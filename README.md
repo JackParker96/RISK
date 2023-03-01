@@ -1,10 +1,10 @@
-ECE 651: RISC *Team Shiny Magikarp* (aka Team 14) 
-=================================================
+ECE 651: RISC *TEAM SHINY MAGIKARP* (aka Group 14) 
+==================================================
 
-![pipeline](https://gitlab.oit.duke.edu/jwp42/RISC/badges/master/pipeline.svg)
+![pipeline](https://gitlab.oit.duke.edu/jwp42/RISC_group14/badges/master/pipeline.svg)
 
-![coverage](https://gitlab.oit.duke.edu/jwp42/RISC/badges/master/coverage.svg?job=test)
+![coverage](https://gitlab.oit.duke.edu/jwp42/RISC_group14/badges/master/coverage.svg?job=test)
 
 ## Coverage
 
-[Detailed coverage](https://jwp42.pages.oit.duke.edu/RISC/dashboard.html)
+[Detailed coverage](https://jwp42.pages.oit.duke.edu/RISC_group14/dashboard.html)
