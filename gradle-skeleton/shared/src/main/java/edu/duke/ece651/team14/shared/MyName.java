@@ -1,7 +1,7 @@
-package edu.duke.ece651.teamX.shared;
+package edu.duke.ece651.team14.shared;
 
 public class MyName {
   public static String getName(){
-    return "teamX";
+    return "team14";
   }
 }
