@@ -19,7 +19,7 @@ done
 
 
 
-netcat localhost 1651 > testoutput <<EOF
+nc localhost 1651 > testoutput <<EOF
 2
 99
 123456
