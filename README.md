@@ -1,5 +1,7 @@
-ECE 651: RISC *TEAM SHINY MAGIKARP* (aka Group 14) 
-==================================================
+ECE 651: RISC --- *TEAM SHINY MAGIKARP*
+=======================================
+
+![Alt text](shiny_magikarp.jpeg)
 
 ![pipeline](https://gitlab.oit.duke.edu/jwp42/RISC_group14/badges/master/pipeline.svg)
 
