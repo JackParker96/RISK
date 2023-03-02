@@ -18,3 +18,5 @@ https://docs.google.com/spreadsheets/d/1xeX1LhQHKaW_9kBSZ3u_cWfS7HyXmD4L6DTs8RlQ
 ## UML diagrams
 
 https://app.diagrams.net/#G1HFjMe-Hy9eAgr037qpsjU75oSxQrfZVQ
+
+![Alt text](shiny_gyarados.jpeg)
