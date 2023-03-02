@@ -8,3 +8,11 @@ ECE 651: RISC *TEAM SHINY MAGIKARP* (aka Group 14)
 ## Coverage
 
 [Detailed coverage](https://jwp42.pages.oit.duke.edu/RISC_group14/dashboard.html)
+
+## Project task breakdown Google Sheet
+
+https://docs.google.com/spreadsheets/d/1xeX1LhQHKaW_9kBSZ3u_cWfS7HyXmD4L6DTs8RlQopE/edit?usp=sharing
+
+## UML diagrams
+
+https://app.diagrams.net/#G1HFjMe-Hy9eAgr037qpsjU75oSxQrfZVQ
