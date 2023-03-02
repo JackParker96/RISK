@@ -31,6 +31,6 @@ public class TerritoryTest {
   @Test
   public void test_hashCode() {
     Territory gondor = new Territory("Gondor");
-    assertEquals(49, gondor.hashCode());
+    assertEquals("Gondor".hashCode(), gondor.hashCode());
   }
 }
