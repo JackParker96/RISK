@@ -1,0 +1,42 @@
+package edu.duke.ece651.team14.shared;
+
+/**
+ * A class to represent a player in the RISC game
+ */
+public class Player {
+  private final Color color;
+
+  // Constructor for a Player that takes in a Color object
+  public Player(Color color) {
+    this.color = color;
+  }
+
+  // Constructor for a Player that takes in a String
+  public Player(String c) {
+    Color color = new Color(c);
+    this.color = color;
+  }
+
+  public Color getColor() {
+    return color;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other != null && other.getClass().equals(getClass())) {
+      Player otherPlayer = (Player) other;
+      return color.equals(otherPlayer.getColor());
+    }
+    return false;
+  }
+
+  @Override
+  public String toString() {
+    return color.toString();
+  }
+
+  @Override
+  public int hashCode() {
+    return color.hashCode();
+  }
+}

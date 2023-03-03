@@ -8,7 +8,7 @@ public class TerritoryTest {
   @Test
   public void test_constructor() {
     Territory gondor = new Territory("Gondor");
-    assertEquals("Gondor", gondor.getName());
+    assertEquals("gondor", gondor.getName());
   }
 
   @Test
@@ -25,12 +25,12 @@ public class TerritoryTest {
   @Test
   public void test_toString() {
     Territory gondor = new Territory("Gondor");
-    assertEquals("Gondor", gondor.toString());
+    assertEquals("gondor", gondor.toString());
   }
 
   @Test
   public void test_hashCode() {
     Territory gondor = new Territory("Gondor");
-    assertEquals("Gondor".hashCode(), gondor.hashCode());
+    assertEquals("gondor".hashCode(), gondor.hashCode());
   }
 }
