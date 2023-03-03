@@ -70,6 +70,13 @@ clover {
     }
 }
 
+tasks.register("resolveDependencies") {
+    dependsOn project('server').getTasksByName('resolveDependencies',false)
+    dependsOn project('client').getTasksByName('resolveDependencies',false)
+    group = 'Build'
+    description = 'Resolve/Download Dependencies'
+}
+
 tasks.register("run-server") {
     dependsOn project('server').getTasksByName('run',false)
     group = 'Run Client/Server'
