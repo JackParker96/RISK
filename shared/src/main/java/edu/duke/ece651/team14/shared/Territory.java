@@ -1,6 +1,8 @@
 package edu.duke.ece651.team14.shared;
 
-public class Territory {
+import java.io.Serializable;
+
+public class Territory implements Serializable{
   private final String name;
 
   public Territory(String name) {
