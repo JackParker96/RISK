@@ -3,15 +3,30 @@
  */
 package edu.duke.ece651.team14.server;
 
-import edu.duke.ece651.team14.shared.MyName;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
+import edu.duke.ece651.team14.shared.Communicator;
+import edu.duke.ece651.team14.shared.MyName;
+import edu.duke.ece651.team14.shared.Territory;
 
 public class App {
   public String getMessage() {
-    return "Hello from the server for "+ MyName.getName();
+    return "Hello from the server for " + MyName.getName();
   }
-  public static void main(String[] args) {
+
+  public static void main(String[] args) throws IOException {
     App a = new App();
     System.out.println(a.getMessage());
+    //int port = Integer.parseInt(args[0]);
+    try (ServerSocket serverSocket = new ServerSocket(4444);//hardcoded portnum 4444
+        Socket clientSocket = serverSocket.accept();) {// try-with-resources
+      Communicator clientCommunicator = new Communicator(clientSocket);
+      Territory t = new Territory("testT");
+      clientCommunicator.sendObject(t);
+    }
+    System.out.println("done");
+
   }
 }
