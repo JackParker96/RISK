@@ -14,6 +14,16 @@ public class PlayerTest {
   }
 
   @Test
+  public void test_adding_removing_territories() {
+    Player player = new Player("blue");
+    assertEquals(true, player.tryAddTerritory(new Territory("Gondor")));
+    assertThrows(IllegalArgumentException.class, () -> player.tryAddTerritory(new Territory("Gondor")));
+    assertEquals(true, player.tryAddTerritory(new Territory("mordor")));
+    assertEquals(true, player.tryAddTerritory(new Territory("theShire")));
+    assertEquals(3, player.getNumTerritories());
+  }
+
+  @Test
   public void test_equals() {
     Player p1 = new Player(new Color("RED"));
     Player p2 = new Player("red");
