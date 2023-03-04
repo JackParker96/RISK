@@ -19,7 +19,7 @@ public class MapTest {
   // Tests getMap() method
   public void test_map() {
     ArrayList<Territory> t = new ArrayList<>();
-    t.add(new Territory("Narnia"));
+    t.add(new BasicTerritory("Narnia"));
     Map m = new Map(t, "Earth");
 
     HashMap<String, Territory> expectedMap = new HashMap<>();

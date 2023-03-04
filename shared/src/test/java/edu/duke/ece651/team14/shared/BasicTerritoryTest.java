@@ -4,18 +4,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-public class TerritoryTest {
+public class BasicTerritoryTest {
   @Test
   public void test_constructor() {
-    Territory gondor = new Territory("Gondor");
+    BasicTerritory gondor = new BasicTerritory("Gondor");
     assertEquals("gondor", gondor.getName());
   }
 
   @Test
   public void test_equals() {
-    Territory gondor = new Territory("Gondor");
-    Territory mordor = new Territory("Mordor");
-    Territory gondor2 = new Territory("Gondor");
+    BasicTerritory gondor = new BasicTerritory("Gondor");
+    BasicTerritory mordor = new BasicTerritory("Mordor");
+    BasicTerritory gondor2 = new BasicTerritory("Gondor");
     assertEquals(gondor, gondor2);
     assertFalse(gondor.equals(mordor));
     String str = "Gondor";
@@ -24,13 +24,13 @@ public class TerritoryTest {
 
   @Test
   public void test_toString() {
-    Territory gondor = new Territory("Gondor");
+    BasicTerritory gondor = new BasicTerritory("Gondor");
     assertEquals("gondor", gondor.toString());
   }
 
   @Test
   public void test_hashCode() {
-    Territory gondor = new Territory("Gondor");
+    BasicTerritory gondor = new BasicTerritory("Gondor");
     assertEquals("gondor".hashCode(), gondor.hashCode());
   }
 }
