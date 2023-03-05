@@ -5,20 +5,23 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 public class ColorTest {
+
   @Test
-  public void test_color_constructor() {
+  // Tests color constructor using default string values
+  public void test_string_color_constructor() {
     Color r = new Color("ReD");
     Color g = new Color("GREEN");
     Color b = new Color("blue");
     Color y = new Color("Yellow");
-    assertEquals("red", r.getColor());
-    assertEquals("green", g.getColor());
-    assertEquals("blue", b.getColor());
-    assertEquals("yellow", y.getColor());
+    assertEquals(Color.colors.get("red"), r);
+    assertEquals(Color.colors.get("green"), g);
+    assertEquals(Color.colors.get("blue"), b);
+    assertEquals(Color.colors.get("yellow"), y);
     assertThrows(IllegalArgumentException.class, () -> new Color("purple"));
   }
 
   @Test
+  // Tests equals method
   public void test_equals() {
     Color c1 = new Color("red");
     Color c2 = new Color("RED");
@@ -30,18 +33,40 @@ public class ColorTest {
     assertFalse(c1.equals(c3));
     assertFalse(c1.equals(c4));
   }
-  
+
   @Test
-  public void test_toString() {
-    Color c = new Color("Red");
-    assertEquals("red", c.toString());
+  // Tests rgb value constructor
+  public void test_rgbConstructor() {
+    Color white = new Color(255, 255, 255);
+    assertEquals(white.r, 255);
+    assertEquals(white.g, 255);
+    assertEquals(white.b, 255);
+    assertEquals(white.a, 1);
+    assertThrows(IllegalArgumentException.class, () -> new Color(-1, 20, 20));
   }
 
   @Test
+  // Tests constructor which takes a preexisting color
+  public void testOtherColorConstructor() {
+    Color white = new Color(new Color(255, 255, 255));
+    assertEquals(white.r, 255);
+    assertEquals(white.g, 255);
+    assertEquals(white.b, 255);
+    assertEquals(white.a, 1);
+  }
+  
+  @Test
+  // Tests toString() method
+  public void test_toString() {
+    Color c = new Color("Red");
+    assertEquals("r: 255 g: 0 b: 0 a: 1", c.toString());
+  }
+
+  @Test
+  // Tests hashCode() method
   public void test_hashCode() {
     Color c = new Color("RED");
-    String red = "red";
-    assertEquals(c.hashCode(), red.hashCode());
+    assertEquals(Color.colors.get("red").hashCode(), c.hashCode());
   }
 
 }
