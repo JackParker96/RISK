@@ -24,7 +24,7 @@ public class App {
     try (ServerSocket serverSocket = new ServerSocket(4444);//hardcoded portnum 4444
         Socket clientSocket = serverSocket.accept();) {// try-with-resources
       Communicator clientCommunicator = new Communicator(clientSocket);
-      Territory t = new BasicTerritory("testT");
+      Territory t = new BasicTerritory("test1");
       clientCommunicator.sendObject(t);
     }
     System.out.println("done");
