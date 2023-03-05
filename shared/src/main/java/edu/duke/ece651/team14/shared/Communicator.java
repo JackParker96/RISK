@@ -1,9 +1,10 @@
 package edu.duke.ece651.team14.shared;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
+import java.io.OutputStream;
 
 /**
  * This class wraps the socket output stream and input steam to send and recv object
@@ -14,9 +15,9 @@ public class Communicator {
   private final ObjectOutputStream out;
   private final ObjectInputStream in;
 
-  public Communicator(Socket clientSocket) throws IOException {
-    this.out = new ObjectOutputStream(clientSocket.getOutputStream());
-    this.in = new ObjectInputStream(clientSocket.getInputStream());
+  public Communicator(OutputStream socketOut,InputStream socketIn) throws IOException {
+    this.out = new ObjectOutputStream(socketOut);
+    this.in = new ObjectInputStream(socketIn);
     this.out.flush();
   }
 

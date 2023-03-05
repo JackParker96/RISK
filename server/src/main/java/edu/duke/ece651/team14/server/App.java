@@ -19,10 +19,10 @@ public class App {
   public static void main(String[] args) throws IOException {
     App a = new App();
     System.out.println(a.getMessage());
-    //int port = Integer.parseInt(args[0]);
-    try (ServerSocket serverSocket = new ServerSocket(4444);//hardcoded portnum 4444
+    int port = Integer.parseInt(args[0]);
+    try (ServerSocket serverSocket = new ServerSocket(port);//hardcoded portnum 4444
         Socket clientSocket = serverSocket.accept();) {// try-with-resources
-      Communicator clientCommunicator = new Communicator(clientSocket);
+      Communicator clientCommunicator = new Communicator(clientSocket.getOutputStream(),clientSocket.getInputStream());
       Territory t = new Territory("testT");
       clientCommunicator.sendObject(t);
     }
