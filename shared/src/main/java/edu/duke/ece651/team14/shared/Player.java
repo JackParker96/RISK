@@ -10,7 +10,6 @@ public class Player {
   private final Color color;
   // The territories currently owned by the player
   private ArrayList<Territory> territories;
-
   // Constructor for a Player that takes in a Color object
   public Player(Color color) {
     this.color = color;
@@ -23,6 +22,7 @@ public class Player {
     this.color = color;
     this.territories = new ArrayList<Territory>();
   }
+
 
   /**
    * Try to add a territory to the list of territories controlled by the Player
