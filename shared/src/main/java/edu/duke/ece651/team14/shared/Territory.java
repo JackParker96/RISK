@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public abstract class Territory implements Serializable{
   private final String name;
+  private Player owner;
 
   /**
    * Creates a Territory from a given name
@@ -15,6 +16,7 @@ public abstract class Territory implements Serializable{
    */
   public Territory(String name) {
     this.name = name.toLowerCase();
+    this.owner = null;
   }
 
   /**
@@ -27,7 +29,23 @@ public abstract class Territory implements Serializable{
   }
 
   /**
-   * Returns true if territories have same class and same name
+   * Get the Player who owns this Territory
+   *
+   * @return the Player who owns the Territory
+   */
+  public Player getOwner() {
+    return owner;
+  }
+
+  /**
+   * Make a Player the owner of this Territory
+   */
+  public void setOwner(Player player) {
+    this.owner = player;
+  }
+  
+  /**
+   * Returns true if territories have same class, same name, same owner
    *
    * @param other is the other object to compare
    *
@@ -35,9 +53,19 @@ public abstract class Territory implements Serializable{
    */
   @Override
   public boolean equals(Object other) {
+    // Check for same class (both Territories)
     if (other != null && other.getClass().equals(getClass())) {
       Territory otherTerritory = (Territory) other;
-      return name.equals(otherTerritory.getName());
+      // Check for same name
+      if (!name.equals(otherTerritory.getName())) {
+        return false;
+      }
+      // If one or the other owners is null, check that both are null
+      if (owner == null || otherTerritory.getOwner() == null) {
+        return (owner == null && otherTerritory.getOwner() == null);
+      }
+      // If both owners are not null, check that they're the same
+      return owner.equals(otherTerritory.getOwner());
     }
     return false;
   }
