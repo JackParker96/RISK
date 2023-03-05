@@ -7,6 +7,7 @@ x=""
 count=0
 while [ "$x" == "" ]
 do
+    sleep 5
     if [ "$count" == "20" ]
     then
         echo "Giving up after 20 attempts to connect!"
