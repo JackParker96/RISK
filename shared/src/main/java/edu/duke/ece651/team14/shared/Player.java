@@ -9,7 +9,7 @@ public abstract class Player {
 
   // Player name
   private final String name;
-
+  
   /**
    * Creates a Player object from given color
    *

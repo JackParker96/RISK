@@ -6,27 +6,77 @@ package edu.duke.ece651.team14.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-import edu.duke.ece651.team14.shared.BasicTerritory;
-import edu.duke.ece651.team14.shared.Communicator;
-import edu.duke.ece651.team14.shared.MyName;
-import edu.duke.ece651.team14.shared.Territory;
+import edu.duke.ece651.team14.shared.*;
 
 public class App {
+  private ArrayList<Player> players;
+  private static final HashMap<Integer,String> colorMap = new HashMap<>();
+  static{
+    colorMap.put(0, "red");
+    colorMap.put(1,"green");
+    colorMap.put(2,"blue");
+    colorMap.put(3,"yellow");
+  }
+  ArrayList<Socket> clientSockets;
+  ServerSocket serverSocket;
+  
+  public App(int portNum) throws IOException {
+    this.players = new ArrayList<Player>();
+    this.clientSockets = new ArrayList<Socket>();
+    this.serverSocket = new ServerSocket(portNum);
+  }
+
   public String getMessage() {
     return "Hello from the server for " + MyName.getName();
   }
 
-  public static void main(String[] args) throws IOException {
-    App a = new App();
-    System.out.println(a.getMessage());
-    //int port = Integer.parseInt(args[0]);
-    try (ServerSocket serverSocket = new ServerSocket(4444);//hardcoded portnum 4444
-        Socket clientSocket = serverSocket.accept();) {// try-with-resources
-      Communicator clientCommunicator = new Communicator(clientSocket);
-      Territory t = new BasicTerritory("test1");
-      clientCommunicator.sendObject(t);
+  /** 
+   * Server accept all the connections specified by num_players 
+   * @param num_players: total num of connections
+   * @throws IOException
+   */
+  public void acceptPlayersPhase(int num_players) throws IOException {
+    int acceptedPlayers = 0;
+    while (acceptedPlayers < num_players) {
+      Socket clientSocket = serverSocket.accept();
+      clientSockets.add(clientSocket);
+      Communicator clientCommunicator = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
+      Player p = new ClientPlayer(new Color(colorMap.get(acceptedPlayers)), colorMap.get(acceptedPlayers), clientCommunicator);
+      players.add(p);
+      //debug message:
+      System.out.println("Accept player connection:"+p);
+      acceptedPlayers++;
     }
+  }
+
+  //test method, just to make sure the connection works
+  public void testSendTerritory() throws IOException{
+    Territory t = new BasicTerritory("test T");
+    for(Player p : players){
+      ClientPlayer cp = (ClientPlayer)p;
+      cp.getCommunicator().sendObject(t);
+    }
+  }
+
+  //./gradlew :server:run --args "[portnum] [num_players]"
+  public static void main(String[] args) throws IOException {
+    int port = Integer.parseInt(args[0]);
+    int num_players = Integer.parseInt(args[1]);
+    App a = new App(port);
+    System.out.println(a.getMessage());
+    try{
+      a.acceptPlayersPhase(num_players);
+      a.testSendTerritory();
+    }finally{
+      for(Socket s:a.clientSockets){
+        s.close();
+      }
+      a.serverSocket.close();
+    }
+    
     System.out.println("done");
 
   }

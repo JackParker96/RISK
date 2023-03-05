@@ -15,14 +15,15 @@ public class App {
     return "Hello from the client for " + MyName.getName();
   }
 
+  //./gradlew :client:run --args "vcm-xxxxx.vm.duke.edu [port_num]" 
   public static void main(String[] args) throws IOException, ClassNotFoundException {
     App a = new App();
     System.out.println(a.getMessage());
-    //String hostName = args[0];
-    //int port = Integer.parseInt(args[1]);
-    try (Socket clientSocket = new Socket("vcm-30605.vm.duke.edu", 4444))// hardcoded hostname and port
+    String hostName = args[0];
+    int port = Integer.parseInt(args[1]);
+    try (Socket clientSocket = new Socket(hostName, port))// hardcoded hostname and port
     {// try-with-resources
-      Communicator serverCommunicator = new Communicator(clientSocket);
+      Communicator serverCommunicator = new Communicator(clientSocket.getOutputStream(),clientSocket.getInputStream());
       Territory t = (Territory) serverCommunicator.recvObject();
       System.out.println("Received Territory:"+t);// Territory toString() called
     }
