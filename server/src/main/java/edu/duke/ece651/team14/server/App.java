@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import edu.duke.ece651.team14.shared.BasicTerritory;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.MyName;
 import edu.duke.ece651.team14.shared.Territory;
@@ -23,7 +24,7 @@ public class App {
     try (ServerSocket serverSocket = new ServerSocket(4444);//hardcoded portnum 4444
         Socket clientSocket = serverSocket.accept();) {// try-with-resources
       Communicator clientCommunicator = new Communicator(clientSocket);
-      Territory t = new Territory("testT");
+      Territory t = new BasicTerritory("testT");
       clientCommunicator.sendObject(t);
     }
     System.out.println("done");
