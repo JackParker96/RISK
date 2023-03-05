@@ -44,7 +44,7 @@ public class App {
       Socket clientSocket = serverSocket.accept();
       clientSockets.add(clientSocket);
       Communicator clientCommunicator = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
-      Player p = new ClientPlayer(colorMap.get(acceptedPlayers),clientCommunicator);
+      Player p = new ClientPlayer(new Color(colorMap.get(acceptedPlayers)), colorMap.get(acceptedPlayers), clientCommunicator);
       players.add(p);
       //debug message:
       System.out.println("Accept player connection:"+p);
@@ -54,7 +54,7 @@ public class App {
 
   //test method, just to make sure the connection works
   public void testSendTerritory() throws IOException{
-    Territory t = new Territory("test T");
+    Territory t = new BasicTerritory("test T");
     for(Player p : players){
       ClientPlayer cp = (ClientPlayer)p;
       cp.getCommunicator().sendObject(t);

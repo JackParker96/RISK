@@ -15,7 +15,7 @@ public class CommunicatorTest {
         FileOutputStream testOut = new FileOutputStream("network.txt");
         FileInputStream testIn = new FileInputStream("network.txt");) {
       Communicator testCommunicator = new Communicator(testOut, testIn);
-      Territory t = new Territory("testTerritory");
+      Territory t = new BasicTerritory("testTerritory");
       testCommunicator.sendObject(t);
       // assume sending to network..
       Territory t_received = (Territory) testCommunicator.recvObject();

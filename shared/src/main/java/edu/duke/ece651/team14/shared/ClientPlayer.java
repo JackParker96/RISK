@@ -5,8 +5,8 @@ This is the class that the server keeps track of to do communication with client
 */
 public class ClientPlayer extends Player {
   private final Communicator communicator;
-  public ClientPlayer(String color, Communicator communicator){
-    super(color);
+  public ClientPlayer(Color color, String name, Communicator communicator){
+    super(color, name);
     this.communicator = communicator;
   }
 

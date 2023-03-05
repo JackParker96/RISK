@@ -15,8 +15,8 @@ public class ClientPlayerTest {
         FileOutputStream testOut = new FileOutputStream("network.txt");
         FileInputStream testIn = new FileInputStream("network.txt");) {
       Communicator testCommunicator = new Communicator(testOut, testIn);
-      ClientPlayer p = new ClientPlayer("yellow", testCommunicator);
-      Territory t = new Territory("testTerritory");
+      ClientPlayer p = new ClientPlayer(new Color("yellow"), "xincheng_the_shrewd", testCommunicator);
+      Territory t = new BasicTerritory("testTerritory");
       p.getCommunicator().sendObject(t);
       // assume sending to network..
       Territory t_received = (Territory)p.getCommunicator().recvObject();
