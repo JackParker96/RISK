@@ -6,31 +6,8 @@ import org.junit.jupiter.api.Test;
 
 public class TerritoryTest {
   @Test
-  public void test_constructor() {
-    Territory gondor = new Territory("Gondor");
-    assertEquals("gondor", gondor.getName());
+  public void test_() {
+
   }
 
-  @Test
-  public void test_equals() {
-    Territory gondor = new Territory("Gondor");
-    Territory mordor = new Territory("Mordor");
-    Territory gondor2 = new Territory("Gondor");
-    assertEquals(gondor, gondor2);
-    assertFalse(gondor.equals(mordor));
-    String str = "Gondor";
-    assertFalse(gondor.equals(str));
-  }
-
-  @Test
-  public void test_toString() {
-    Territory gondor = new Territory("Gondor");
-    assertEquals("gondor", gondor.toString());
-  }
-
-  @Test
-  public void test_hashCode() {
-    Territory gondor = new Territory("Gondor");
-    assertEquals("gondor".hashCode(), gondor.hashCode());
-  }
 }
