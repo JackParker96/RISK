@@ -1,6 +1,7 @@
 package edu.duke.ece651.team14.shared;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Abstract class to represent RISC territory
@@ -8,6 +9,7 @@ import java.io.Serializable;
 public abstract class Territory implements Serializable{
   private final String name;
   private Player owner;
+  private ArrayList<Unit> units;
 
   /**
    * Creates a Territory from a given name
@@ -17,8 +19,29 @@ public abstract class Territory implements Serializable{
   public Territory(String name) {
     this.name = name.toLowerCase();
     this.owner = null;
+    this.units = new ArrayList<Unit>();
   }
 
+  // Get the number of units in the Territory
+  public int getNumUnits() {
+    return units.size();
+  }
+  
+  /**
+   * Add units to a Territory
+   *
+   * @param units is a list of units to add to the territory
+   * @return true if units successfully added
+   * @throws IllegalArgumentException if the list of units is empty
+   */
+  public boolean tryAddUnits(ArrayList<Unit> units) throws IllegalArgumentException {
+    if (units.size() == 0) {
+      throw new IllegalArgumentException("Can't add 0 units to a territory - must add 1 or more");
+    }
+    this.units.addAll(units);
+    return true;
+  }
+  
   /**
    * Returns territory name
    *
