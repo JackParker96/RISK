@@ -1,6 +1,12 @@
 package edu.duke.ece651.team14.shared;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +17,22 @@ public class BasicTerritoryTest {
     assertEquals("gondor", gondor.getName());
   }
 
+  @Test
+  public void test_tryAddUnits_getNumUnits() {
+    BasicTerritory gondor = new BasicTerritory("Gondor");
+    assertEquals(0, gondor.getNumUnits());
+    assertThrows(IllegalArgumentException.class, () -> gondor.tryAddUnits(new ArrayList<Unit>()));
+    ArrayList<Unit> units_lst = new ArrayList<Unit>();
+    units_lst.add(new BasicUnit());
+    assertEquals(true, gondor.tryAddUnits(units_lst));
+    assertEquals(1, gondor.getNumUnits());
+    ArrayList<Unit> more_units = new ArrayList<Unit>();
+    more_units.add(new BasicUnit());
+    more_units.add(new BasicUnit());
+    assertEquals(true, gondor.tryAddUnits(more_units));
+    assertEquals(3, gondor.getNumUnits());
+  }
+  
   @Test
   public void test_equals() {
     // Tests for when both territories are unowned
