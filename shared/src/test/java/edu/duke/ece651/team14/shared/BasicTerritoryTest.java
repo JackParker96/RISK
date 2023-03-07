@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +31,29 @@ public class BasicTerritoryTest {
     more_units.add(new BasicUnit());
     assertEquals(true, gondor.tryAddUnits(more_units));
     assertEquals(3, gondor.getNumUnits());
+  }
+
+  @Test
+  public void test_adjacentTerritories() {
+    BasicTerritory roshar = new BasicTerritory("Roshar");
+    ArrayList<Territory> map = new ArrayList<Territory>();
+    BasicTerritory hogwarts = new BasicTerritory("Hogwarts");
+    BasicTerritory mordor = new BasicTerritory("Mordor");
+    BasicTerritory narnia = new BasicTerritory("Narnia");
+    BasicTerritory duke = new BasicTerritory("Duke");
+    map.add(hogwarts);
+    map.add(mordor);
+    map.add(narnia);
+    assertEquals(true, roshar.tryInitializeAllTerr(map));
+    assertEquals(true, roshar.tryInitializeAdjacentTerrStr("Hogwarts"));
+    assertEquals(false, roshar.tryInitializeAdjacentTerrStr("Duke"));
+    assertEquals(false, roshar.tryInitializeAdjacentTerr(duke));
+    assertEquals(true, roshar.tryInitializeAdjacentTerr(mordor));
+    HashMap<Territory, Boolean> adj = new HashMap<Territory, Boolean>();
+    adj.put(hogwarts, true);
+    adj.put(mordor, true);
+    adj.put(narnia, false);
+    assertEquals(roshar.adjacentTerritories, adj);
   }
   
   @Test

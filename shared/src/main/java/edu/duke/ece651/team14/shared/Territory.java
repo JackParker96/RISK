@@ -2,14 +2,17 @@ package edu.duke.ece651.team14.shared;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Abstract class to represent RISC territory
  */
-public abstract class Territory implements Serializable{
+public abstract class Territory implements Serializable {
   private final String name;
   private Player owner;
   private ArrayList<Unit> units;
+  public HashMap<Territory, Boolean> adjacentTerritories;
 
   /**
    * Creates a Territory from a given name
@@ -20,13 +23,55 @@ public abstract class Territory implements Serializable{
     this.name = name.toLowerCase();
     this.owner = null;
     this.units = new ArrayList<Unit>();
+    this.adjacentTerritories = new HashMap<Territory, Boolean>();
+  }
+
+  /**
+   * Add all territories in map to adjacentTerritories
+   *
+   * @param allTerritories is an ArrayList of these territories
+   */
+  public boolean tryInitializeAllTerr(ArrayList<Territory> allTerritories) {
+    for (Territory a : allTerritories) {
+      adjacentTerritories.put(a, false);
+    }
+    return true;
+  }
+
+  /**
+   * Mark a specific territory as adjacent
+   *
+   * @param terr is the adjacent Territory object
+   */
+  public boolean tryInitializeAdjacentTerr(Territory terr) {
+    if (adjacentTerritories.containsKey(terr)) {
+      adjacentTerritories.put(terr, true);
+    } else {
+      return false;
+    }
+    return true;
+  }
+
+  /**
+   * Mark a specific territory as adjacent
+   *
+   * @param terrName is the name of the adjacent territory
+   */
+  public boolean tryInitializeAdjacentTerrStr(String terrName) {
+    for (Map.Entry<Territory, Boolean> map : adjacentTerritories.entrySet()) {
+      if (map.getKey().getName().equals(terrName.toLowerCase())) {
+        adjacentTerritories.put(map.getKey(), true);
+        return true;
+      }
+    }
+    return false;
   }
 
   // Get the number of units in the Territory
   public int getNumUnits() {
     return units.size();
   }
-  
+
   /**
    * Add units to a Territory
    *
@@ -41,7 +86,7 @@ public abstract class Territory implements Serializable{
     this.units.addAll(units);
     return true;
   }
-  
+
   /**
    * Returns territory name
    *
@@ -66,7 +111,7 @@ public abstract class Territory implements Serializable{
   public void setOwner(Player player) {
     this.owner = player;
   }
-  
+
   /**
    * Returns true if territories have same class, same name, same owner
    *
