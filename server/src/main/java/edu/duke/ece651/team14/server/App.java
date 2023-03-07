@@ -20,38 +20,6 @@ public class App {
     colorMap.put(2, "blue");
     colorMap.put(3, "yellow");
   }
-  private static final ArrayList<Territory> map = new ArrayList<Territory>();
-
-  public void createBasicMap(){
-    map.add(new BasicTerritory("Narnia"));
-    map.add(new BasicTerritory("Midkemia"));
-    map.add(new BasicTerritory("Oz"));
-    map.add(new BasicTerritory("Gondor"));
-    map.add(new BasicTerritory("Mordor"));
-    map.add(new BasicTerritory("Neverland"));
-    
-    map.add(new BasicTerritory("Elantris"));
-    map.add(new BasicTerritory("Scadrial"));
-    map.add(new BasicTerritory("Roshar"));
-    map.add(new BasicTerritory("Mt Olympus"));
-    map.add(new BasicTerritory("Mt Othrys"));
-    map.add(new BasicTerritory("Camp Half-Blood"));
-
-    map.add(new BasicTerritory("Hogwarts"));
-    map.add(new BasicTerritory("Diagon Alley"));
-    map.add(new BasicTerritory("Platform 9 and 3/4"));
-    map.add(new BasicTerritory("Jurassic Park"));
-    map.add(new BasicTerritory("Gotham City"));
-    map.add(new BasicTerritory("Wakanda"));
-
-    map.add(new BasicTerritory("The Capitol"));
-    map.add(new BasicTerritory("District Twelve"));
-    map.add(new BasicTerritory("North Pole"));
-    map.add(new BasicTerritory("Atlantis"));
-    map.add(new BasicTerritory("Wonka Chocolate Factory"));
-    map.add(new BasicTerritory("Duke"));
-  }
-  
   ArrayList<Socket> clientSockets;
   ServerSocket serverSocket;
   

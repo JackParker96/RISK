@@ -17,6 +17,7 @@ public class BasicTerritoryTest {
     assertEquals("gondor", gondor.getName());
   }
 
+  
   @Test
   public void test_tryAddUnits_getNumUnits() {
     BasicTerritory gondor = new BasicTerritory("Gondor");

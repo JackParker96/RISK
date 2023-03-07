@@ -12,8 +12,7 @@ public abstract class Territory implements Serializable {
   private final String name;
   private Player owner;
   private ArrayList<Unit> units;
-  public HashMap<Territory, Boolean> adjacentTerritories;
-
+  public  HashMap<Territory, Boolean> adjacentTerritories;
   /**
    * Creates a Territory from a given name
    *
@@ -24,6 +23,7 @@ public abstract class Territory implements Serializable {
     this.owner = null;
     this.units = new ArrayList<Unit>();
     this.adjacentTerritories = new HashMap<Territory, Boolean>();
+
   }
 
   /**
