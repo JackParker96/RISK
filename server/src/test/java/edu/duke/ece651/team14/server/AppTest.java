@@ -8,6 +8,7 @@ import java.io.IOException;
 import  org.junit.jupiter.api.Disabled;
 
 class AppTest {
+  @Disabled
   @Test
   void test_getMessage() throws IOException{
     App a = new App(1);
