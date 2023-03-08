@@ -12,7 +12,7 @@ public abstract class Territory implements Serializable {
   private final String name;
   private Player owner;
   private ArrayList<Unit> units;
-  public HashMap<Territory, Boolean> adjacentTerritories;
+  private HashMap<Territory, Boolean> adjacentTerritories;
 
   /**
    * Creates a Territory from a given name
@@ -24,6 +24,7 @@ public abstract class Territory implements Serializable {
     this.owner = null;
     this.units = new ArrayList<Unit>();
     this.adjacentTerritories = new HashMap<Territory, Boolean>();
+
   }
 
   /**
@@ -47,7 +48,7 @@ public abstract class Territory implements Serializable {
     if (adjacentTerritories.containsKey(terr)) {
       adjacentTerritories.put(terr, true);
     } else {
-      return false;
+      throw new IllegalArgumentException("Territory not in map");
     }
     return true;
   }
@@ -58,13 +59,41 @@ public abstract class Territory implements Serializable {
    * @param terrName is the name of the adjacent territory
    */
   public boolean tryInitializeAdjacentTerrStr(String terrName) {
-    for (Map.Entry<Territory, Boolean> map : adjacentTerritories.entrySet()) {
-      if (map.getKey().getName().equals(terrName.toLowerCase())) {
-        adjacentTerritories.put(map.getKey(), true);
+    for (Map.Entry<Territory, Boolean> adjacent_map : adjacentTerritories.entrySet()) {
+      if (adjacent_map.getKey().getName().equals(terrName.toLowerCase())) {
+        adjacentTerritories.put(adjacent_map.getKey(), true);
         return true;
       }
     }
-    return false;
+    throw new IllegalArgumentException("Territory name not in map");
+  }
+
+  /**
+   * Check if the territory is adjacent to this territory
+   * 
+   * @param terr: the territory to check
+   * @return true if adjacent
+   */
+  public boolean isAdjacentTo(Territory terr) {
+    if (!adjacentTerritories.containsKey(terr)) {
+      throw new IllegalArgumentException("Territory not in map");
+    }
+    return adjacentTerritories.get(terr);
+  }
+
+  /**
+   * Check if the territory is adjacent to this territory
+   * 
+   * @param terr: the territory to check
+   * @return true if adjacent
+   */
+  public boolean isAdjacentTo(String terrName) {
+    for (Map.Entry<Territory, Boolean> adjacent_map : adjacentTerritories.entrySet()) {
+      if (adjacent_map.getKey().getName().equals(terrName.toLowerCase())) {
+        return adjacentTerritories.get(adjacent_map.getKey());
+      }
+    }
+    throw new IllegalArgumentException("Territory name not in map");
   }
 
   // Get the number of units in the Territory

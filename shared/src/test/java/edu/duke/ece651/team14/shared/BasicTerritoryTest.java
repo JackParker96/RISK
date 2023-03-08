@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.*;
 
@@ -46,16 +47,23 @@ public class BasicTerritoryTest {
     map.add(narnia);
     assertEquals(true, roshar.tryInitializeAllTerr(map));
     assertEquals(true, roshar.tryInitializeAdjacentTerrStr("Hogwarts"));
-    assertEquals(false, roshar.tryInitializeAdjacentTerrStr("Duke"));
-    assertEquals(false, roshar.tryInitializeAdjacentTerr(duke));
+    assertThrows(IllegalArgumentException.class, () -> roshar.tryInitializeAdjacentTerrStr("Duke"));
+    assertThrows(IllegalArgumentException.class, () -> roshar.tryInitializeAdjacentTerr(duke));
     assertEquals(true, roshar.tryInitializeAdjacentTerr(mordor));
-    HashMap<Territory, Boolean> adj = new HashMap<Territory, Boolean>();
-    adj.put(hogwarts, true);
-    adj.put(mordor, true);
-    adj.put(narnia, false);
-    assertEquals(roshar.adjacentTerritories, adj);
+    // HashMap<Territory, Boolean> adj = new HashMap<Territory, Boolean>();
+    // adj.put(hogwarts, true);
+    // adj.put(mordor, true);
+    // adj.put(narnia, false);
+    // assertEquals(roshar.adjacentTerritories, adj);//dont want class attribute
+    // public
+    assertTrue(roshar.isAdjacentTo(hogwarts));
+    assertTrue(roshar.isAdjacentTo("Mordor"));
+    assertFalse(roshar.isAdjacentTo(narnia));
+    assertFalse(roshar.isAdjacentTo("Narnia"));
+    assertThrows(IllegalArgumentException.class, () -> roshar.isAdjacentTo("UNC"));
+    assertThrows(IllegalArgumentException.class, () -> roshar.isAdjacentTo(duke));
   }
-  
+
   @Test
   public void test_equals() {
     // Tests for when both territories are unowned

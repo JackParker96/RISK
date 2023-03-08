@@ -24,6 +24,19 @@ public class Map {
     this.name = name;
   }
 
+  /** 
+   * Get the territory object by name.
+   * @param TerrName
+   * @return the territory object
+   */
+  public Territory getTerritoryByName(String TerrName){
+    TerrName = TerrName.toLowerCase();
+    if(!map.containsKey(TerrName)){
+      throw new IllegalArgumentException("Territory does not exist in Map");
+    }
+    return map.get(TerrName);
+  }
+
   /**
    * Returns the map's name
    *
