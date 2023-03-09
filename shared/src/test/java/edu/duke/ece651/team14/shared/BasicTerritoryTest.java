@@ -19,6 +19,22 @@ public class BasicTerritoryTest {
   }
 
   @Test
+  public void test_getNeighbors() {
+    BasicTerritory gondor = new BasicTerritory("Gondor");
+    assertEquals(0, gondor.getNeighbors().size());
+    BasicTerritory hogwarts = new BasicTerritory("Hogwarts");
+    BasicTerritory mordor = new BasicTerritory("Mordor");
+    ArrayList<Territory> terr_arr = new ArrayList<Territory>();
+    terr_arr.add(hogwarts);
+    terr_arr.add(mordor);
+    gondor.tryInitializeAllTerr(terr_arr);
+    gondor.tryInitializeAdjacentTerr(mordor);
+    assertEquals(1, gondor.getNeighbors().size());
+    gondor.tryInitializeAdjacentTerr(hogwarts);
+    assertEquals(2, gondor.getNeighbors().size());
+  }
+  
+  @Test
   public void test_tryAddUnits_getNumUnits() {
     BasicTerritory gondor = new BasicTerritory("Gondor");
     assertEquals(0, gondor.getNumUnits());
