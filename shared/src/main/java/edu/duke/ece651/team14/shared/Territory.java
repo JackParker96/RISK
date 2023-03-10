@@ -28,6 +28,21 @@ public abstract class Territory implements Serializable {
   }
 
   /**
+   * Get all territories adjacent to this territory
+   *
+   * @return an ArrayList<Territory> of all adjacent territories
+   */
+  public ArrayList<Territory> getNeighbors() {
+    ArrayList<Territory> ans = new ArrayList<Territory>();
+    for (Territory terr : adjacentTerritories.keySet()) {
+      if (adjacentTerritories.get(terr).equals(true)) {
+        ans.add(terr);
+      }
+    }
+    return ans;
+  }
+  
+  /**
    * Add all territories in map to adjacentTerritories
    *
    * @param allTerritories is an ArrayList of these territories
