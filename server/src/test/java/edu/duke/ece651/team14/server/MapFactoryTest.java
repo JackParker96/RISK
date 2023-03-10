@@ -22,4 +22,9 @@ public class MapFactoryTest {
     assertTrue(m.getTerritoryByName("gondor").isAdjacentTo("neverland"));
   }
 
+  @Test
+  public void test_createGroups() {
+    MapFactory f = new MapFactory();
+  }
+
 }
