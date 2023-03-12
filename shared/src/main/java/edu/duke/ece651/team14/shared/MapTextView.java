@@ -75,7 +75,7 @@ public class MapTextView {
     for (Territory terr : terrArr) {
       String name = terr.getName();
       int numUnits = terr.getNumUnits();
-      ArrayList<Territory> adjTerrs = terr.getNeighbors();
+      ArrayList<Territory> adjTerrs = terr.getAdjacentTerritories();
       sb.append(numUnits + " units in " + name + " (next to: " + territoriesAsListOfStrings(adjTerrs) + ")\n");
     }
     return sb.toString();
