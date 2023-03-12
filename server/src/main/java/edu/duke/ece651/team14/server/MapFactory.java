@@ -1,22 +1,40 @@
 package edu.duke.ece651.team14.server;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import edu.duke.ece651.team14.shared.BasicTerritory;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.Territory;
 
+/**
+ * Class to make a hard-coded map with 24 Territories
+ */
 public class MapFactory implements AbstractMapFactory {
   @Override
+  /**
+   * Makes a hard-coded map of 24 Territories
+   *
+   * @param mapName is the map name
+   *
+   * @param players is the ArrayList of players
+   *
+   * @return the map
+   */
   public Map makeMap(String mapName, ArrayList<Player> players) {
-    ArrayList<Territory> allTerritories = makeTheMap();
+    ArrayList<Territory> allTerritories = makeTerritories();
+    addAdjacency(allTerritories);
+    addOwners(allTerritories, players);
     Map m = new Map(allTerritories, mapName);
     return m;
   }
 
-  private ArrayList<Territory> makeTheMap() {
+  /**
+   * Makes an ArrayList of 24 hard-coded Territories
+   *
+   * @return an ArrayList of 24 hard-coded Territories
+   */
+  public ArrayList<Territory> makeTerritories() {
     ArrayList<Territory> allTerritories = new ArrayList<Territory>();
     allTerritories.add(new BasicTerritory("Narnia"));
     allTerritories.add(new BasicTerritory("Midkemia"));
@@ -45,147 +63,151 @@ public class MapFactory implements AbstractMapFactory {
     allTerritories.add(new BasicTerritory("Atlantis"));
     allTerritories.add(new BasicTerritory("Wonka Chocolate Factory"));
     allTerritories.add(new BasicTerritory("Duke"));
-    addAdjacency(allTerritories);
+
     return allTerritories;
   }
 
-  private ArrayList<Territory> addAdjacency(ArrayList<Territory> allTerritories) {
-    for (Territory t : allTerritories) {
-      t.tryInitializeAllTerr(allTerritories);
-    }
+  /**
+   * Adds hard-coded adjacencies to given ArrayList of Territories
+   *
+   * @param allTerritories is the ArrayList of Territories to which to add
+   *                       adjacency information
+   */
+  public void addAdjacency(ArrayList<Territory> allTerritories) {
+    // Initialize temporary map to add adjacent territories
+    Map myMap = new Map(allTerritories, "m");
     // Narnia
-    allTerritories.get(0).tryInitializeAdjacentTerrStr("Midkemia");
-    allTerritories.get(0).tryInitializeAdjacentTerrStr("Mordor");
+    allTerritories.get(0).addAdjacentTerritories(myMap.getMap().get("Midkemia".toLowerCase()));
+    allTerritories.get(0).addAdjacentTerritories(myMap.getMap().get("Mordor".toLowerCase()));
     // Midkemia
-    allTerritories.get(1).tryInitializeAdjacentTerrStr("Narnia");
-    allTerritories.get(1).tryInitializeAdjacentTerrStr("Neverland");
-    allTerritories.get(1).tryInitializeAdjacentTerrStr("Mordor");
-    allTerritories.get(1).tryInitializeAdjacentTerrStr("Gondor");
+    allTerritories.get(1).addAdjacentTerritories(myMap.getMap().get("Narnia".toLowerCase()));
+    allTerritories.get(1).addAdjacentTerritories(myMap.getMap().get("Neverland".toLowerCase()));
+    allTerritories.get(1).addAdjacentTerritories(myMap.getMap().get("Mordor".toLowerCase()));
+    allTerritories.get(1).addAdjacentTerritories(myMap.getMap().get("Gondor".toLowerCase()));
     // Oz
-    allTerritories.get(2).tryInitializeAdjacentTerrStr("Neverland");
-    allTerritories.get(2).tryInitializeAdjacentTerrStr("Elantris");
-    allTerritories.get(2).tryInitializeAdjacentTerrStr("Gondor");
-    allTerritories.get(2).tryInitializeAdjacentTerrStr("Mt Othrys");
+    allTerritories.get(2).addAdjacentTerritories(myMap.getMap().get("Neverland".toLowerCase()));
+    allTerritories.get(2).addAdjacentTerritories(myMap.getMap().get("Elantris".toLowerCase()));
+    allTerritories.get(2).addAdjacentTerritories(myMap.getMap().get("Gondor".toLowerCase()));
+    allTerritories.get(2).addAdjacentTerritories(myMap.getMap().get("Mt Othrys".toLowerCase()));
     // Gondor
-    allTerritories.get(3).tryInitializeAdjacentTerrStr("Midkemia");
-    allTerritories.get(3).tryInitializeAdjacentTerrStr("Neverland");
-    allTerritories.get(3).tryInitializeAdjacentTerrStr("Oz");
-    allTerritories.get(3).tryInitializeAdjacentTerrStr("Mt Othrys");
-    allTerritories.get(3).tryInitializeAdjacentTerrStr("Mordor");
-    allTerritories.get(3).tryInitializeAdjacentTerrStr("Wakanda");
-    allTerritories.get(3).tryInitializeAdjacentTerrStr("Platform 9 and 3/4");
+    allTerritories.get(3).addAdjacentTerritories(myMap.getMap().get("Midkemia".toLowerCase()));
+    allTerritories.get(3).addAdjacentTerritories(myMap.getMap().get("Neverland".toLowerCase()));
+    allTerritories.get(3).addAdjacentTerritories(myMap.getMap().get("Oz".toLowerCase()));
+    allTerritories.get(3).addAdjacentTerritories(myMap.getMap().get("Mt Othrys".toLowerCase()));
+    allTerritories.get(3).addAdjacentTerritories(myMap.getMap().get("Mordor".toLowerCase()));
+    allTerritories.get(3).addAdjacentTerritories(myMap.getMap().get("Wakanda".toLowerCase()));
+    allTerritories.get(3).addAdjacentTerritories(myMap.getMap().get("Platform 9 and 3/4".toLowerCase()));
     // Mordor
-    allTerritories.get(4).tryInitializeAdjacentTerrStr("Narnia");
-    allTerritories.get(4).tryInitializeAdjacentTerrStr("Midkemia");
-    allTerritories.get(4).tryInitializeAdjacentTerrStr("Gondor");
-    allTerritories.get(4).tryInitializeAdjacentTerrStr("Platform 9 and 3/4");
-    allTerritories.get(4).tryInitializeAdjacentTerrStr("Hogwarts");
+    allTerritories.get(4).addAdjacentTerritories(myMap.getMap().get("Narnia".toLowerCase()));
+    allTerritories.get(4).addAdjacentTerritories(myMap.getMap().get("Midkemia".toLowerCase()));
+    allTerritories.get(4).addAdjacentTerritories(myMap.getMap().get("Gondor".toLowerCase()));
+    allTerritories.get(4).addAdjacentTerritories(myMap.getMap().get("Platform 9 and 3/4".toLowerCase()));
+    allTerritories.get(4).addAdjacentTerritories(myMap.getMap().get("Hogwarts".toLowerCase()));
     // Neverland
-    allTerritories.get(5).tryInitializeAdjacentTerrStr("Midkemia");
-    allTerritories.get(5).tryInitializeAdjacentTerrStr("Gondor");
-    allTerritories.get(5).tryInitializeAdjacentTerrStr("Oz");
-    allTerritories.get(5).tryInitializeAdjacentTerrStr("Elantris");
+    allTerritories.get(5).addAdjacentTerritories(myMap.getMap().get("Midkemia".toLowerCase()));
+    allTerritories.get(5).addAdjacentTerritories(myMap.getMap().get("Gondor".toLowerCase()));
+    allTerritories.get(5).addAdjacentTerritories(myMap.getMap().get("Oz".toLowerCase()));
+    allTerritories.get(5).addAdjacentTerritories(myMap.getMap().get("Elantris".toLowerCase()));
     // Elantris
-    allTerritories.get(6).tryInitializeAdjacentTerrStr("Neverland");
-    allTerritories.get(6).tryInitializeAdjacentTerrStr("Oz");
-    allTerritories.get(6).tryInitializeAdjacentTerrStr("Mt Othrys");
-    allTerritories.get(6).tryInitializeAdjacentTerrStr("Mt Olympus");
-    allTerritories.get(6).tryInitializeAdjacentTerrStr("Scadrial");
+    allTerritories.get(6).addAdjacentTerritories(myMap.getMap().get("Neverland".toLowerCase()));
+    allTerritories.get(6).addAdjacentTerritories(myMap.getMap().get("Oz".toLowerCase()));
+    allTerritories.get(6).addAdjacentTerritories(myMap.getMap().get("Mt Othrys".toLowerCase()));
+    allTerritories.get(6).addAdjacentTerritories(myMap.getMap().get("Mt Olympus".toLowerCase()));
+    allTerritories.get(6).addAdjacentTerritories(myMap.getMap().get("Scadrial".toLowerCase()));
     // Scadrial
-    allTerritories.get(7).tryInitializeAdjacentTerrStr("Elantris");
-    allTerritories.get(7).tryInitializeAdjacentTerrStr("Mt Olympus");
-    allTerritories.get(7).tryInitializeAdjacentTerrStr("Roshar");
+    allTerritories.get(7).addAdjacentTerritories(myMap.getMap().get("Elantris".toLowerCase()));
+    allTerritories.get(7).addAdjacentTerritories(myMap.getMap().get("Mt Olympus".toLowerCase()));
+    allTerritories.get(7).addAdjacentTerritories(myMap.getMap().get("Roshar".toLowerCase()));
     // Roshar
-    allTerritories.get(8).tryInitializeAdjacentTerrStr("Scadrial");
-    allTerritories.get(8).tryInitializeAdjacentTerrStr("Mt Olympus");
-    allTerritories.get(8).tryInitializeAdjacentTerrStr("Camp Half-Blood");
+    allTerritories.get(8).addAdjacentTerritories(myMap.getMap().get("Scadrial".toLowerCase()));
+    allTerritories.get(8).addAdjacentTerritories(myMap.getMap().get("Mt Olympus".toLowerCase()));
+    allTerritories.get(8).addAdjacentTerritories(myMap.getMap().get("Camp Half-Blood".toLowerCase()));
     // Mt Olympus
-    allTerritories.get(9).tryInitializeAdjacentTerrStr("Mt Othrys");
-    allTerritories.get(9).tryInitializeAdjacentTerrStr("Elantris");
-    allTerritories.get(9).tryInitializeAdjacentTerrStr("Scadrial");
-    allTerritories.get(9).tryInitializeAdjacentTerrStr("Roshar");
-    allTerritories.get(9).tryInitializeAdjacentTerrStr("Camp Half-Blood");
+    allTerritories.get(9).addAdjacentTerritories(myMap.getMap().get("Mt Othrys".toLowerCase()));
+    allTerritories.get(9).addAdjacentTerritories(myMap.getMap().get("Elantris".toLowerCase()));
+    allTerritories.get(9).addAdjacentTerritories(myMap.getMap().get("Scadrial".toLowerCase()));
+    allTerritories.get(9).addAdjacentTerritories(myMap.getMap().get("Roshar".toLowerCase()));
+    allTerritories.get(9).addAdjacentTerritories(myMap.getMap().get("Camp Half-Blood".toLowerCase()));
     // Mt Othrys
-    allTerritories.get(10).tryInitializeAdjacentTerrStr("Gondor");
-    allTerritories.get(10).tryInitializeAdjacentTerrStr("Oz");
-    allTerritories.get(10).tryInitializeAdjacentTerrStr("Elantris");
-    allTerritories.get(10).tryInitializeAdjacentTerrStr("Mt Olympus");
-    allTerritories.get(10).tryInitializeAdjacentTerrStr("Camp Half-Blood");
-    allTerritories.get(10).tryInitializeAdjacentTerrStr("Jurassic Park");
-    allTerritories.get(10).tryInitializeAdjacentTerrStr("Wakanda");
+    allTerritories.get(10).addAdjacentTerritories(myMap.getMap().get("Gondor".toLowerCase()));
+    allTerritories.get(10).addAdjacentTerritories(myMap.getMap().get("Oz".toLowerCase()));
+    allTerritories.get(10).addAdjacentTerritories(myMap.getMap().get("Elantris".toLowerCase()));
+    allTerritories.get(10).addAdjacentTerritories(myMap.getMap().get("Mt Olympus".toLowerCase()));
+    allTerritories.get(10).addAdjacentTerritories(myMap.getMap().get("Camp Half-Blood".toLowerCase()));
+    allTerritories.get(10).addAdjacentTerritories(myMap.getMap().get("Jurassic Park".toLowerCase()));
+    allTerritories.get(10).addAdjacentTerritories(myMap.getMap().get("Wakanda".toLowerCase()));
     // Camp Half-Blood
-    allTerritories.get(11).tryInitializeAdjacentTerrStr("Mt Othrys");
-    allTerritories.get(11).tryInitializeAdjacentTerrStr("Mt Olympus");
-    allTerritories.get(11).tryInitializeAdjacentTerrStr("Roshar");
-    allTerritories.get(11).tryInitializeAdjacentTerrStr("Jurassic Park");
-    allTerritories.get(11).tryInitializeAdjacentTerrStr("The Capitol");
-    allTerritories.get(11).tryInitializeAdjacentTerrStr("North Pole");
+    allTerritories.get(11).addAdjacentTerritories(myMap.getMap().get("Mt Othrys".toLowerCase()));
+    allTerritories.get(11).addAdjacentTerritories(myMap.getMap().get("Mt Olympus".toLowerCase()));
+    allTerritories.get(11).addAdjacentTerritories(myMap.getMap().get("Roshar".toLowerCase()));
+    allTerritories.get(11).addAdjacentTerritories(myMap.getMap().get("Jurassic Park".toLowerCase()));
+    allTerritories.get(11).addAdjacentTerritories(myMap.getMap().get("The Capitol".toLowerCase()));
+    allTerritories.get(11).addAdjacentTerritories(myMap.getMap().get("North Pole".toLowerCase()));
     // Hogwarts
-    allTerritories.get(12).tryInitializeAdjacentTerrStr("Mordor");
-    allTerritories.get(12).tryInitializeAdjacentTerrStr("Platform 9 and 3/4");
-    allTerritories.get(12).tryInitializeAdjacentTerrStr("Diagon Alley");
+    allTerritories.get(12).addAdjacentTerritories(myMap.getMap().get("Mordor".toLowerCase()));
+    allTerritories.get(12).addAdjacentTerritories(myMap.getMap().get("Platform 9 and 3/4".toLowerCase()));
+    allTerritories.get(12).addAdjacentTerritories(myMap.getMap().get("Diagon Alley".toLowerCase()));
     // Diagon Alley
-    allTerritories.get(13).tryInitializeAdjacentTerrStr("Hogwarts");
-    allTerritories.get(13).tryInitializeAdjacentTerrStr("Platform 9 and 3/4");
-    allTerritories.get(13).tryInitializeAdjacentTerrStr("Gotham City");
-    allTerritories.get(13).tryInitializeAdjacentTerrStr("Atlantis");
+    allTerritories.get(13).addAdjacentTerritories(myMap.getMap().get("Hogwarts".toLowerCase()));
+    allTerritories.get(13).addAdjacentTerritories(myMap.getMap().get("Platform 9 and 3/4".toLowerCase()));
+    allTerritories.get(13).addAdjacentTerritories(myMap.getMap().get("Gotham City".toLowerCase()));
+    allTerritories.get(13).addAdjacentTerritories(myMap.getMap().get("Atlantis".toLowerCase()));
     // Platform 9 and 3/4
-    allTerritories.get(14).tryInitializeAdjacentTerrStr("Hogwarts");
-    allTerritories.get(14).tryInitializeAdjacentTerrStr("Mordor");
-    allTerritories.get(14).tryInitializeAdjacentTerrStr("Gondor");
-    allTerritories.get(14).tryInitializeAdjacentTerrStr("Wakanda");
-    allTerritories.get(14).tryInitializeAdjacentTerrStr("Jurassic Park");
-    allTerritories.get(14).tryInitializeAdjacentTerrStr("Gotham City");
-    allTerritories.get(14).tryInitializeAdjacentTerrStr("Diagon Alley");
+    allTerritories.get(14).addAdjacentTerritories(myMap.getMap().get("Hogwarts".toLowerCase()));
+    allTerritories.get(14).addAdjacentTerritories(myMap.getMap().get("Mordor".toLowerCase()));
+    allTerritories.get(14).addAdjacentTerritories(myMap.getMap().get("Gondor".toLowerCase()));
+    allTerritories.get(14).addAdjacentTerritories(myMap.getMap().get("Wakanda".toLowerCase()));
+    allTerritories.get(14).addAdjacentTerritories(myMap.getMap().get("Jurassic Park".toLowerCase()));
+    allTerritories.get(14).addAdjacentTerritories(myMap.getMap().get("Gotham City".toLowerCase()));
+    allTerritories.get(14).addAdjacentTerritories(myMap.getMap().get("Diagon Alley".toLowerCase()));
     // Jurassic Park
-    allTerritories.get(15).tryInitializeAdjacentTerrStr("Platform 9 and 3/4");
-    allTerritories.get(15).tryInitializeAdjacentTerrStr("Wakanda");
-    allTerritories.get(15).tryInitializeAdjacentTerrStr("Mt Othrys");
-    allTerritories.get(15).tryInitializeAdjacentTerrStr("Camp Half-Blood");
-    allTerritories.get(15).tryInitializeAdjacentTerrStr("The Capitol");
-    allTerritories.get(15).tryInitializeAdjacentTerrStr("Atlantis");
-    allTerritories.get(15).tryInitializeAdjacentTerrStr("Gotham City");
+    allTerritories.get(15).addAdjacentTerritories(myMap.getMap().get("Platform 9 and 3/4".toLowerCase()));
+    allTerritories.get(15).addAdjacentTerritories(myMap.getMap().get("Wakanda".toLowerCase()));
+    allTerritories.get(15).addAdjacentTerritories(myMap.getMap().get("Mt Othrys".toLowerCase()));
+    allTerritories.get(15).addAdjacentTerritories(myMap.getMap().get("Camp Half-Blood".toLowerCase()));
+    allTerritories.get(15).addAdjacentTerritories(myMap.getMap().get("The Capitol".toLowerCase()));
+    allTerritories.get(15).addAdjacentTerritories(myMap.getMap().get("Atlantis".toLowerCase()));
+    allTerritories.get(15).addAdjacentTerritories(myMap.getMap().get("Gotham City".toLowerCase()));
     // Gotham City
-    allTerritories.get(16).tryInitializeAdjacentTerrStr("Diagon Alley");
-    allTerritories.get(16).tryInitializeAdjacentTerrStr("Platform 9 and 3/4");
-    allTerritories.get(16).tryInitializeAdjacentTerrStr("Jurassic Park");
-    allTerritories.get(16).tryInitializeAdjacentTerrStr("Atlantis");
+    allTerritories.get(16).addAdjacentTerritories(myMap.getMap().get("Diagon Alley".toLowerCase()));
+    allTerritories.get(16).addAdjacentTerritories(myMap.getMap().get("Platform 9 and 3/4".toLowerCase()));
+    allTerritories.get(16).addAdjacentTerritories(myMap.getMap().get("Jurassic Park".toLowerCase()));
+    allTerritories.get(16).addAdjacentTerritories(myMap.getMap().get("Atlantis".toLowerCase()));
     // Wakanda
-    allTerritories.get(17).tryInitializeAdjacentTerrStr("Gondor");
-    allTerritories.get(17).tryInitializeAdjacentTerrStr("Mt Othrys");
-    allTerritories.get(17).tryInitializeAdjacentTerrStr("Jurassic Park");
-    allTerritories.get(17).tryInitializeAdjacentTerrStr("Platform 9 and 3/4");
+    allTerritories.get(17).addAdjacentTerritories(myMap.getMap().get("Gondor".toLowerCase()));
+    allTerritories.get(17).addAdjacentTerritories(myMap.getMap().get("Mt Othrys".toLowerCase()));
+    allTerritories.get(17).addAdjacentTerritories(myMap.getMap().get("Jurassic Park".toLowerCase()));
+    allTerritories.get(17).addAdjacentTerritories(myMap.getMap().get("Platform 9 and 3/4".toLowerCase()));
     // The Capitol
-    allTerritories.get(18).tryInitializeAdjacentTerrStr("Jurassic Park");
-    allTerritories.get(18).tryInitializeAdjacentTerrStr("Camp Half-Blood");
-    allTerritories.get(18).tryInitializeAdjacentTerrStr("North Pole");
-    allTerritories.get(18).tryInitializeAdjacentTerrStr("Duke");
-    allTerritories.get(18).tryInitializeAdjacentTerrStr("Wonka Chocolate Factory");
-    allTerritories.get(18).tryInitializeAdjacentTerrStr("Atlantis");
+    allTerritories.get(18).addAdjacentTerritories(myMap.getMap().get("Jurassic Park".toLowerCase()));
+    allTerritories.get(18).addAdjacentTerritories(myMap.getMap().get("Camp Half-Blood".toLowerCase()));
+    allTerritories.get(18).addAdjacentTerritories(myMap.getMap().get("North Pole".toLowerCase()));
+    allTerritories.get(18).addAdjacentTerritories(myMap.getMap().get("Duke".toLowerCase()));
+    allTerritories.get(18).addAdjacentTerritories(myMap.getMap().get("Wonka Chocolate Factory".toLowerCase()));
+    allTerritories.get(18).addAdjacentTerritories(myMap.getMap().get("Atlantis".toLowerCase()));
     // District Twelve
-    allTerritories.get(19).tryInitializeAdjacentTerrStr("Wonka Chocolate Factory");
-    allTerritories.get(19).tryInitializeAdjacentTerrStr("Duke");
+    allTerritories.get(19).addAdjacentTerritories(myMap.getMap().get("Wonka Chocolate Factory".toLowerCase()));
+    allTerritories.get(19).addAdjacentTerritories(myMap.getMap().get("Duke".toLowerCase()));
     // North Pole
-    allTerritories.get(20).tryInitializeAdjacentTerrStr("The Capitol");
-    allTerritories.get(20).tryInitializeAdjacentTerrStr("Camp Half-Blood");
-    allTerritories.get(20).tryInitializeAdjacentTerrStr("Duke");
+    allTerritories.get(20).addAdjacentTerritories(myMap.getMap().get("The Capitol".toLowerCase()));
+    allTerritories.get(20).addAdjacentTerritories(myMap.getMap().get("Camp Half-Blood".toLowerCase()));
+    allTerritories.get(20).addAdjacentTerritories(myMap.getMap().get("Duke".toLowerCase()));
     // Atlantis
-    allTerritories.get(21).tryInitializeAdjacentTerrStr("Diagon Alley");
-    allTerritories.get(21).tryInitializeAdjacentTerrStr("Gotham City");
-    allTerritories.get(21).tryInitializeAdjacentTerrStr("Jurassic Park");
-    allTerritories.get(21).tryInitializeAdjacentTerrStr("The Capitol");
-    allTerritories.get(21).tryInitializeAdjacentTerrStr("Wonka Chocolate Factory");
+    allTerritories.get(21).addAdjacentTerritories(myMap.getMap().get("Diagon Alley".toLowerCase()));
+    allTerritories.get(21).addAdjacentTerritories(myMap.getMap().get("Gotham City".toLowerCase()));
+    allTerritories.get(21).addAdjacentTerritories(myMap.getMap().get("Jurassic Park".toLowerCase()));
+    allTerritories.get(21).addAdjacentTerritories(myMap.getMap().get("The Capitol".toLowerCase()));
+    allTerritories.get(21).addAdjacentTerritories(myMap.getMap().get("Wonka Chocolate Factory".toLowerCase()));
     // Wonka Chocolate Factory
-    allTerritories.get(22).tryInitializeAdjacentTerrStr("Atlantis");
-    allTerritories.get(22).tryInitializeAdjacentTerrStr("The Capitol");
-    allTerritories.get(22).tryInitializeAdjacentTerrStr("Duke");
-    allTerritories.get(22).tryInitializeAdjacentTerrStr("District Twelve");
+    allTerritories.get(22).addAdjacentTerritories(myMap.getMap().get("Atlantis".toLowerCase()));
+    allTerritories.get(22).addAdjacentTerritories(myMap.getMap().get("The Capitol".toLowerCase()));
+    allTerritories.get(22).addAdjacentTerritories(myMap.getMap().get("Duke".toLowerCase()));
+    allTerritories.get(22).addAdjacentTerritories(myMap.getMap().get("District Twelve".toLowerCase()));
     // Duke
-    allTerritories.get(23).tryInitializeAdjacentTerrStr("Wonka Chocolate Factory");
-    allTerritories.get(23).tryInitializeAdjacentTerrStr("The Capitol");
-    allTerritories.get(23).tryInitializeAdjacentTerrStr("North Pole");
-    allTerritories.get(23).tryInitializeAdjacentTerrStr("District Twelve");
-    return allTerritories;
+    allTerritories.get(23).addAdjacentTerritories(myMap.getMap().get("Wonka Chocolate Factory".toLowerCase()));
+    allTerritories.get(23).addAdjacentTerritories(myMap.getMap().get("The Capitol".toLowerCase()));
+    allTerritories.get(23).addAdjacentTerritories(myMap.getMap().get("North Pole".toLowerCase()));
+    allTerritories.get(23).addAdjacentTerritories(myMap.getMap().get("District Twelve".toLowerCase()));
   }
 
   /**
@@ -195,128 +217,19 @@ public class MapFactory implements AbstractMapFactory {
    * @return HashMap with player number as key and ArrayList of territories for
    *         player as value
    */
-  private HashMap<Integer, ArrayList<Territory>> makeFourGroups(ArrayList<Territory> allTerritories) {
-    HashMap<Integer, ArrayList<Territory>> groups = new HashMap<>();
-
-    ArrayList<Territory> green = new ArrayList<>();
-    for (int i = 0; i < 6; i++) {
-      green.add(allTerritories.get(i));
+  public void addOwners(ArrayList<Territory> allTerritories, ArrayList<Player> players) {
+    int numPlayers = players.size();
+    if (!(numPlayers >= 2 && numPlayers <= 4)) {
+      throw new IllegalArgumentException("This clas only supports 2-4 groups.");
     }
 
-    ArrayList<Territory> yellow = new ArrayList<>();
-    for (int j = 6; j < 12; j++) {
-      yellow.add(allTerritories.get(j));
+    int numTerr = allTerritories.size();
+    int territoriesPerPlayer = numTerr / numPlayers;
+
+    for (int i = 0; i < territoriesPerPlayer; i++) {
+      for (int player = 0; player < numPlayers; player++) {
+        allTerritories.get(i + player * territoriesPerPlayer).setOwner(players.get(player));
+      }
     }
-
-    ArrayList<Territory> red = new ArrayList<>();
-    for (int k = 12; k < 18; k++) {
-      red.add(allTerritories.get(k));
-    }
-
-    ArrayList<Territory> blue = new ArrayList<>();
-    for (int m = 18; m < 24; m++) {
-      blue.add(allTerritories.get(m));
-    }
-
-    groups.put(1, green);
-    groups.put(2, yellow);
-    groups.put(3, red);
-    groups.put(4, blue);
-
-    return groups;
   }
-
-  /**
-   * Make three groups of territories
-   *
-   * @param allTerritories is an ArrayList of all territories
-   * @return HashMap with player number as key and ArrayList of territories for
-   *         player as value
-   */
-  private HashMap<Integer, ArrayList<Territory>> makeThreeGroups(ArrayList<Territory> allTerritories) {
-    HashMap<Integer, ArrayList<Territory>> groups = new HashMap<>();
-
-    ArrayList<Territory> green = new ArrayList<>();
-    for (int i = 0; i < 6; i++) {
-      green.add(allTerritories.get(i));
-    }
-    green.add(allTerritories.get(12));
-    green.add(allTerritories.get(14));
-
-    ArrayList<Territory> yellow = new ArrayList<>();
-    for (int j = 6; j < 12; j++) {
-      yellow.add(allTerritories.get(j));
-    }
-    yellow.add(allTerritories.get(15));
-    yellow.add(allTerritories.get(17));
-
-    ArrayList<Territory> blue = new ArrayList<>();
-    for (int m = 18; m < 24; m++) {
-      blue.add(allTerritories.get(m));
-    }
-    blue.add(allTerritories.get(13));
-    blue.add(allTerritories.get(16));
-
-    groups.put(1, green);
-    groups.put(2, yellow);
-    groups.put(3, blue);
-
-    return groups;
-  }
-
-  /**
-   * Make two groups of territories
-   *
-   * @param allTerritories is an ArrayList of all territories
-   * @return HashMap with player number as key and ArrayList of territories for
-   *         player as value
-   */
-  private HashMap<Integer, ArrayList<Territory>> makeTwoGroups(ArrayList<Territory> allTerritories) {
-    HashMap<Integer, ArrayList<Territory>> groups = new HashMap<>();
-
-    ArrayList<Territory> green = new ArrayList<>();
-    for (int i = 0; i < 6; i++) {
-      green.add(allTerritories.get(i));
-    }
-    for (int j = 6; j < 12; j++) {
-      green.add(allTerritories.get(j));
-    }
-
-    ArrayList<Territory> blue = new ArrayList<>();
-    for (int k = 12; k < 18; k++) {
-      blue.add(allTerritories.get(k));
-    }
-    for (int m = 18; m < 24; m++) {
-      blue.add(allTerritories.get(m));
-    }
-
-    groups.put(1, green);
-    groups.put(2, blue);
-
-    return groups;
-  }
-
-  /**
-   * Determine groups of territories depending on number of players
-   *
-   * @param allTerr    is an ArrayList of all territories
-   * @param numPlayers is the number of players
-   * @return HashMap with player number as key and ArrayList of territories for
-   *         player as value
-   */
-  @Override
-  public HashMap<Integer, ArrayList<Territory>> makeGroups(ArrayList<Territory> allTerr, int numPlayers) {
-    HashMap<Integer, ArrayList<Territory>> groups = new HashMap<>();
-    if (numPlayers == 2) {
-      makeTwoGroups(allTerr);
-    } else if (numPlayers == 3) {
-      makeThreeGroups(allTerr);
-    } else if (numPlayers == 4) {
-      makeFourGroups(allTerr);
-    } else {
-      throw new IllegalArgumentException("Wrong number of players");
-    }
-    return groups;
-  }
-
 }

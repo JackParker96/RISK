@@ -2,8 +2,6 @@ package edu.duke.ece651.team14.shared;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Abstract class to represent RISC territory
@@ -12,7 +10,7 @@ public abstract class Territory implements Serializable {
   private final String name;
   private Player owner;
   private ArrayList<Unit> units;
-  private HashMap<Territory, Boolean> adjacentTerritories;
+  private ArrayList<Territory> adjacentTerritories;
 
   /**
    * Creates a Territory from a given name
@@ -23,7 +21,7 @@ public abstract class Territory implements Serializable {
     this.name = name.toLowerCase();
     this.owner = null;
     this.units = new ArrayList<Unit>();
-    this.adjacentTerritories = new HashMap<Territory, Boolean>();
+    this.adjacentTerritories = new ArrayList<>();
 
   }
 
@@ -32,68 +30,36 @@ public abstract class Territory implements Serializable {
    *
    * @return an ArrayList<Territory> of all adjacent territories
    */
-  public ArrayList<Territory> getNeighbors() {
-    ArrayList<Territory> ans = new ArrayList<Territory>();
-    for (Territory terr : adjacentTerritories.keySet()) {
-      if (adjacentTerritories.get(terr).equals(true)) {
-        ans.add(terr);
-      }
-    }
-    return ans;
+  public ArrayList<Territory> getAdjacentTerritories() {
+    return adjacentTerritories;
   }
-  
+
   /**
    * Add all territories in map to adjacentTerritories
    *
    * @param allTerritories is an ArrayList of these territories
    */
-  public boolean tryInitializeAllTerr(ArrayList<Territory> allTerritories) {
-    for (Territory a : allTerritories) {
-      adjacentTerritories.put(a, false);
-    }
-    return true;
+  public void addAdjacentTerritories(ArrayList<Territory> allTerritories) {
+    adjacentTerritories.addAll(allTerritories);
   }
 
   /**
-   * Mark a specific territory as adjacent
+   * Add a single territory to adjacentTerritories
    *
-   * @param terr is the adjacent Territory object
+   * @param terr is the Territory to add
    */
-  public boolean tryInitializeAdjacentTerr(Territory terr) {
-    if (adjacentTerritories.containsKey(terr)) {
-      adjacentTerritories.put(terr, true);
-    } else {
-      throw new IllegalArgumentException("Territory not in map");
-    }
-    return true;
-  }
-
-  /**
-   * Mark a specific territory as adjacent
-   *
-   * @param terrName is the name of the adjacent territory
-   */
-  public boolean tryInitializeAdjacentTerrStr(String terrName) {
-    for (Map.Entry<Territory, Boolean> adjacent_map : adjacentTerritories.entrySet()) {
-      if (adjacent_map.getKey().getName().equals(terrName.toLowerCase())) {
-        adjacentTerritories.put(adjacent_map.getKey(), true);
-        return true;
-      }
-    }
-    throw new IllegalArgumentException("Territory name not in map");
+  public void addAdjacentTerritories(Territory t) {
+    adjacentTerritories.add(t);
   }
 
   /**
    * Check if the territory is adjacent to this territory
    * 
    * @param terr: the territory to check
-   * @return true if adjacent
+   * @return true if adjacent, false otherwise
    */
   public boolean isAdjacentTo(Territory terr) {
-    if (!adjacentTerritories.containsKey(terr)) {
-      throw new IllegalArgumentException("Territory not in map");
-    }
-    return adjacentTerritories.get(terr);
+    return adjacentTerritories.contains(terr);
   }
 
   /**
@@ -103,12 +69,12 @@ public abstract class Territory implements Serializable {
    * @return true if adjacent
    */
   public boolean isAdjacentTo(String terrName) {
-    for (Map.Entry<Territory, Boolean> adjacent_map : adjacentTerritories.entrySet()) {
-      if (adjacent_map.getKey().getName().equals(terrName.toLowerCase())) {
-        return adjacentTerritories.get(adjacent_map.getKey());
+    for (Territory t : adjacentTerritories) {
+      if (t.getName().equals(terrName.toLowerCase())) {
+        return true;
       }
     }
-    throw new IllegalArgumentException("Territory name not in map");
+    return false;
   }
 
   // Get the number of units in the Territory
@@ -117,18 +83,27 @@ public abstract class Territory implements Serializable {
   }
 
   /**
-   * Add units to a Territory
+   * Adds units to territory
    *
    * @param units is a list of units to add to the territory
    * @return true if units successfully added
    * @throws IllegalArgumentException if the list of units is empty
    */
-  public boolean tryAddUnits(ArrayList<Unit> units) throws IllegalArgumentException {
+  public void addUnits(ArrayList<Unit> units) throws IllegalArgumentException {
     if (units.size() == 0) {
       throw new IllegalArgumentException("Can't add 0 units to a territory - must add 1 or more");
     }
     this.units.addAll(units);
-    return true;
+  }
+
+    /**
+   * Add a signle unit to territory
+   *
+   * @param units is a list of units to add to the territory
+   * @return true if units successfully added   * @throws IllegalArgumentException if the list of units is empty
+   */
+  public void addUnits(Unit unit) throws IllegalArgumentException {
+    this.units.add(unit);
   }
 
   /**

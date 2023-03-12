@@ -38,22 +38,20 @@ public class MapTextViewTest {
     mordorUnits.add(u4);
     mordorUnits.add(u5);
     dukeUnits.add(u6);
-    gondor.tryAddUnits(gondorUnits);
-    mordor.tryAddUnits(mordorUnits);
-    duke.tryAddUnits(dukeUnits);
+    gondor.addUnits(gondorUnits);
+    mordor.addUnits(mordorUnits);
+    duke.addUnits(dukeUnits);
     // Package the territories into a list
     ArrayList<Territory> terr_arr = new ArrayList<Territory>();
     terr_arr.add(gondor);
     terr_arr.add(mordor);
     terr_arr.add(duke);
     // Set up adjacencies
-    gondor.tryInitializeAllTerr(terr_arr);
-    mordor.tryInitializeAllTerr(terr_arr);
-    duke.tryInitializeAllTerr(terr_arr);
-    gondor.tryInitializeAdjacentTerr(mordor);
-    mordor.tryInitializeAdjacentTerr(gondor);
-    mordor.tryInitializeAdjacentTerr(duke);
-    duke.tryInitializeAdjacentTerr(mordor);
+    gondor.addAdjacentTerritories(mordor);
+
+    mordor.addAdjacentTerritories(gondor);
+    mordor.addAdjacentTerritories(duke);
+    duke.addAdjacentTerritories(mordor);
     // Create a map and use it to construct a MapTextView
     Map map = new Map(terr_arr, "my_awesome_map");
     MapTextView view = new MapTextView(map);
