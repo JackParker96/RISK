@@ -1,9 +1,11 @@
 package edu.duke.ece651.team14.shared;
 
+import java.io.Serializable;
+
 /**
  * A class to represent a player in the RISC game
  */
-public abstract class Player {
+public abstract class Player implements Serializable{
   // Player color
   private final Color color;
 
