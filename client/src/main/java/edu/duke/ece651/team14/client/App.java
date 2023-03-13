@@ -6,8 +6,10 @@ package edu.duke.ece651.team14.client;
 import java.io.IOException;
 import java.net.Socket;
 
+import edu.duke.ece651.team14.shared.BasicPlayer;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.MyName;
+import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.Territory;
 
 public class App {
@@ -24,8 +26,10 @@ public class App {
     try (Socket clientSocket = new Socket(hostName, port))// hardcoded hostname and port
     {// try-with-resources
       Communicator serverCommunicator = new Communicator(clientSocket.getOutputStream(),clientSocket.getInputStream());
-      Territory t = (Territory) serverCommunicator.recvObject();
-      System.out.println("Received Territory:"+t);// Territory toString() called
+      Player p = (BasicPlayer) serverCommunicator.recvObject();
+      String mapview = (String) serverCommunicator.recvObject();
+      System.out.println(mapview);// Territory toString() called
+      System.out.println("You are the "+p+" player, please add some units to your territory");
     }
   }
 }

@@ -40,4 +40,9 @@ public class Communicator {
   public Object recvObject() throws IOException, ClassNotFoundException{
     return in.readObject();
   }
+
+  public void release() throws IOException{
+    this.in.close();
+    this.out.close();
+  }
 }

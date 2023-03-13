@@ -15,7 +15,7 @@ class AppTest {
   @Disabled
   @Test
   void test_getMessage() throws IOException{
-    App a = new App(1);
+    App a = new App(1,1);
     assertEquals("Hello from the server for team14", a.getMessage());
   }
 

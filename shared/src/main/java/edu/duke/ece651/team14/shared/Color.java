@@ -1,12 +1,13 @@
 package edu.duke.ece651.team14.shared;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * A class to represent a color
  * Can only be red, green, blue, or yellow
  */
-public class Color {
+public class Color implements Serializable{
   public static final HashMap<String, Color> colors;
 
   static {
