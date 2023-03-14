@@ -1,5 +1,7 @@
 package edu.duke.ece651.team14.server;
 
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -14,12 +16,15 @@ import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
+import org.mockito.Mockito;
+
 public class ServerAdmin {
   ServerSocket serverSocket;
   ArrayList<Socket> clientSockets;
   HashMap<Player, Communicator> PlayerCommunicator;
   Map GameMap;
   MapTextView view;
+  
   private static final HashMap<Integer, String> colorMap = new HashMap<>();
   static {
     colorMap.put(0, "red");
@@ -28,8 +33,23 @@ public class ServerAdmin {
     colorMap.put(3, "yellow");
   }
 
+  /**
+   * Constructor
+   *
+   * @param portNum: server port number
+   * @throws IOException
+   */
   public ServerAdmin(int portNum) throws IOException {
     this.serverSocket = new ServerSocket(portNum);
+    this.clientSockets = new ArrayList<Socket>();
+    this.PlayerCommunicator = new HashMap<Player, Communicator>();
+  }
+
+  /** 
+   * Constructor for mock object
+   */
+  public ServerAdmin(ServerSocket serverSocket, InputStream input, OutputStream output) {
+    this.serverSocket = serverSocket;
     this.clientSockets = new ArrayList<Socket>();
     this.PlayerCommunicator = new HashMap<Player, Communicator>();
   }
@@ -45,16 +65,18 @@ public class ServerAdmin {
     while (acceptedPlayers < num_players) {
       Socket clientSocket = serverSocket.accept();
       clientSockets.add(clientSocket);
-      Communicator clientCommunicator = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
+      OutputStream out = clientSocket.getOutputStream();
+      InputStream in = clientSocket.getInputStream();
+      Communicator clientCommunicator = new Communicator(out, in);
       Player p = new BasicPlayer(new Color(colorMap.get(acceptedPlayers)), colorMap.get(acceptedPlayers));
-      PlayerCommunicator.put(p, clientCommunicator);
+      //PlayerCommunicator.put(p, clientCommunicator);
       // debug message:
-      System.out.println("Accept player connection:" + p);
+      System.out.println("Accepted player #" + acceptedPlayers);
       acceptedPlayers++;
     }
   }
 
-  public void InitializeGamePhase() throws IOException, ClassNotFoundException{
+  public void InitializeGamePhase() throws IOException, ClassNotFoundException {
     MapFactory f = new MapFactory();
     this.GameMap = f.makeMap("Earth", new ArrayList<Player>(this.PlayerCommunicator.keySet()));
     this.view = new MapTextView(this.GameMap);
@@ -69,18 +91,18 @@ public class ServerAdmin {
     receivePlacementOrders();
   }
 
-  public void receivePlacementOrders() throws IOException,ClassNotFoundException{
+  public void receivePlacementOrders() throws IOException, ClassNotFoundException {
     for (Player p : PlayerCommunicator.keySet()) {
       Communicator c = this.PlayerCommunicator.get(p);
       UnitPlacementOrder upo = (UnitPlacementOrder) c.recvObject();
-      //might need rule checker here, may not, clients have do a lot rule checking
-      System.out.println("recv unit placement request from "+p);
+      // might need rule checker here, may not, clients have do a lot rule checking
+      System.out.println("recv unit placement request from " + p);
       GameMap.handleUnitPlacementOrder(upo);
     }
-    //all placement order received
-   for (Player p : PlayerCommunicator.keySet()) {
+    // all placement order received
+    for (Player p : PlayerCommunicator.keySet()) {
       Communicator c = this.PlayerCommunicator.get(p);
-      System.out.println("send placed map to "+p);
+      System.out.println("send placed map to " + p);
       c.sendObject(view.displayMap());
     }
   }
