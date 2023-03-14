@@ -15,7 +15,7 @@ public class App {
   public App(String hostName, int port) throws IOException {
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
     //BufferedReader input = new BufferedReader(new FileReader("input.txt"));//this is a input file for 2 players
-    this.client = new ClientPlayer(hostName, port,input,System.out);
+    this.client = new TextClientPlayer(hostName, port,input,System.out);
   }
 
   public String getMessage() {

@@ -1,12 +1,13 @@
 package edu.duke.ece651.team14.shared;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Class to represent RISC Map of territories.
  */
-public class Map {
+public class Map implements Serializable {
   private HashMap<String, Territory> map;
   private String name;
 
@@ -111,5 +112,21 @@ public class Map {
    */
   public HashMap<String, Territory> getMap() {
     return map;
+  }
+
+  /**
+   * Returns true if all Territories are the same and name is the same
+   *
+   * @param o is the object to compare
+   *
+   * @return true is equal, false otherwise
+   */
+  @Override
+  public boolean equals(Object other) {
+    if (other != null && other.getClass().equals(getClass())) {
+      Map otherMap = (Map) other;
+      return ((name.equals(otherMap.getName())) && (map.equals(otherMap.getMap())));
+    }
+    return false;
   }
 }
