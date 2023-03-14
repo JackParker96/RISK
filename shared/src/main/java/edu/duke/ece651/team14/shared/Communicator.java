@@ -41,6 +41,18 @@ public class Communicator {
     return in.readObject();
   }
 
+  public String recvString() throws IOException, ClassNotFoundException{
+    return (String)recvObject();
+  }
+
+  public BasicPlayer recvBasicPlayer() throws IOException, ClassNotFoundException{
+    return (BasicPlayer) recvObject();
+  }
+
+  public UnitPlacementOrder recvUnitPOrder() throws IOException, ClassNotFoundException{
+    return (UnitPlacementOrder) recvObject();
+  }
+
   public void release() throws IOException{
     this.in.close();
     this.out.close();

@@ -19,7 +19,7 @@ public class App {
     return "Hello from the server for " + MyName.getName();
   }
 
-  public void startGame() throws IOException {
+  public void startGame() throws IOException, ClassNotFoundException{
     try {
       serverAdmin.acceptPlayersPhase(num_players);
       serverAdmin.InitializeGamePhase();
@@ -30,7 +30,7 @@ public class App {
   }
 
   // ./gradlew :server:run --args "[portnum] [num_players]"
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException, ClassNotFoundException{
     int port = Integer.parseInt(args[0]);
     int num_players = Integer.parseInt(args[1]);
     App a = new App(port, num_players);

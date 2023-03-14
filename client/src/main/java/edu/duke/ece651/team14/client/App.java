@@ -3,33 +3,36 @@
  */
 package edu.duke.ece651.team14.client;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.net.Socket;
 
-import edu.duke.ece651.team14.shared.BasicPlayer;
-import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.MyName;
-import edu.duke.ece651.team14.shared.Player;
-import edu.duke.ece651.team14.shared.Territory;
 
 public class App {
+  ClientPlayer client;
+
+  public App(String hostName, int port) throws IOException {
+    //BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    BufferedReader input = new BufferedReader(new FileReader("input.txt"));//this is a input file for 2 players
+    this.client = new ClientPlayer(hostName, port,input,System.out);
+  }
+
   public String getMessage() {
     return "Hello from the client for " + MyName.getName();
   }
 
-  //./gradlew :client:run --args "vcm-xxxxx.vm.duke.edu [port_num]" 
+  // ./gradlew :client:run --args "vcm-xxxxx.vm.duke.edu [port_num]"
   public static void main(String[] args) throws IOException, ClassNotFoundException {
-    App a = new App();
-    System.out.println(a.getMessage());
     String hostName = args[0];
     int port = Integer.parseInt(args[1]);
-    try (Socket clientSocket = new Socket(hostName, port))// hardcoded hostname and port
-    {// try-with-resources
-      Communicator serverCommunicator = new Communicator(clientSocket.getOutputStream(),clientSocket.getInputStream());
-      Player p = (BasicPlayer) serverCommunicator.recvObject();
-      String mapview = (String) serverCommunicator.recvObject();
-      System.out.println(mapview);// Territory toString() called
-      System.out.println("You are the "+p+" player, please add some units to your territory");
+    App a = new App(hostName,port);
+    System.out.println(a.getMessage());
+    try{
+      a.client.whoAmIPhase();
+      a.client.placeUnitsPhase();
+    }finally{
+      a.client.release();
     }
   }
 }
