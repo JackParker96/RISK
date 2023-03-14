@@ -11,33 +11,6 @@ public class MapTextView {
   }
 
   /**
-   * Get a mapping from Players to the territories they own
-   *
-   * @return a HashMap whose keys are all the Players in the game and whose values
-   *         are ArrayLists of territories owned by each Player
-   */
-  public HashMap<Player, ArrayList<Territory>> groupTerritoriesByPlayer() {
-    // Intialize an empty map that we will populate and then return
-    HashMap<Player, ArrayList<Territory>> ans = new HashMap<Player, ArrayList<Territory>>();
-    // Get the HashMap that corresponds to the Map object
-    HashMap<String, Territory> myMap = map.getMap();
-    // Loop through all the Territories in myMap
-    for (Territory terr : myMap.values()) {
-      Player p = terr.getOwner();
-      // If we have already added this Player to ans, just add terr to the list of
-      // Territories controlled by that Player
-      if (ans.containsKey(p)) {
-        ans.get(p).add(terr);
-        // Otherwise, create a new entry in ans
-      } else {
-        ans.put(p, new ArrayList<Territory>());
-        ans.get(p).add(terr);
-      }
-    }
-    return ans;
-  }
-
-  /**
    * Take in an ArrayList of Territories and convert it to a comma-separated list
    * of territory names
    *
@@ -91,7 +64,7 @@ public class MapTextView {
    */
   public String displayMap() {
     StringBuilder sb = new StringBuilder();
-    HashMap<Player, ArrayList<Territory>> gameStateInfo = groupTerritoriesByPlayer();
+    HashMap<Player, ArrayList<Territory>> gameStateInfo = map.groupTerritoriesByPlayer();
     for (Player p : gameStateInfo.keySet()) {
       sb.append(displayPlayerInfo(p, gameStateInfo.get(p)));
       sb.append("\n");

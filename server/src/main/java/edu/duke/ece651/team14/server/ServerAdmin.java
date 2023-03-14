@@ -1,4 +1,5 @@
 package edu.duke.ece651.team14.server;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,6 +12,7 @@ import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.Player;
+import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
 public class ServerAdmin {
   ServerSocket serverSocket;
@@ -52,7 +54,7 @@ public class ServerAdmin {
     }
   }
 
-  public void InitializeGamePhase() throws IOException {
+  public void InitializeGamePhase() throws IOException, ClassNotFoundException{
     MapFactory f = new MapFactory();
     this.GameMap = f.makeMap("Earth", new ArrayList<Player>(this.PlayerCommunicator.keySet()));
     this.view = new MapTextView(this.GameMap);
@@ -61,6 +63,24 @@ public class ServerAdmin {
     for (Player p : PlayerCommunicator.keySet()) {
       Communicator c = this.PlayerCommunicator.get(p);
       c.sendObject(p);
+      c.sendObject(view.displayMap());
+      c.sendObject(GameMap.getUnitsPlacementOrder(p));
+    }
+    receivePlacementOrders();
+  }
+
+  public void receivePlacementOrders() throws IOException,ClassNotFoundException{
+    for (Player p : PlayerCommunicator.keySet()) {
+      Communicator c = this.PlayerCommunicator.get(p);
+      UnitPlacementOrder upo = (UnitPlacementOrder) c.recvObject();
+      //might need rule checker here, may not, clients have do a lot rule checking
+      System.out.println("recv unit placement request from "+p);
+      GameMap.handleUnitPlacementOrder(upo);
+    }
+    //all placement order received
+   for (Player p : PlayerCommunicator.keySet()) {
+      Communicator c = this.PlayerCommunicator.get(p);
+      System.out.println("send placed map to "+p);
       c.sendObject(view.displayMap());
     }
   }

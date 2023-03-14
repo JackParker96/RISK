@@ -1,6 +1,7 @@
 package edu.duke.ece651.team14.shared;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
@@ -41,6 +42,23 @@ public class MapTest {
     assertEquals(n, m.getTerritoryByName("Narnia"));
     assertThrows(IllegalArgumentException.class, ()->m.getTerritoryByName("heaven"));
   }
-  
+
+  @Test
+  // Tests equals() method
+  public void test_equals() {
+    ArrayList<Territory> t1 = new ArrayList<>();
+    ArrayList<Territory> t2 = new ArrayList<>();
+    BasicTerritory n = new BasicTerritory("Narnia");
+    BasicTerritory o = new BasicTerritory("Oz");
+    t1.add(n);
+    t1.add(o);
+    t2.add(o);
+    t2.add(n);
+    Map m1 = new Map(t1, "Earth");
+    Map m2 = new Map(t2, "Earth");
+    Map m3 = null;
+    assertEquals(m1, m2);
+    assertNotEquals(m1, m3);
+  }
 
 }
