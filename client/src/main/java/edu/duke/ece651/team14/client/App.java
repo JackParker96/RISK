@@ -4,8 +4,8 @@
 package edu.duke.ece651.team14.client;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import edu.duke.ece651.team14.shared.MyName;
 
@@ -13,8 +13,8 @@ public class App {
   ClientPlayer client;
 
   public App(String hostName, int port) throws IOException {
-    //BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    BufferedReader input = new BufferedReader(new FileReader("input.txt"));//this is a input file for 2 players
+    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    //BufferedReader input = new BufferedReader(new FileReader("input.txt"));//this is a input file for 2 players
     this.client = new ClientPlayer(hostName, port,input,System.out);
   }
 

@@ -16,5 +16,7 @@ application {
     mainClassName = 'edu.duke.ece651.team14.client.App'
 }
 
-
+run {
+    standardInput = System.in
+}
 
