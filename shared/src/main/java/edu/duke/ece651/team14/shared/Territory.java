@@ -83,6 +83,15 @@ public abstract class Territory implements Serializable {
   }
 
   /**
+   * Returns the list of units
+   *
+   * @return the list of units in the territory
+   */
+  public ArrayList<Unit> getUnits() {
+    return units;
+  }
+
+  /**
    * Adds units to territory
    *
    * @param units is a list of units to add to the territory
