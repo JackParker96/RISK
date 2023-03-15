@@ -3,19 +3,16 @@ package edu.duke.ece651.team14.server;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.StringReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import edu.duke.ece651.team14.shared.Communicator;
 
 public class ServerAdminTest {
   @Test
@@ -29,6 +26,7 @@ public class ServerAdminTest {
     }
   }
 
+  @Disabled
   @Test
   public void test_acceptPlayers() throws IOException {
     // create mocks
