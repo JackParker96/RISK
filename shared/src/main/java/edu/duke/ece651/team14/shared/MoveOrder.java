@@ -5,12 +5,29 @@ package edu.duke.ece651.team14.shared;
  */
 public class MoveOrder extends Order {
 
-  public MoveOrder(Territory origin, Territory destination, Player player, int numUnits, String unitType) {
-    super(origin, destination, player, numUnits, unitType);
+  /**
+   * Creates a MoveOrder with numUnits of basic units
+   *
+   * @param origin      is the origin Territory
+   * @param destination is the destination Territory
+   * @param numUnits    is the number of units to send
+   * @param player      is the player making the order
+   * @param unitType    is the type of unit to send
+   */
+  public MoveOrder(Territory origin, Territory destination, int numUnits, Player player, String unitType) {
+    super(origin, destination, numUnits, player, unitType);
   }
 
+  /**
+   * Creates a MoveOrder with numUnits of basic units
+   *
+   * @param origin      is the origin Territory
+   * @param destination is the destination Territory
+   * @param numUnits    is the number of units to send
+   * @param player      is the player making the order
+   */
   public MoveOrder(Territory origin, Territory destination, int numUnits, Player player) {
-    this(origin, destination, player, numUnits, "basic");
+    super(origin, destination, numUnits, player);
   }
 
 }

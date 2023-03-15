@@ -1,0 +1,73 @@
+package edu.duke.ece651.team14.shared;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+public class NumberOfUnitsRuleCheckerTest {
+  
+  @Test
+  public void test_checkMyRule() {
+    Territory origin = new BasicTerritory("t1");
+    Territory destination = new BasicTerritory("t2");
+    Player p = new BasicPlayer(new Color("red"), "p");
+
+    ArrayList<Territory> terrs = new ArrayList<>();
+    terrs.add(origin);
+    terrs.add(destination);
+
+    Map map = new Map(terrs, "map");
+
+    NumberOfUnitsRuleChecker o = new NumberOfUnitsRuleChecker(null);
+
+    MoveOrder negativeUnits = new MoveOrder(origin, destination, -5, p);
+    assertEquals("Order must have positive value for numUnits", o.checkMyRule(map, negativeUnits));
+
+    MoveOrder m = new MoveOrder(origin, destination, 2, p);
+    assertEquals("Not enough units of given type in destination territory", o.checkMyRule(map, m));
+
+    origin.addUnits(new BasicUnit());
+
+    Unit otherTypeUnit = Mockito.mock(BasicUnit.class);
+    Mockito.when(otherTypeUnit.getType()).thenReturn("other");
+    
+    origin.addUnits(otherTypeUnit);
+
+    assertEquals("Not enough units of given type in destination territory", o.checkMyRule(map, m));
+
+    origin.addUnits(new BasicUnit());
+    
+    assertNull(o.checkMyRule(map, m));
+  }
+
+  @Test
+  public void test_numUnitsOwnershipChain() {
+    NumberOfUnitsRuleChecker n = new NumberOfUnitsRuleChecker(null);
+    OriginOwnershipRuleChecker o = new OriginOwnershipRuleChecker(n);
+
+    Territory origin = new BasicTerritory("t1");
+    origin.addUnits(new BasicUnit());
+    Territory destination = new BasicTerritory("t2");
+    Player p = new BasicPlayer(new Color("red"), "p");
+    origin.setOwner(p);
+
+    MoveOrder m = new MoveOrder(origin, destination, 1, p);
+
+    ArrayList<Territory> terrs = new ArrayList<>();
+    terrs.add(origin);
+    terrs.add(destination);
+
+    Map map = new Map(terrs, "map");
+    assertNull(o.checkOrder(map, m));
+
+    MoveOrder notEnoughUnits = new MoveOrder(origin, destination, 2, p);
+
+    assertEquals("Not enough units of given type in destination territory", o.checkOrder(map, notEnoughUnits));
+    
+  }
+
+}

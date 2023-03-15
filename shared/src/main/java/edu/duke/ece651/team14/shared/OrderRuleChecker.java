@@ -35,14 +35,14 @@ public abstract class OrderRuleChecker {
    *
    * @return String if breaks one of the rule checkers' rules, null otherwise
    */
-  public String checkMoveOrder(Map map, Order order) {
+  public String checkOrder(Map map, Order order) {
     String result = checkMyRule(map, order);
     if (result != null) {
       return result;
     }
 
     if (next != null) {
-      return next.checkMoveOrder(map, order);
+      return next.checkOrder(map, order);
     }
 
     return null;

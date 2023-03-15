@@ -3,8 +3,8 @@ package edu.duke.ece651.team14.shared;
 /**
  * Class that checks to make sure player owns destination territory in order
  */
-public class OwnershipRuleChecker extends OrderRuleChecker {
-  public OwnershipRuleChecker(OrderRuleChecker next) {
+public class DestinationOwnershipRuleChecker extends OrderRuleChecker {
+  public DestinationOwnershipRuleChecker(OrderRuleChecker next) {
     super(next);
   }
 

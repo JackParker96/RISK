@@ -87,6 +87,25 @@ public class BasicTerritoryTest {
   }
 
   @Test
+  public void test_getUnits() {
+    BasicUnit b1 = new BasicUnit();
+    BasicUnit b2 = new BasicUnit();
+    ArrayList<Unit> units = new ArrayList<>();
+    units.add(b1);
+    units.add(b2);
+
+    Territory t = new BasicTerritory("t");
+    t.addUnits(b1);
+    t.addUnits(b2);
+
+    assertEquals(units, t.getUnits());
+
+    units.add(new BasicUnit());
+
+    assertNotEquals(units, t.getUnits());
+  }
+
+  @Test
   public void test_setOwner_getOwner() {
     BasicTerritory gondor = new BasicTerritory("Gondor");
     assertNull(gondor.getOwner());
