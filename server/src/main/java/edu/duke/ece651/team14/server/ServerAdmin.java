@@ -108,6 +108,15 @@ public class ServerAdmin {
   }
 
   /**
+   * Close server socket
+   *
+   * @throws IOException
+   */
+  public void closeServer() throws IOException {
+    serverSocket.close();
+  }
+
+  /**
    * Release all the resources of this ServerAdmin
    * 
    * @throws IOException
@@ -119,7 +128,9 @@ public class ServerAdmin {
     for (Socket s : clientSockets) {
       s.close();
     }
-    serverSocket.close();
+    closeServer();
   }
+
+  
 
 }
