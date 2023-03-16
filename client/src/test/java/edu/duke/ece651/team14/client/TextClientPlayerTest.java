@@ -1,7 +1,6 @@
 package edu.duke.ece651.team14.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -16,6 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -43,6 +43,18 @@ public class TextClientPlayerTest {
     tcp.myPlayer = p;
     return tcp;
   }
+
+  // TODO: figure out how to test normal (non-mocked) constructor
+  /*
+  @Test
+  public void test_constructor() throws IOException {
+    ServerSocket sock = new ServerSocket(4444);
+    BufferedReader in = new BufferedReader(new StringReader("duke\n"));
+    PrintStream out = new PrintStream(new ByteArrayOutputStream(), true);
+    ClientPlayer cp = new TextClientPlayer("localhost", 4444, in, out);
+    sock.close();
+  }
+  */
 
   @Test
   public void test_askForTerritory() throws IOException {

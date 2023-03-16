@@ -22,8 +22,8 @@ public abstract class ClientPlayer {
   /**
    * Constructor
    * 
-   * @param hostName:       hostname of server
-   * @param serverPort:     port number if server
+   * @param hostName:       name of host server
+   * @param serverPort:     port number of host server
    * @param inputSource:    the source to read interactive input, e.g. System.in.
    * @param outPrintStream: e.g. System.out
    * @throws IOException
