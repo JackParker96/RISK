@@ -198,6 +198,37 @@ public class TextClientPlayer extends ClientPlayer {
     }
   }
 
+  public String getOrderType() throws IOException {
+    while (true) {
+      out.println("Enter order type ('move', 'attack', or 'commit' - to stop entering orders for this turn):");
+      String orderType = inputReader.readLine().toLowerCase();
+      if ((!orderType.equals("move")) && (!orderType.equals("attack")) && (!orderType.equals("commit"))) {
+        out.println("Invalid move type");
+        continue;
+      }
+      return orderType;
+    }
+  }
+
+  public int getNumUnitsToSend() {
+    while (true) {
+      out.println("Enter the number of units you want to send")
+    }
+  }
+  
+  public Order getOrder(Map m) throws IOException {
+    out.println("You will now enter an Order");
+    String orderType = getOrderType();
+    if (orderType.equals("commit")) {
+      return null;
+    }
+    String fromPrompt = "Enter the name of the 'from' territory for your order";
+    Territory fromTerr = askForTerritoryOwnedByPlayer(fromPrompt, m);
+    String toPrompt = "Enter the name of the 'to' territory for your order";
+    Territory toTerr = askForTerritoryOwnedByPlayer(toPrompt, m);
+    
+  }
+  
   /**
    * public Order getOrder() throws IOException{
    * out.println("You will now enter an order\nType 'A' for an attack order or 'M'
