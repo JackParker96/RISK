@@ -10,16 +10,33 @@ public class App {
   ServerAdmin serverAdmin;
   int num_players;
 
+  /**
+   * Constructor
+   *
+   * @param portNum: server port number - must be greater than 1024
+   * @param num_players: number of players
+   * @throws IOException
+   */
   public App(int portNum, int num_players) throws IOException {
-    this.serverAdmin = new ServerAdmin(portNum);
-    this.num_players = num_players;
+    try {
+      if (num_players < 2) {
+        throw new IllegalArgumentException("To play, you need a minimum of 2 players.");
+      }
+      if (num_players > 4) {
+        throw new IllegalArgumentException("To play, you cannot exceed a maximum of 4 players.");
+      }
+      this.serverAdmin = new ServerAdmin(portNum);
+      this.num_players = num_players;
+    } finally {
+      // empty
+    }
   }
 
   public String getMessage() {
     return "Hello from the server for " + MyName.getName();
   }
 
-  public void startGame() throws IOException, ClassNotFoundException{
+  public void startGame() throws IOException, ClassNotFoundException {
     try {
       serverAdmin.acceptPlayersPhase(num_players);
       serverAdmin.InitializeGamePhase();
@@ -30,11 +47,20 @@ public class App {
   }
 
   // ./gradlew :server:run --args "[portnum] [num_players]"
-  public static void main(String[] args) throws IOException, ClassNotFoundException{
-    int port = Integer.parseInt(args[0]);
-    int num_players = Integer.parseInt(args[1]);
-    App a = new App(port, num_players);
-    System.out.println(a.getMessage());
-    a.startGame();
+  public static void main(String[] args) throws IOException, ClassNotFoundException {
+    try {
+      int port = Integer.parseInt(args[0]);
+      int num_players = Integer.parseInt(args[1]);
+      App a = new App(port, num_players);
+      System.out.println(a.getMessage());
+      a.startGame();
+      a.serverAdmin.closeServer();
+    } catch (IllegalArgumentException e) {
+      System.out.println(e.getMessage());
+      System.out.println("Exiting game...");
+    } catch (ClassNotFoundException e) {
+      System.out.println("System error.");
+      System.out.println("Exiting game...");
+    }
   }
 }

@@ -41,6 +41,6 @@ public class ServerAdminTest {
 
     InputStream input = new ByteArrayInputStream("test".getBytes());
     ServerAdmin sa = new ServerAdmin(mockServerSocket, input, mockOut);
-    sa.acceptPlayersPhase(2); // does not compile
+    sa.acceptPlayersPhase(3); // does not compile
   }
 }
