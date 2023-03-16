@@ -39,7 +39,7 @@ public class App {
   public void startGame() throws IOException, ClassNotFoundException {
     try {
       serverAdmin.acceptPlayersPhase(num_players);
-      serverAdmin.InitializeGamePhase();
+      serverAdmin.initializeGamePhase();
     } finally {
       serverAdmin.releaseResources();
     }

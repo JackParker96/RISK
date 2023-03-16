@@ -48,14 +48,14 @@ public class ServerAdmin {
   /**
    * Constructor for mock object
    */
-  public ServerAdmin(ServerSocket serverSocket, InputStream input, OutputStream output) {
+  public ServerAdmin(ServerSocket serverSocket) {
     this.serverSocket = serverSocket;
     this.clientSockets = new ArrayList<Socket>();
     this.playerCommunicators = new HashMap<Player, Communicator>();
   }
 
   /**
-   * Server accept all the connections specified by num_players
+   * Server accepts all the connections specified by num_players
    * 
    * @param num_players: total num of connections
    * @throws IOException
@@ -76,7 +76,12 @@ public class ServerAdmin {
     }
   }
 
-  public void InitializeGamePhase() throws IOException, ClassNotFoundException {
+  /**
+   * Server initializes map and sends it to players
+   *
+   * @throws IOException, ClassNotFoundException
+   */
+  public void initializeGamePhase() throws IOException, ClassNotFoundException {
     MapFactory f = new MapFactory();
     this.map = f.makeMap("Earth", new ArrayList<Player>(this.playerCommunicators.keySet()));
     // System.out.println(view.displayMap());
@@ -88,9 +93,11 @@ public class ServerAdmin {
       // TODO: change this, doesn't need to send empty placement order
       c.sendObject(map.getUnitsPlacementOrder(p));
     }
-    receivePlacementOrders();
+    // receivePlacementOrders();
   }
 
+  // throwing java.lang.ClassCastException: BasicPlayer cannot be cast to class UnitPlacementOrder
+  // commented out in initializeGamePhase() method for now
   public void receivePlacementOrders() throws IOException, ClassNotFoundException {
     for (Player p : playerCommunicators.keySet()) {
       Communicator c = playerCommunicators.get(p);

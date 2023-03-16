@@ -58,18 +58,17 @@ public class ServerAdminTest {
     sa.releaseResources();
   }
 
-  // TODO: finish writing this test once method is completed
+  // TODO: finish w
   @Test
   public void test_initializeGame() throws IOException, ClassNotFoundException {
     ServerSocket mockServerSocket = mock(ServerSocket.class);
     createBasicMocks(mockServerSocket);
     ServerAdmin sa = new ServerAdmin(mockServerSocket);
     sa.acceptPlayersPhase(2);
-    sa.initializeGamePhase();
+    sa.InitializeGamePhase();
     sa.releaseResources();
   }
 
-  // TODO: write this test once method is completed
   @Test
   public void test_receivePlacementOrders() throws IOException {
   }
