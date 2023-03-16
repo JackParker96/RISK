@@ -17,6 +17,7 @@ import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.MoveOrder;
 import edu.duke.ece651.team14.shared.AttackOrder;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
+import edu.duke.ece651.team14.shared.MapFactory;
 
 public class ServerAdmin {
   ServerSocket serverSocket;
@@ -76,6 +77,8 @@ public class ServerAdmin {
   }
 
   public void InitializeGamePhase() throws IOException, ClassNotFoundException {
+    MapFactory f = new MapFactory();
+    this.map = f.makeMap("Earth", new ArrayList<Player>(this.playerCommunicators.keySet()));
     // System.out.println(view.displayMap());
     // send the player object to client
     for (Player p : playerCommunicators.keySet()) {
@@ -105,7 +108,7 @@ public class ServerAdmin {
   }
 
   /**
-   * Executes one turn in the game
+   * Executes one turn in the game - not finished writing yet
    */
   public void executeTurn(HashMap<Player, Communicator> playerCommunicators, Map map) throws IOException {
     sendMap(playerCommunicators.values(), map);

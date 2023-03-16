@@ -212,7 +212,7 @@ public class TextClientPlayer extends ClientPlayer {
 
   public int getNumUnitsToSend() {
     while (true) {
-      out.println("Enter the number of units you want to send")
+      out.println("Enter the number of units you want to send");
     }
   }
   
@@ -226,7 +226,8 @@ public class TextClientPlayer extends ClientPlayer {
     Territory fromTerr = askForTerritoryOwnedByPlayer(fromPrompt, m);
     String toPrompt = "Enter the name of the 'to' territory for your order";
     Territory toTerr = askForTerritoryOwnedByPlayer(toPrompt, m);
-    
+
+    return null;
   }
   
   /**

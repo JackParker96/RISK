@@ -1,4 +1,4 @@
-package edu.duke.ece651.team14.server;
+package edu.duke.ece651.team14.shared;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
