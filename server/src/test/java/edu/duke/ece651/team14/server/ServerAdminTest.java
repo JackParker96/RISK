@@ -19,7 +19,7 @@ public class ServerAdminTest {
   public void test_constructor() throws IOException {
     ServerAdmin serverAdmin = null;
     try {
-      serverAdmin = new ServerAdmin(12345);
+      serverAdmin = new ServerAdmin(12345, null);
       assertEquals(12345, serverAdmin.serverSocket.getLocalPort());
     } finally {
       serverAdmin.releaseResources();
@@ -42,5 +42,16 @@ public class ServerAdminTest {
     InputStream input = new ByteArrayInputStream("test".getBytes());
     ServerAdmin sa = new ServerAdmin(mockServerSocket, input, mockOut);
     sa.acceptPlayersPhase(3); // does not compile
+  }
+
+  @Test
+  public void test_initializeGamePhase() throws IOException {
+    ServerAdmin s = new ServerAdmin(1234, null);
+    
+  }
+
+  @Test
+  public void testReceivePlacementOrders() throws IOException {
+    
   }
 }

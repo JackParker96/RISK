@@ -22,11 +22,25 @@ public class MapFactory implements AbstractMapFactory {
    * @return the map
    */
   public Map makeMap(String mapName, ArrayList<Player> players) {
-    ArrayList<Territory> allTerritories = makeTerritories();
+    ArrayList<Territory> allTerritories;
+    if (mapName.equals("Earth")) {
+      allTerritories = makeTerritories();
+    } else {
+      allTerritories = makeTestTerritories();
+    }
     addAdjacency(allTerritories);
     addOwners(allTerritories, players);
     Map m = new Map(allTerritories, mapName);
     return m;
+  }
+
+  /**
+   * Makes a basic set of territories for testing
+   *
+   * @return a basic set of Territories
+   */
+  public ArrayList<Territory> makeTestTerritories() {
+    return null;
   }
 
   /**

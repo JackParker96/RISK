@@ -12,7 +12,6 @@ import edu.duke.ece651.team14.shared.BasicPlayer;
 import edu.duke.ece651.team14.shared.Color;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.Map;
-import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
@@ -21,9 +20,8 @@ import org.mockito.Mockito;
 public class ServerAdmin {
   ServerSocket serverSocket;
   ArrayList<Socket> clientSockets;
-  HashMap<Player, Communicator> PlayerCommunicator;
-  Map GameMap;
-  MapTextView view;
+  HashMap<Player, Communicator> playerCommunicators;
+  Map map;
   
   private static final HashMap<Integer, String> colorMap = new HashMap<>();
   static {
@@ -39,19 +37,21 @@ public class ServerAdmin {
    * @param portNum: server port number
    * @throws IOException
    */
-  public ServerAdmin(int portNum) throws IOException {
+  public ServerAdmin(int portNum, Map map) throws IOException {
     this.serverSocket = new ServerSocket(portNum);
     this.clientSockets = new ArrayList<Socket>();
-    this.PlayerCommunicator = new HashMap<Player, Communicator>();
+    this.playerCommunicators = new HashMap<Player, Communicator>();
+    this.map = map;
   }
 
   /** 
    * Constructor for mock object
    */
-  public ServerAdmin(ServerSocket serverSocket, InputStream input, OutputStream output) {
+  public ServerAdmin(ServerSocket serverSocket, InputStream input, OutputStream output, Map map) {
     this.serverSocket = serverSocket;
     this.clientSockets = new ArrayList<Socket>();
-    this.PlayerCommunicator = new HashMap<Player, Communicator>();
+    this.playerCommunicators = new HashMap<Player, Communicator>();
+    this.map = map;
   }
 
   /**
@@ -69,7 +69,7 @@ public class ServerAdmin {
       InputStream in = clientSocket.getInputStream();
       Communicator clientCommunicator = new Communicator(out, in);
       Player p = new BasicPlayer(new Color(colorMap.get(acceptedPlayers)), colorMap.get(acceptedPlayers));
-      //PlayerCommunicator.put(p, clientCommunicator);
+      playerCommunicators.put(p, clientCommunicator);
       // debug message:
       System.out.println("Accepted player #" + acceptedPlayers);
       acceptedPlayers++;
@@ -77,33 +77,31 @@ public class ServerAdmin {
   }
 
   public void InitializeGamePhase() throws IOException, ClassNotFoundException {
-    MapFactory f = new MapFactory();
-    this.GameMap = f.makeMap("Earth", new ArrayList<Player>(this.PlayerCommunicator.keySet()));
-    this.view = new MapTextView(this.GameMap);
     // System.out.println(view.displayMap());
     // send the player object to client
-    for (Player p : PlayerCommunicator.keySet()) {
-      Communicator c = this.PlayerCommunicator.get(p);
+    for (Player p : playerCommunicators.keySet()) {
+      Communicator c = playerCommunicators.get(p);
       c.sendObject(p);
-      c.sendObject(view.displayMap());
-      c.sendObject(GameMap.getUnitsPlacementOrder(p));
+      c.sendObject(map);
+      // TODO: change this, doesn't need to send empty placement order
+      c.sendObject(map.getUnitsPlacementOrder(p));
     }
     receivePlacementOrders();
   }
 
   public void receivePlacementOrders() throws IOException, ClassNotFoundException {
-    for (Player p : PlayerCommunicator.keySet()) {
-      Communicator c = this.PlayerCommunicator.get(p);
+    for (Player p : playerCommunicators.keySet()) {
+      Communicator c = playerCommunicators.get(p);
       UnitPlacementOrder upo = (UnitPlacementOrder) c.recvObject();
       // might need rule checker here, may not, clients have do a lot rule checking
       System.out.println("recv unit placement request from " + p);
-      GameMap.handleUnitPlacementOrder(upo);
+      map.handleUnitPlacementOrder(upo);
     }
     // all placement order received
-    for (Player p : PlayerCommunicator.keySet()) {
-      Communicator c = this.PlayerCommunicator.get(p);
+    for (Player p : playerCommunicators.keySet()) {
+      Communicator c = playerCommunicators.get(p);
       System.out.println("send placed map to " + p);
-      c.sendObject(view.displayMap());
+      c.sendObject(map);
     }
   }
 
@@ -122,7 +120,7 @@ public class ServerAdmin {
    * @throws IOException
    */
   public void releaseResources() throws IOException {
-    for (Communicator c : PlayerCommunicator.values()) {
+    for (Communicator c : playerCommunicators.values()) {
       c.release();
     }
     for (Socket s : clientSockets) {
