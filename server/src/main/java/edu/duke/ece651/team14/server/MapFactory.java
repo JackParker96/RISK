@@ -6,6 +6,7 @@ import edu.duke.ece651.team14.shared.BasicTerritory;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.Territory;
+import edu.duke.ece651.team14.shared.BasicUnit;
 
 /**
  * Class to make a hard-coded map with 24 Territories
@@ -26,7 +27,7 @@ public class MapFactory implements AbstractMapFactory {
     if (mapName.equals("Earth")) {
       allTerritories = makeTerritories();
     } else {
-      allTerritories = makeTestTerritories();
+      return(new Map(makeTestTerritories(players), mapName));
     }
     addAdjacency(allTerritories);
     addOwners(allTerritories, players);
@@ -39,8 +40,36 @@ public class MapFactory implements AbstractMapFactory {
    *
    * @return a basic set of Territories
    */
-  public ArrayList<Territory> makeTestTerritories() {
-    return null;
+  public ArrayList<Territory> makeTestTerritories(ArrayList<Player> players) {
+    if (players.size() != 2) {
+      throw new IllegalArgumentException("Player array must have two players");
+    }
+    Player p1 = players.get(0);
+    Player p2 = players.get(1);
+    ArrayList<Territory> terrs = new ArrayList<>();
+    for (int i = 0; i < 5; i++) {
+      terrs.add(new BasicTerritory(Integer.toString(i)));
+      if (i < 4) {
+        terrs.get(i).setOwner(p1);
+      } else {
+        terrs.get(i).setOwner(p2);
+      }
+    }
+
+    // Add adjacencies
+    terrs.get(0).addAdjacentTerritories(terrs.get(1));
+    terrs.get(1).addAdjacentTerritories(terrs.get(2));
+    terrs.get(2).addAdjacentTerritories(terrs.get(3));
+    terrs.get(2).addAdjacentTerritories(terrs.get(4));
+
+    terrs.get(1).addAdjacentTerritories(terrs.get(0));
+    terrs.get(2).addAdjacentTerritories(terrs.get(1));
+    terrs.get(3).addAdjacentTerritories(terrs.get(2));
+    terrs.get(4).addAdjacentTerritories(terrs.get(2));
+
+    terrs.get(1).addUnits(new BasicUnit());
+
+    return terrs;
   }
 
   /**

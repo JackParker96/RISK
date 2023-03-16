@@ -1,8 +1,8 @@
 package edu.duke.ece651.team14.server;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -13,9 +13,10 @@ import edu.duke.ece651.team14.shared.Color;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.Player;
+import edu.duke.ece651.team14.shared.Order;
+import edu.duke.ece651.team14.shared.MoveOrder;
+import edu.duke.ece651.team14.shared.AttackOrder;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
-
-import org.mockito.Mockito;
 
 public class ServerAdmin {
   ServerSocket serverSocket;
@@ -37,21 +38,19 @@ public class ServerAdmin {
    * @param portNum: server port number
    * @throws IOException
    */
-  public ServerAdmin(int portNum, Map map) throws IOException {
+  public ServerAdmin(int portNum) throws IOException {
     this.serverSocket = new ServerSocket(portNum);
     this.clientSockets = new ArrayList<Socket>();
     this.playerCommunicators = new HashMap<Player, Communicator>();
-    this.map = map;
   }
 
   /** 
    * Constructor for mock object
    */
-  public ServerAdmin(ServerSocket serverSocket, InputStream input, OutputStream output, Map map) {
+  public ServerAdmin(ServerSocket serverSocket, InputStream input, OutputStream output) {
     this.serverSocket = serverSocket;
     this.clientSockets = new ArrayList<Socket>();
     this.playerCommunicators = new HashMap<Player, Communicator>();
-    this.map = map;
   }
 
   /**
@@ -103,6 +102,22 @@ public class ServerAdmin {
       System.out.println("send placed map to " + p);
       c.sendObject(map);
     }
+  }
+
+  public HashMap<String, ArrayList<Order>> receiveOrdersFromOnePlayer(Player p) throws IOException, ClassNotFoundException {
+    Communicator c = playerCommunicators.get(p);
+    c.sendObject("Init order phase");
+    return sortOrders(c.recvOrders());
+  }
+
+  public HashMap<String, ArrayList<Order>> sortOrders(ArrayList<Order> orders) {
+    HashMap<String, ArrayList<Order>> sortedOrders = new HashMap<>();
+    sortedOrders.put("move", new ArrayList<Order>());
+    sortedOrders.put("attack", new ArrayList<Order>());
+    for (Order o : orders) {
+      sortedOrders.get(o.getOrderType()).add(o);
+    }
+    return sortedOrders;
   }
 
   /**

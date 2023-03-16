@@ -34,6 +34,8 @@ public class MoveOrderTest {
 
     assertEquals(m2.getUnitType(), "otherUnitType");
     assertNotEquals(m2.getUnitType(), "basic");
+
+    assertEquals(m2.getOrderType(), "move");
   }
 
 }

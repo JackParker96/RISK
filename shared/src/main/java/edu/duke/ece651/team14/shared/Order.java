@@ -12,6 +12,7 @@ public abstract class Order implements Serializable {
   private int numUnits;
   private String unitType;
   private Player player;
+  private String orderType;
 
   /**
    * Creates an Order
@@ -22,12 +23,13 @@ public abstract class Order implements Serializable {
    * @param player      is the player making the order
    * @param unitType    is the type of unit to send
    */
-  public Order(Territory origin, Territory destination, int numUnits, Player player, String unitType) {
+  public Order(Territory origin, Territory destination, int numUnits, Player player, String unitType, String orderType) {
     this.origin = origin;
     this.destination = destination;
     this.numUnits = numUnits;
     this.player = player;
     this.unitType = unitType;
+    this.orderType = orderType;
   }
 
   /**
@@ -38,8 +40,8 @@ public abstract class Order implements Serializable {
    * @param numUnits    is the number of units to send
    * @param player      is the player making the order
    */
-  public Order(Territory origin, Territory destination, int numUnits, Player player) {
-    this(origin, destination, numUnits, player, "basic");
+  public Order(Territory origin, Territory destination, int numUnits, Player player, String orderType) {
+    this(origin, destination, numUnits, player, "basic", orderType);
   }
 
   /**
@@ -85,5 +87,14 @@ public abstract class Order implements Serializable {
    */
   public Player getPlayer() {
     return player;
+  }
+
+    /**
+   * Returns order type
+   *
+   * @return orderType
+   */
+  public String getOrderType() {
+    return orderType;
   }
 }
