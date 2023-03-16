@@ -23,7 +23,7 @@ public class ServerAdmin {
   ArrayList<Socket> clientSockets;
   HashMap<Player, Communicator> playerCommunicators;
   Map map;
-  
+
   private static final HashMap<Integer, String> colorMap = new HashMap<>();
   static {
     colorMap.put(0, "red");
@@ -44,7 +44,7 @@ public class ServerAdmin {
     this.playerCommunicators = new HashMap<Player, Communicator>();
   }
 
-  /** 
+  /**
    * Constructor for mock object
    */
   public ServerAdmin(ServerSocket serverSocket, InputStream input, OutputStream output) {
@@ -104,12 +104,71 @@ public class ServerAdmin {
     }
   }
 
-  public HashMap<String, ArrayList<Order>> receiveOrdersFromOnePlayer(Player p) throws IOException, ClassNotFoundException {
-    Communicator c = playerCommunicators.get(p);
+  /**
+   * Executes one turn in the game
+   */
+  public void executeTurn(HashMap<Player, Communicator> playerCommunicators, Map map) throws IOException {
+    sendMap(playerCommunicators.values(), map);
+    
+  }
+
+  /**
+   * Sends the given map through every given Communicator
+   *
+   * @param communicators is the list of Communicators
+   * @param m             is the game map
+   *
+   * @throws IOException
+   */
+  public void sendMap(Iterable<Communicator> communicators, Map map) throws IOException {
+    for (Communicator c : communicators) {
+      c.sendObject(map);
+    }
+  }
+
+  /**
+   * Receives orders from every player for a given turn
+   *
+   * @param communicators is a HashMap of communicators to use
+   *
+   * @throw IOException
+   * @throw ClassNotFoundException
+   *
+   * @return a HashMap of the orders
+   */
+  public HashMap<Player, HashMap<String, ArrayList<Order>>> receiveAllOrders(
+      HashMap<Player, Communicator> communicators) throws IOException, ClassNotFoundException {
+    HashMap<Player, HashMap<String, ArrayList<Order>>> orders = new HashMap<>();
+    for (Player p : communicators.keySet()) {
+      orders.put(p, receiveOrdersFromOnePlayer(communicators.get(p)));
+    }
+    return orders;
+  }
+
+  /**
+   * Receives a list of orders from player associated with given Communicator
+   *
+   * @param c is the communicator from which to get orders
+   *
+   * @throws IOException
+   * @throws ClassNotFoundException
+   *
+   * @return HashMap of orders arranged by order type
+   */
+  public HashMap<String, ArrayList<Order>> receiveOrdersFromOnePlayer(Communicator c)
+      throws IOException, ClassNotFoundException {
     c.sendObject("Init order phase");
     return sortOrders(c.recvOrders());
   }
 
+  /**
+   * Takes in an ArrayList of orders and return a HashMap of the orders arranged
+   * by order type
+   *
+   * @param orders is the list of Orders
+   *
+   * @return the HashMap of Orders arranged by order type
+   */
   public HashMap<String, ArrayList<Order>> sortOrders(ArrayList<Order> orders) {
     HashMap<String, ArrayList<Order>> sortedOrders = new HashMap<>();
     sortedOrders.put("move", new ArrayList<Order>());
@@ -143,7 +202,5 @@ public class ServerAdmin {
     }
     closeServer();
   }
-
-  
 
 }
