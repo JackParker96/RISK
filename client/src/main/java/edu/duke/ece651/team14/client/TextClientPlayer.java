@@ -5,11 +5,17 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.duke.ece651.team14.shared.Communicator;
-import edu.duke.ece651.team14.shared.UnitPlacementOrder;
-import edu.duke.ece651.team14.shared.MapTextView;
+import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.Map;
+import edu.duke.ece651.team14.shared.MapTextView;
+import edu.duke.ece651.team14.shared.Order;
+import edu.duke.ece651.team14.shared.UnitPlacementOrder;
+import edu.duke.ece651.team14.shared.Territory;
+import edu.duke.ece651.team14.shared.BasicTerritory;
 
 public class TextClientPlayer extends ClientPlayer {
   /**
@@ -140,15 +146,70 @@ public class TextClientPlayer extends ClientPlayer {
           throw new EOFException("reach end of file");
         }
         int ans = Integer.parseInt(s);
-        if(ans<=0){
+        if (ans <= 0) {
           throw new IllegalArgumentException("Unit number cannot be less than 1");
         }
         return ans;
       } catch (NumberFormatException ex) {
         out.println("Wrong int format, try again");
-      }catch(IllegalArgumentException ex){
+      } catch (IllegalArgumentException ex) {
         out.println(ex.getMessage());
       }
     }
   }
+
+  /**
+   * Prompt the user to enter the name of a territory on the map, then return that
+   * territory if it exists
+   *
+   * @param prompt is the prompt to display to the player
+   * @param m      is the Map you want the player to select a territory from
+   * @return the Territory owned by the player
+   */
+  public Territory askForTerritory(String prompt, Map m) throws IOException {
+    while (true) {
+      out.println(prompt);
+      String terrName = inputReader.readLine();
+      try {
+        Territory t = m.getTerritoryByName(terrName);
+        return t;
+      } catch (IllegalArgumentException e) {
+        out.println(e.getMessage());
+        continue;
+      }
+    }
+  }
+
+  /**
+   * Prompt the user to enter the name of a territory that is (a) on the map and
+   * (b) owned by the player
+   *
+   * @param prompt is the prompt to display to the player
+   * @param m      is the map you want the p[layer to select a territory from
+   * @return the Territory owned by the player
+   */
+  public Territory askForTerritoryOwnedByPlayer(String prompt, Map m) throws IOException {
+    while (true) {
+      Territory t = askForTerritory(prompt, m);
+      if (t.getOwner().equals(myPlayer)) {
+        return t;
+      }
+      out.println("You do not own that territory");
+    }
+  }
+
+  /**
+   * public Order getOrder() throws IOException{
+   * out.println("You will now enter an order\nType 'A' for an attack order or 'M'
+   * for a move order");
+   * String orderType = inputReader.readLine();
+   * if ((orderType.toLowerCase() != "a") && (orderType.toLowerCase() != "m")) {
+   * throw new IllegalArgumentException("Please type either 'A' or 'M'");
+   * }
+   * out.println("From territory name: ");
+   * String terrName = inputReader.readLine();
+   * out.println("To territory name: ");
+   * out.println("Number of units: ");
+   * }
+   */
 }

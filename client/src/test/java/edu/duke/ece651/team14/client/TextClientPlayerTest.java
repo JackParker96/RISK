@@ -1,15 +1,20 @@
 package edu.duke.ece651.team14.client;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.StringReader;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -17,14 +22,61 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 import edu.duke.ece651.team14.shared.BasicPlayer;
+import edu.duke.ece651.team14.shared.BasicTerritory;
 import edu.duke.ece651.team14.shared.Color;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.Map;
-import edu.duke.ece651.team14.shared.UnitPlacementOrder;
+import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.Territory;
-import edu.duke.ece651.team14.shared.BasicTerritory;
+import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
 public class TextClientPlayerTest {
+
+  /**
+   * Helper method to create a simple TextClientPlayer
+   */
+  public TextClientPlayer createTextClientPlayer(String inputData, Color c, OutputStream bytes) throws IOException {
+    Player p = new BasicPlayer(c, "A");
+    BufferedReader in = new BufferedReader(new StringReader(inputData));
+    PrintStream out = new PrintStream(bytes, true);
+    TextClientPlayer tcp = new TextClientPlayer(null, null, in, out);
+    tcp.myPlayer = p;
+    return tcp;
+  }
+
+  @Test
+  public void test_askForTerritory() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    TextClientPlayer tcp = createTextClientPlayer("duke\ngondor\n", new Color("blue"), bytes);
+    BasicTerritory gondor = new BasicTerritory("gondor");
+    ArrayList<Territory> terrs = new ArrayList<>();
+    terrs.add(gondor);
+    Map m = new Map(terrs, "map");
+    String prompt = "Enter the name of a territory on the map";
+    assertEquals(gondor, tcp.askForTerritory(prompt, m));
+    String expected = prompt + "\n" + "Territory does not exist in Map\n" + prompt + "\n";
+    assertEquals(expected, bytes.toString());
+  }
+
+  @Test
+  public void test_askForTerritoryOwnedByPlayer() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    TextClientPlayer tcp = createTextClientPlayer("duke\ngondor\nmordor\n", new Color("blue"), bytes);
+    BasicTerritory gondor = new BasicTerritory("gondor");
+    BasicTerritory mordor = new BasicTerritory("mordor");
+    mordor.setOwner(tcp.myPlayer);
+    gondor.setOwner(new BasicPlayer(new Color("red"), "p"));
+    ArrayList<Territory> terrs = new ArrayList<>();
+    terrs.add(gondor);
+    terrs.add(mordor);
+    Map m = new Map(terrs, "map");
+    String prompt = "Enter the name of a territory that you own";
+    assertEquals(mordor, tcp.askForTerritoryOwnedByPlayer(prompt, m));
+    String expected = prompt + "\n" + "Territory does not exist in Map\n" + prompt + "\n"
+        + "You do not own that territory\n" + prompt + "\n";
+    assertEquals(expected, bytes.toString());
+  }
+
   @Test
   public void test_placeUnits() throws FileNotFoundException, IOException, ClassNotFoundException {
     Socket mockClientSocket = mock(Socket.class);
