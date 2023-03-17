@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.NumberOfUnitsRuleChecker;
 import edu.duke.ece651.team14.shared.Order;
+import edu.duke.ece651.team14.shared.UnitMover;
 
 /**
  * The OrderVerifier class can be used for verifying both attack and move orders
@@ -35,12 +36,14 @@ public class OrderVerifier {
     String checkResult = checker.checkMyRule(map, order);
     // If the order is valid, actually move those units on the map
     if (checkResult == null) {
-      // UnitMover mover = new UnitMover();
-      // UnitMover.moveUnits(map, order.getOrigin(), order.getDestination(),
-      // order.getNumUnits());
+      UnitMover.moveUnits(order.getOrigin(), order.getDestination(), order.getNumUnits(), order.getUnitType());
       verifiedOrders.add(order);
     }
     return checkResult;
+  }
+
+  public int getNumVerifiedOrders() {
+    return verifiedOrders.size();
   }
 
 }
