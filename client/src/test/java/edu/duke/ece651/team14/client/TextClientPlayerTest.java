@@ -28,6 +28,7 @@ import edu.duke.ece651.team14.shared.BasicUnit;
 import edu.duke.ece651.team14.shared.Color;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.Map;
+import edu.duke.ece651.team14.shared.MapFactory;
 import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.Unit;
@@ -149,21 +150,19 @@ public class TextClientPlayerTest {
   public void test_placeUnits() throws FileNotFoundException, IOException, ClassNotFoundException {
     Socket mockClientSocket = mock(Socket.class);
     Communicator mockComuni = mock(Communicator.class);
-    ArrayList<Territory> terrs = new ArrayList<>();
-    Territory t = new BasicTerritory("t");
-    t.setOwner(new BasicPlayer(new Color("yellow"), "yellow"));
-    terrs.add(t);
-    when(mockComuni.recvMap()).thenReturn(new Map(terrs, "Earth"));
-    when(mockComuni.recvBasicPlayer()).thenReturn(new BasicPlayer(new Color("yellow"), "yellow"));
-    UnitPlacementOrder upo = new UnitPlacementOrder();
-    for (int i = 0; i < 12; i++) {// the input file expects to fill 12 territories
-      upo.addOneTerrPlacement("testT", 0);
-    }
-    when(mockComuni.recvUnitPOrder()).thenReturn(upo);
+    ArrayList<Player> players = new ArrayList<>();
+    BasicPlayer thisPlayer = new BasicPlayer(new Color("red"), "red");
+    BasicPlayer thatPlayer = new BasicPlayer(new Color("blue"), "blue");
+    players.add(thisPlayer);
+    players.add(thatPlayer);
+    MapFactory f = new MapFactory();
+    Map gameMap = f.makeMap("Earth", players);
+    when(mockComuni.recvMap()).thenReturn(gameMap);
+    when(mockComuni.recvBasicPlayer()).thenReturn(thisPlayer);
     BufferedReader input = new BufferedReader(new FileReader("input.txt"));
     ClientPlayer cp = new TextClientPlayer(mockClientSocket, mockComuni, input, System.out);
-    cp.placeUnitsPhase();
     cp.whoAmIPhase();
+    cp.placeUnitsPhase();
     verify(mockComuni).recvBasicPlayer();
     cp.release();
   }
@@ -172,20 +171,20 @@ public class TextClientPlayerTest {
   public void testEOF() throws FileNotFoundException, IOException, ClassNotFoundException {
     Socket mockClientSocket = mock(Socket.class);
     Communicator mockComuni = mock(Communicator.class);
-    ArrayList<Territory> terrs = new ArrayList<>();
-    Territory t = new BasicTerritory("t");
-    t.setOwner(new BasicPlayer(new Color("yellow"), "yellow"));
-    terrs.add(t);
-    when(mockComuni.recvMap()).thenReturn(new Map(terrs, "Earth"));
-    when(mockComuni.recvBasicPlayer()).thenReturn(new BasicPlayer(new Color("yellow"), "yellow"));
-    UnitPlacementOrder upo = new UnitPlacementOrder();
-    for (int i = 0; i < 12; i++) {// the input file expects to fill 12 territories
-      upo.addOneTerrPlacement("testT", 0);
-    }
-    when(mockComuni.recvUnitPOrder()).thenReturn(upo);
+    ArrayList<Player> players = new ArrayList<>();
+    BasicPlayer thisPlayer = new BasicPlayer(new Color("red"), "red");
+    BasicPlayer thatPlayer = new BasicPlayer(new Color("blue"), "blue");
+    players.add(thisPlayer);
+    players.add(thatPlayer);
+    MapFactory f = new MapFactory();
+    Map gameMap = f.makeMap("Earth", players);
+    when(mockComuni.recvMap()).thenReturn(gameMap);
+    when(mockComuni.recvBasicPlayer()).thenReturn(thisPlayer);
     BufferedReader input = new BufferedReader(new StringReader("3\n"));
     ClientPlayer cp = new TextClientPlayer(mockClientSocket, mockComuni, input, System.out);
+    cp.whoAmIPhase();
     assertThrows(EOFException.class, () -> cp.placeUnitsPhase());
+    cp.release();
   }
 
 }

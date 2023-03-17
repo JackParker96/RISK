@@ -60,9 +60,10 @@ public class TextClientPlayer extends ClientPlayer {
    * @throws ClassNotFoundException
    */
   public void placeUnitsPhase() throws IOException, ClassNotFoundException {
-    displayMap(recvMap());
+    Map m = recvMap();
+    displayMap(m);
     out.println("You are the " + myPlayer + " player, please add some units to your territory");
-    UnitPlacementOrder upo = communicator.recvUnitPOrder();
+    UnitPlacementOrder upo = m.getUnitsPlacementOrder(myPlayer);
     placeUnits(upo, 30);
     communicator.sendObject(upo);
     // wait for other to finish
