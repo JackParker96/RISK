@@ -7,7 +7,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import edu.duke.ece651.team14.shared.BasicPlayer;
 import edu.duke.ece651.team14.shared.Color;
@@ -20,8 +19,7 @@ import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.OrderRuleChecker;
 import edu.duke.ece651.team14.shared.OriginOwnershipRuleChecker;
 import edu.duke.ece651.team14.shared.Player;
-import edu.duke.ece651.team14.shared.Territory;
-import edu.duke.ece651.team14.shared.Unit;
+import edu.duke.ece651.team14.shared.UnitMover;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
 public class ServerAdmin {
@@ -173,7 +171,7 @@ public class ServerAdmin {
     if (checkerResult != null) {
       return checkerResult;
     }
-    moveUnits(order.getOrigin(), order.getDestination(), order.getNumUnits(), order.getUnitType());
+    UnitMover.moveUnits(order.getOrigin(), order.getDestination(), order.getNumUnits(), order.getUnitType());
     return null;
   }
 
@@ -182,29 +180,6 @@ public class ServerAdmin {
    */
   public void resolveAttackOrders() {
     return;
-  }
-
-  /**
-   * Moves up to numUnits units of type unitType from Territory origin to
-   * Territory
-   * destination
-   *
-   * @param origin      is the origin Territory
-   * @param destination is the destination Territory
-   * @param numUnits    is the number of units to move
-   * @param unitType    is the unit type
-   */
-  public void moveUnits(Territory origin, Territory destination, int numUnits, String unitType) {
-    ArrayList<Unit> originUnits = origin.getUnits();
-    Iterator<Unit> iterator = originUnits.iterator();
-    while (iterator.hasNext() && numUnits > 0) {
-      Unit u = iterator.next();
-      if (u.getType().equals(unitType)) {
-        iterator.remove();
-        destination.addUnits(u);
-        numUnits--;
-      }
-    }
   }
 
   /**
