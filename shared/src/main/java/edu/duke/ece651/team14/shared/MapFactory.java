@@ -220,16 +220,35 @@ public class MapFactory implements AbstractMapFactory {
   public void addOwners(ArrayList<Territory> allTerritories, ArrayList<Player> players) {
     int numPlayers = players.size();
     if (!(numPlayers >= 2 && numPlayers <= 4)) {
-      throw new IllegalArgumentException("This clas only supports 2-4 groups.");
+      throw new IllegalArgumentException("This class only supports 2-4 groups.");
     }
 
     int numTerr = allTerritories.size();
     int territoriesPerPlayer = numTerr / numPlayers;
 
-    for (int i = 0; i < territoriesPerPlayer; i++) {
-      for (int player = 0; player < numPlayers; player++) {
-        allTerritories.get(i + player * territoriesPerPlayer).setOwner(players.get(player));
+    if (numPlayers == 3) {
+      for (int i = 0; i < 6; i++) {
+        for (int player = 0; player < 2; player++) {
+          allTerritories.get(i + player * 6).setOwner(players.get(player));
+        }
+        allTerritories.get(i + 3 * 6).setOwner(players.get(2));
+      }
+      allTerritories.get(12).setOwner(players.get(0));
+      allTerritories.get(14).setOwner(players.get(0));
+      allTerritories.get(15).setOwner(players.get(1));
+      allTerritories.get(17).setOwner(players.get(1));
+      allTerritories.get(13).setOwner(players.get(2));
+      allTerritories.get(16).setOwner(players.get(2));
+    }
+    
+    else {
+      for (int i = 0; i < territoriesPerPlayer; i++) {
+        for (int player = 0; player < numPlayers; player++) {
+          allTerritories.get(i + player * territoriesPerPlayer).setOwner(players.get(player));
+        }
       }
     }
+
+  
   }
 }
