@@ -70,8 +70,7 @@ public class ServerAdmin {
       Communicator clientCommunicator = new Communicator(out, in);
       Player p = new BasicPlayer(new Color(colorMap.get(acceptedPlayers)), colorMap.get(acceptedPlayers));
       playerCommunicators.put(p, clientCommunicator);
-      // debug message:
-      System.out.println("Accepted player #" + acceptedPlayers);
+      System.out.println("Accepted player connection: " + p);
       acceptedPlayers++;
     }
   }
