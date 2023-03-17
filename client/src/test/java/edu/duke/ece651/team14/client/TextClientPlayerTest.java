@@ -15,9 +15,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import edu.duke.ece651.team14.shared.BasicPlayer;
@@ -57,16 +59,16 @@ public class TextClientPlayerTest {
   }
 
   // TODO: figure out how to test normal (non-mocked) constructor
-  /*
-   * @Test
-   * public void test_constructor() throws IOException {
-   * ServerSocket sock = new ServerSocket(4444);
-   * BufferedReader in = new BufferedReader(new StringReader("duke\n"));
-   * PrintStream out = new PrintStream(new ByteArrayOutputStream(), true);
-   * ClientPlayer cp = new TextClientPlayer("localhost", 4444, in, out);
-   * sock.close();
-   * }
-   */
+  // Breaking on new Communicator line in constructor
+  @Disabled
+  @Test
+  public void test_constructor() throws IOException {
+    ServerSocket sock = new ServerSocket(4444);
+    BufferedReader in = new BufferedReader(new StringReader("duke\n"));
+    PrintStream out = new PrintStream(new ByteArrayOutputStream(), true);
+    ClientPlayer cp = new TextClientPlayer("localhost", 4444, in, out);
+    sock.close();
+  }
 
   @Test
   public void test_getOrderType() throws IOException {

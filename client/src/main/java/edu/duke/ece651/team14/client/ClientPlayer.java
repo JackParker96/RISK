@@ -31,9 +31,13 @@ public abstract class ClientPlayer {
   public ClientPlayer(String hostName, int serverPort, BufferedReader inputSource, PrintStream outPrintStream)
       throws IOException {
     this.clientSocket = new Socket(hostName, serverPort);
+    System.out.println("client");
     this.communicator = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
+    System.out.println("comm");
     this.inputReader = inputSource;
+    System.out.println("input");
     this.out = outPrintStream;
+    System.out.println("output");
   }
 
   /**
