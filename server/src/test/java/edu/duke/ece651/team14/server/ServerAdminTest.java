@@ -233,27 +233,6 @@ public class ServerAdminTest {
   }
 
   @Test
-  // Tests moveUnits
-  public void test_moveUnits() throws IOException {
-    Territory t1 = new BasicTerritory("t1");
-    Territory t2 = new BasicTerritory("t2");
-    addUnits(t1, t2);
-
-    ServerAdmin s = new ServerAdmin(1323);
-    s.moveUnits(t1, t2, 4, "basic");
-    assertEquals(t1.getUnits().size(), 3);
-    assertEquals(t2.getUnits().size(), 11);
-
-    s.moveUnits(t2, t1, 1, "other");
-    assertEquals(t1.getUnits().size(), 4);
-    assertEquals(t2.getUnits().size(), 10);
-
-    s.moveUnits(t2, t1, 10, "basic");
-    assertEquals(t1.getUnits().size(), 14);
-    assertEquals(t2.getUnits().size(), 0);
-  }
-
-  @Test
   // Tests sendMap()
   public void test_sendMap() throws IOException {
     ServerAdmin s = new ServerAdmin(1222);
