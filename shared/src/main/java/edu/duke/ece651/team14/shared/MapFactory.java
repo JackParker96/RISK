@@ -22,11 +22,44 @@ public class MapFactory implements AbstractMapFactory {
    * @return the map
    */
   public Map makeMap(String mapName, ArrayList<Player> players) {
+    if (mapName.equals("test")) {
+      return new Map(makeTestTerritories(players.get(0), players.get(1)), mapName);
+    }
     ArrayList<Territory> allTerritories = makeTerritories();
     addAdjacency(allTerritories);
     addOwners(allTerritories, players);
     Map m = new Map(allTerritories, mapName);
     return m;
+  }
+
+   /**
+   * Makes a list of Territorires for testing
+   */
+  public ArrayList<Territory> makeTestTerritories(Player p1, Player p2) {
+    ArrayList<Territory> terrs = new ArrayList<>();
+    for (int i = 0; i < 5; i++) {
+      terrs.add(new BasicTerritory(Integer.toString(i)));
+      if (i < 4) {
+        terrs.get(i).setOwner(p1);
+      } else {
+        terrs.get(i).setOwner(p2);
+      }
+    }
+
+    // Add adjacencies
+    terrs.get(0).addAdjacentTerritories(terrs.get(1));
+    terrs.get(1).addAdjacentTerritories(terrs.get(2));
+    terrs.get(2).addAdjacentTerritories(terrs.get(3));
+    terrs.get(2).addAdjacentTerritories(terrs.get(4));
+
+    terrs.get(1).addAdjacentTerritories(terrs.get(0));
+    terrs.get(2).addAdjacentTerritories(terrs.get(1));
+    terrs.get(3).addAdjacentTerritories(terrs.get(2));
+    terrs.get(4).addAdjacentTerritories(terrs.get(2));
+
+    terrs.get(1).addUnits(new BasicUnit());
+
+    return terrs;
   }
 
   /**

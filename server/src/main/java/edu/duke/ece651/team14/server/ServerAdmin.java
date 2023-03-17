@@ -7,17 +7,22 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import edu.duke.ece651.team14.shared.BasicPlayer;
 import edu.duke.ece651.team14.shared.Color;
 import edu.duke.ece651.team14.shared.Communicator;
+import edu.duke.ece651.team14.shared.DestinationOwnershipRuleChecker;
 import edu.duke.ece651.team14.shared.Map;
-import edu.duke.ece651.team14.shared.Player;
-import edu.duke.ece651.team14.shared.Order;
-import edu.duke.ece651.team14.shared.MoveOrder;
-import edu.duke.ece651.team14.shared.AttackOrder;
-import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 import edu.duke.ece651.team14.shared.MapFactory;
+import edu.duke.ece651.team14.shared.MoveOrderPathExistsRuleChecker;
+import edu.duke.ece651.team14.shared.Order;
+import edu.duke.ece651.team14.shared.OrderRuleChecker;
+import edu.duke.ece651.team14.shared.OriginOwnershipRuleChecker;
+import edu.duke.ece651.team14.shared.Player;
+import edu.duke.ece651.team14.shared.Territory;
+import edu.duke.ece651.team14.shared.Unit;
+import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
 public class ServerAdmin {
   ServerSocket serverSocket;
@@ -95,7 +100,8 @@ public class ServerAdmin {
     // receivePlacementOrders();
   }
 
-  // throwing java.lang.ClassCastException: BasicPlayer cannot be cast to class UnitPlacementOrder
+  // throwing java.lang.ClassCastException: BasicPlayer cannot be cast to class
+  // UnitPlacementOrder
   // commented out in initializeGamePhase() method for now
   public void receivePlacementOrders() throws IOException, ClassNotFoundException {
     for (Player p : playerCommunicators.keySet()) {
@@ -116,9 +122,71 @@ public class ServerAdmin {
   /**
    * Executes one turn in the game - not finished writing yet
    */
-  public void executeTurn(HashMap<Player, Communicator> playerCommunicators, Map map) throws IOException {
+  public void executeTurn(HashMap<Player, Communicator> playerCommunicators, Map map)
+      throws IOException, ClassNotFoundException {
     sendMap(playerCommunicators.values(), map);
+    HashMap<Player, HashMap<String, ArrayList<Order>>> orders = receiveAllOrders(playerCommunicators);
+    resolveAllMoveOrders(orders, map);
+    // resolveAttackOrders();
+
+  }
+
+  /**ha
+   * Resolves move orders, modifies map
+   */
+  public void resolveAllMoveOrders(HashMap<Player, HashMap<String, ArrayList<Order>>> orders, Map map) {
+    OrderRuleChecker checker = new OriginOwnershipRuleChecker(
+        new DestinationOwnershipRuleChecker(new MoveOrderPathExistsRuleChecker(null)));
+    for (Player player : orders.keySet()) {
+      for (Order order : orders.get(player).get("move")) {
+        resolveMoveOrder(order, map, checker);
+      }
+    }
+  }
+
+  public void resolveOnePlayerMoveOrders() {
     
+  }
+
+  /**
+   * Resolves a single move order
+   */
+  public String resolveMoveOrder(Order order, Map map, OrderRuleChecker checker) {
+    String checkerResult = checker.checkOrder(map, order);
+    if (checkerResult != null) {
+      return checkerResult;
+    }
+    moveUnits(order.getOrigin(), order.getDestination(), order.getNumUnits(), order.getUnitType());
+    return null;
+  }
+
+  /**
+   * Resolves attack orders, returns list of combat events
+   */
+  public void resolveAttackOrders() {
+    return;
+  }
+
+  /**
+   * Moves up to numUnits units of type unitType from Territory origin to Territory
+   * destination
+   *
+   * @param origin      is the origin Territory
+   * @param destination is the destination Territory
+   * @param numUnits    is the number of units to move
+   * @param unitType    is the unit type
+   */
+  public void moveUnits(Territory origin, Territory destination, int numUnits, String unitType) {
+    ArrayList<Unit> originUnits = origin.getUnits();
+    Iterator<Unit> iterator = originUnits.iterator();
+    while (iterator.hasNext() && numUnits > 0) {
+      Unit u = iterator.next();
+      if (u.getType().equals(unitType)) {
+        iterator.remove();
+        destination.addUnits(u);
+        numUnits--;
+      }
+    }
   }
 
   /**
