@@ -258,13 +258,20 @@ public class TextClientPlayer extends ClientPlayer {
   }
 
   /**
-   * Allows player to create a MoveOrder
+   * Allows player to create a MoveOrder - checks that four conditions are met:
+   * (1) Player owns territory to send units from
+   * (2) Player owns territory to send units to
+   * (3) Path exists connecting origin and destination
+   * (4) Number of units to send does not exceed number of units on origin
+   * territory
    *
    * @param m is the current game map
-   * @return a MoveOrder object constructed based on the player's responses to prompts
+   * @return a MoveOrder object constructed based on the player's responses to
+   *         prompts
    */
   public MoveOrder commitMoveOrder(Map m) throws IOException {
-    out.println("Type 'D' if you're done committing move order for this turn. Type anything else to begin creating a new move order");
+    out.println(
+        "Type 'D' if you're done committing move order for this turn. Type anything else to begin creating a new move order");
     String response = inputReader.readLine().toLowerCase();
     if (response.equals("d")) {
       return null;
@@ -283,8 +290,10 @@ public class TextClientPlayer extends ClientPlayer {
         out.println("Try entering the info for your move order again");
         continue;
       }
+      // Use an OrderVerifier to check that the MoveOrder is okay
+      // Write another method for this
       return order;
     }
   }
-
+  
 }
