@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -23,11 +22,13 @@ import org.junit.jupiter.api.Test;
 
 import edu.duke.ece651.team14.shared.BasicPlayer;
 import edu.duke.ece651.team14.shared.BasicTerritory;
+import edu.duke.ece651.team14.shared.BasicUnit;
 import edu.duke.ece651.team14.shared.Color;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.Territory;
+import edu.duke.ece651.team14.shared.Unit;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
 public class TextClientPlayerTest {
@@ -42,6 +43,17 @@ public class TextClientPlayerTest {
     TextClientPlayer tcp = new TextClientPlayer(null, null, in, out);
     tcp.myPlayer = p;
     return tcp;
+  }
+
+  /**
+   * Helper method to put a given number of units on a given territory
+   */
+  public void putUnitsOnTerr(Territory t, int n) {
+    ArrayList<Unit> units = new ArrayList<>();
+    for (int i = 0; i < n; i++) {
+      units.add(new BasicUnit());
+    }
+    t.addUnits(units);
   }
 
   // TODO: figure out how to test normal (non-mocked) constructor
@@ -68,6 +80,33 @@ public class TextClientPlayerTest {
     assertEquals("move", tcp.getOrderType());
     assertEquals("commit", tcp.getOrderType());
     assertEquals("commit", tcp.getOrderType());
+    assertEquals(expected, bytes.toString());
+  }
+
+  @Test
+  public void test_getNumUnitsToSend() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    TextClientPlayer tcp = createTextClientPlayer("\n2s\ntwo\n0\n-1\n1\n3\n4\n2\n", new Color("blue"), bytes);
+    // Make two territores and set their owners
+    Territory gondor = new BasicTerritory("gondor");
+    Territory mordor = new BasicTerritory("mordor");
+    mordor.setOwner(new BasicPlayer(new Color("green"), "p"));
+    gondor.setOwner(tcp.myPlayer);
+    // Put some units on Gondor
+    putUnitsOnTerr(gondor, 3);
+    // Make sure we throw an IllegalArgumentException if the player doesn't own the
+    // territory
+    assertThrows(IllegalArgumentException.class, () -> tcp.getNumUnitsToSend(mordor));
+    // Now let's check our other error handling
+    String prompt = "Enter the number of units you want to send\n";
+    String invalidNum = "Please enter a valid number\n";
+    String negative = "You must send at least one unit\n";
+    String tooMany = "You have 3 units on gondor - You cannot send 4 units\n";
+    String expected = prompt + invalidNum + prompt + invalidNum + prompt + invalidNum + prompt + negative + prompt
+        + negative + prompt + prompt + prompt + tooMany + prompt;
+    assertEquals(1, tcp.getNumUnitsToSend(gondor));
+    assertEquals(3, tcp.getNumUnitsToSend(gondor));
+    assertEquals(2, tcp.getNumUnitsToSend(gondor));
     assertEquals(expected, bytes.toString());
   }
 

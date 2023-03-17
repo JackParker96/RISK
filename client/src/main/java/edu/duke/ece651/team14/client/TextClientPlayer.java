@@ -224,6 +224,8 @@ public class TextClientPlayer extends ClientPlayer {
    *
    * @param fromTerr is the territory the Player wants to send units from
    * @return the number of units the player wants to send (if it's a valid number)
+   * @throws IllegalArgumentException if fromTerr is not owned by
+   *                                  TextClientPlayer.myPlayer
    */
   public int getNumUnitsToSend(Territory fromTerr) throws IOException {
     // Check that fromTerr is owned by the Player
