@@ -82,8 +82,107 @@ public class ServerAdminTest {
   }
 
   @Test
-  public void test_resolveMoveOrders() throws IOException {
-    
+  public void test_resolveAllMoveOrders() throws IOException {
+    ServerAdmin s = new ServerAdmin(1550);
+    Player p1 = new BasicPlayer(new Color("red"), "p1");
+    Player p2 = new BasicPlayer(new Color("blue"), "p2");
+
+    ArrayList<Player> players = new ArrayList<Player>();
+    players.add(p1);
+    players.add(p2);
+
+    MapFactory m = new MapFactory();
+    Map map = m.makeMap("test", players);
+
+    OrderRuleChecker checker = new OriginOwnershipRuleChecker(
+        new DestinationOwnershipRuleChecker(new MoveOrderPathExistsRuleChecker(null)));
+
+    Territory t0 = map.getTerritoryByName("0");
+    Territory t1 = map.getTerritoryByName("1");
+    Territory t2 = map.getTerritoryByName("2");
+    Territory t4 = map.getTerritoryByName("4");
+    Territory t5 = map.getTerritoryByName("5");
+
+    addUnits(t0, t1);
+
+    MoveOrder m1 = new MoveOrder(t0, t1, 5, p1);
+    MoveOrder m2 = new MoveOrder(t1, t2, 11, p1);
+    MoveOrder m3 = new MoveOrder(t4, t1, 8, p1);
+
+    t4.addUnits(new BasicUnit());
+    t4.addUnits(new BasicUnit());
+
+    MoveOrder p2m1 = new MoveOrder(t4, t5, 2, p2);
+
+    ArrayList<Order> moveOrders = new ArrayList<>();
+    moveOrders.add(m1);
+    moveOrders.add(m2);
+    moveOrders.add(m3);
+
+    ArrayList<Order> p2moveOrders = new ArrayList<>();
+    p2moveOrders.add(p2m1);
+
+    HashMap<String, ArrayList<Order>> orders = new HashMap<>();
+    orders.put("move", moveOrders);
+    orders.put("attack", new ArrayList<Order>());
+
+    HashMap<String, ArrayList<Order>> p2orders = new HashMap<>();
+    p2orders.put("move", p2moveOrders);
+    p2orders.put("attack", new ArrayList<Order>());
+
+    HashMap<Player, HashMap<String, ArrayList<Order>>> allOrders = new HashMap<>();
+    allOrders.put(p1, orders);
+    allOrders.put(p2, p2orders);
+
+    s.resolveAllMoveOrders(allOrders, map);
+
+    assertEquals(t2.getUnits().size(), 11);
+    assertEquals(t1.getUnits().size(), 2);
+    assertEquals(t4.getUnits().size(), 0);
+    assertEquals(t5.getUnits().size(), 2);
+  }
+
+  @Test
+  public void test_resolveOnePlayerMoveOrders() throws IOException {
+    ServerAdmin s = new ServerAdmin(1549);
+    Player p1 = new BasicPlayer(new Color("red"), "p1");
+    Player p2 = new BasicPlayer(new Color("blue"), "p2");
+
+    ArrayList<Player> players = new ArrayList<Player>();
+    players.add(p1);
+    players.add(p2);
+
+    MapFactory m = new MapFactory();
+    Map map = m.makeMap("test", players);
+
+    OrderRuleChecker checker = new OriginOwnershipRuleChecker(
+        new DestinationOwnershipRuleChecker(new MoveOrderPathExistsRuleChecker(null)));
+
+    Territory t0 = map.getTerritoryByName("0");
+    Territory t1 = map.getTerritoryByName("1");
+    Territory t2 = map.getTerritoryByName("2");
+    Territory t4 = map.getTerritoryByName("4");
+
+    addUnits(t0, t1);
+
+    MoveOrder m1 = new MoveOrder(t0, t1, 5, p1);
+    MoveOrder m2 = new MoveOrder(t1, t2, 11, p1);
+    MoveOrder m3 = new MoveOrder(t4, t1, 8, p1);
+
+    ArrayList<Order> moveOrders = new ArrayList<>();
+    moveOrders.add(m1);
+    moveOrders.add(m2);
+    moveOrders.add(m3);
+
+    HashMap<String, ArrayList<Order>> orders = new HashMap<>();
+    orders.put("move", moveOrders);
+    orders.put("attack", new ArrayList<Order>());
+
+    s.resolveOnePlayerMoveOrders(orders, map, checker);
+
+    assertEquals(t2.getUnits().size(), 11);
+    assertEquals(t1.getUnits().size(), 2);
+    assertEquals(t4.getUnits().size(), 0);
   }
 
   @Test
