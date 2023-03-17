@@ -46,15 +46,30 @@ public class TextClientPlayerTest {
 
   // TODO: figure out how to test normal (non-mocked) constructor
   /*
+   * @Test
+   * public void test_constructor() throws IOException {
+   * ServerSocket sock = new ServerSocket(4444);
+   * BufferedReader in = new BufferedReader(new StringReader("duke\n"));
+   * PrintStream out = new PrintStream(new ByteArrayOutputStream(), true);
+   * ClientPlayer cp = new TextClientPlayer("localhost", 4444, in, out);
+   * sock.close();
+   * }
+   */
+
   @Test
-  public void test_constructor() throws IOException {
-    ServerSocket sock = new ServerSocket(4444);
-    BufferedReader in = new BufferedReader(new StringReader("duke\n"));
-    PrintStream out = new PrintStream(new ByteArrayOutputStream(), true);
-    ClientPlayer cp = new TextClientPlayer("localhost", 4444, in, out);
-    sock.close();
+  public void test_getOrderType() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    TextClientPlayer tcp = createTextClientPlayer("ATTack\nmove\ncommit\natack\nmv\ncommit\n", new Color("blue"),
+        bytes);
+    String prompt = "Enter order type ('move', 'attack', or 'commit' - to stop entering orders for this turn):\n";
+    String errMessage = "Invalid move type\n";
+    String expected = prompt + prompt + prompt + prompt + errMessage + prompt + errMessage + prompt;
+    assertEquals("attack", tcp.getOrderType());
+    assertEquals("move", tcp.getOrderType());
+    assertEquals("commit", tcp.getOrderType());
+    assertEquals("commit", tcp.getOrderType());
+    assertEquals(expected, bytes.toString());
   }
-  */
 
   @Test
   public void test_askForTerritory() throws IOException {

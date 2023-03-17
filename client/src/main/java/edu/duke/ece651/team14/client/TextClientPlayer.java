@@ -160,7 +160,8 @@ public class TextClientPlayer extends ClientPlayer {
 
   /**
    * Prompt the user to enter the name of a territory on the map, then return that
-   * territory if it exists
+   * territory if it exists. The user will be prompted repeatedly until they enter
+   * a valid territory
    *
    * @param prompt is the prompt to display to the player
    * @param m      is the Map you want the player to select a territory from
@@ -182,7 +183,8 @@ public class TextClientPlayer extends ClientPlayer {
 
   /**
    * Prompt the user to enter the name of a territory that is (a) on the map and
-   * (b) owned by the player
+   * (b) owned by the player. The user will be prompted repeatedly until they
+   * enter a valid territory
    *
    * @param prompt is the prompt to display to the player
    * @param m      is the map you want the p[layer to select a territory from
@@ -198,6 +200,12 @@ public class TextClientPlayer extends ClientPlayer {
     }
   }
 
+  /**
+   * Prompt the user for the type of order they would like to place (move, attack,
+   * etc)
+   *
+   * @return the String "move", "attack", or "commit"
+   */
   public String getOrderType() throws IOException {
     while (true) {
       out.println("Enter order type ('move', 'attack', or 'commit' - to stop entering orders for this turn):");
@@ -210,12 +218,52 @@ public class TextClientPlayer extends ClientPlayer {
     }
   }
 
-  public int getNumUnitsToSend() {
+  /**
+   * Prompt the user for the number of units they want to send to another
+   * territory as part of a move or attack order
+   *
+   * @param fromTerr is the territory the Player wants to send units from
+   * @return the number of units the player wants to send (if it's a valid number)
+   */
+  public int getNumUnitsToSend(Territory fromTerr) throws IOException {
+    // Check that fromTerr is owned by the Player
+    if (!fromTerr.getOwner().equals(myPlayer)) {
+      throw new IllegalArgumentException(
+          "Player (" + myPlayer.toString() + ") does not own (" + fromTerr.toString() + ")");
+    }
+    int maxCanSend = fromTerr.getNumUnits();
     while (true) {
       out.println("Enter the number of units you want to send");
+      String strNum = inputReader.readLine();
+      int numToSend;
+      // Try converting strNum into an int using the parseInt method of class Integer
+      try {
+        numToSend = Integer.parseInt(strNum);
+      } catch (NumberFormatException e) {
+        out.println("Please enter a valid number");
+        continue;
+      }
+      // Check that at least one unit is being sent
+      if (numToSend < 1) {
+        out.println("You must send at least one unit");
+        continue;
+      }
+      // Check that not too many units are being sent
+      if (numToSend > maxCanSend) {
+        out.println("You have " + maxCanSend + " units on " + fromTerr.toString() + " - You cannot send " + numToSend
+            + " units");
+        continue;
+      }
+      return numToSend;
     }
   }
-  
+
+  /**
+   * Prompt the user to place an order to the server
+   *
+   * @param m is the Map associated with the current game
+   * @return an Order object that another function can send to the server
+   */
   public Order getOrder(Map m) throws IOException {
     out.println("You will now enter an Order");
     String orderType = getOrderType();
@@ -229,19 +277,5 @@ public class TextClientPlayer extends ClientPlayer {
 
     return null;
   }
-  
-  /**
-   * public Order getOrder() throws IOException{
-   * out.println("You will now enter an order\nType 'A' for an attack order or 'M'
-   * for a move order");
-   * String orderType = inputReader.readLine();
-   * if ((orderType.toLowerCase() != "a") && (orderType.toLowerCase() != "m")) {
-   * throw new IllegalArgumentException("Please type either 'A' or 'M'");
-   * }
-   * out.println("From territory name: ");
-   * String terrName = inputReader.readLine();
-   * out.println("To territory name: ");
-   * out.println("Number of units: ");
-   * }
-   */
+
 }
