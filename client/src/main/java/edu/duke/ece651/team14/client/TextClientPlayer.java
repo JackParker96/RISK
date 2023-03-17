@@ -5,17 +5,14 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import edu.duke.ece651.team14.shared.Communicator;
-import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapTextView;
-import edu.duke.ece651.team14.shared.Order;
-import edu.duke.ece651.team14.shared.UnitPlacementOrder;
+import edu.duke.ece651.team14.shared.MoveOrder;
+import edu.duke.ece651.team14.shared.MoveOrderPathExistsRuleChecker;
 import edu.duke.ece651.team14.shared.Territory;
-import edu.duke.ece651.team14.shared.BasicTerritory;
+import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
 public class TextClientPlayer extends ClientPlayer {
   /**
@@ -261,23 +258,33 @@ public class TextClientPlayer extends ClientPlayer {
   }
 
   /**
-   * Prompt the user to place an order to the server
+   * Allows player to create a MoveOrder
    *
-   * @param m is the Map associated with the current game
-   * @return an Order object that another function can send to the server
+   * @param m is the current game map
+   * @return a MoveOrder object constructed based on the player's responses to prompts
    */
-  public Order getOrder(Map m) throws IOException {
-    out.println("You will now enter an Order");
-    String orderType = getOrderType();
-    if (orderType.equals("commit")) {
+  public MoveOrder commitMoveOrder(Map m) throws IOException {
+    out.println("Type 'D' if you're done committing move order for this turn. Type anything else to begin creating a new move order");
+    String response = inputReader.readLine().toLowerCase();
+    if (response.equals("d")) {
       return null;
     }
-    String fromPrompt = "Enter the name of the 'from' territory for your order";
-    Territory fromTerr = askForTerritoryOwnedByPlayer(fromPrompt, m);
-    String toPrompt = "Enter the name of the 'to' territory for your order";
-    Territory toTerr = askForTerritoryOwnedByPlayer(toPrompt, m);
-
-    return null;
+    String originPrompt = "Territory to move units from:";
+    String destPrompt = "Territory to move units to:";
+    MoveOrderPathExistsRuleChecker pathChecker = new MoveOrderPathExistsRuleChecker(null);
+    while (true) {
+      Territory origin = askForTerritoryOwnedByPlayer(originPrompt, m);
+      Territory dest = askForTerritoryOwnedByPlayer(destPrompt, m);
+      int numUnits = getNumUnitsToSend(origin);
+      MoveOrder order = new MoveOrder(origin, dest, numUnits, myPlayer);
+      String check = pathChecker.checkMyRule(m, order);
+      if (check != null) {
+        out.println(check);
+        out.println("Try entering the info for your move order again");
+        continue;
+      }
+      return order;
+    }
   }
 
 }
