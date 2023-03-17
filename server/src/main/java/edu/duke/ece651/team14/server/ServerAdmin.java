@@ -120,7 +120,13 @@ public class ServerAdmin {
   }
 
   /**
-   * Executes one turn in the game - not finished writing yet
+   * Executes one round of turns in the game
+   *
+   * @param playerCommunicators is the HashMap of communicators
+   * @param map                 is the game map
+   *
+   * @throws IOException
+   * @throws ClassNotFoundException
    */
   public void executeTurn(HashMap<Player, Communicator> playerCommunicators, Map map)
       throws IOException, ClassNotFoundException {
@@ -131,21 +137,32 @@ public class ServerAdmin {
 
   }
 
-  /**ha
-   * Resolves move orders, modifies map
+  /**
+   * Resolves all move orders for a round of turns
+   *
+   * @param orders is the HashMap of all orders for the round of turns
+   * @param map    is the game map
+   *
    */
   public void resolveAllMoveOrders(HashMap<Player, HashMap<String, ArrayList<Order>>> orders, Map map) {
     OrderRuleChecker checker = new OriginOwnershipRuleChecker(
         new DestinationOwnershipRuleChecker(new MoveOrderPathExistsRuleChecker(null)));
     for (Player player : orders.keySet()) {
-      for (Order order : orders.get(player).get("move")) {
-        resolveMoveOrder(order, map, checker);
-      }
+      resolveOnePlayerMoveOrders(orders.get(player), map, checker);
     }
   }
 
-  public void resolveOnePlayerMoveOrders() {
-    
+  /**
+   * Resolves all the move orders for one player for a given turn
+   *
+   * @param orders  is the HashMap of orders grouped by type
+   * @param map     is the map
+   * @param checker is the OrderRuleChecker
+   */
+  public void resolveOnePlayerMoveOrders(HashMap<String, ArrayList<Order>> orders, Map map, OrderRuleChecker checker) {
+    for (Order o : orders.get("move")) {
+      resolveMoveOrder(o, map, checker);
+    }
   }
 
   /**
@@ -168,7 +185,8 @@ public class ServerAdmin {
   }
 
   /**
-   * Moves up to numUnits units of type unitType from Territory origin to Territory
+   * Moves up to numUnits units of type unitType from Territory origin to
+   * Territory
    * destination
    *
    * @param origin      is the origin Territory
