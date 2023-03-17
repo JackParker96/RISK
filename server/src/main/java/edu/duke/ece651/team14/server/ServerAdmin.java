@@ -97,7 +97,7 @@ public class ServerAdmin {
       // TODO: change this, doesn't need to send empty placement order
       c.sendObject(map.getUnitsPlacementOrder(p));
     }
-    // receivePlacementOrders();
+    receivePlacementOrders();
   }
 
   // throwing java.lang.ClassCastException: BasicPlayer cannot be cast to class
@@ -107,7 +107,6 @@ public class ServerAdmin {
     for (Player p : playerCommunicators.keySet()) {
       Communicator c = playerCommunicators.get(p);
       UnitPlacementOrder upo = (UnitPlacementOrder) c.recvObject();
-      // might need rule checker here, may not, clients have do a lot rule checking
       System.out.println("recv unit placement request from " + p);
       map.handleUnitPlacementOrder(upo);
     }

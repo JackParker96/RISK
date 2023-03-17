@@ -1,6 +1,8 @@
 package edu.duke.ece651.team14.shared;
 
-public class BasicUnit implements Unit {
+import java.io.Serializable;
+
+public class BasicUnit implements Unit, Serializable {
   // The type of the unit (may need multiple types of units in future versions)
   private String type;
   // Boolean representing whether the Unit is alive or dead
