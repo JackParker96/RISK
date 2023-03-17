@@ -43,7 +43,7 @@ public class App {
     } finally {
       serverAdmin.releaseResources();
     }
-    System.out.println("done");
+    System.out.println("\nStarting game...\n");
   }
 
   // ./gradlew :server:run --args "[portnum] [num_players]"
