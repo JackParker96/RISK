@@ -1,4 +1,4 @@
-package edu.duke.ece651.team14.server;
+package edu.duke.ece651.team14.shared;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,13 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import edu.duke.ece651.team14.shared.BasicPlayer;
-import edu.duke.ece651.team14.shared.Color;
-import edu.duke.ece651.team14.shared.Map;
-import edu.duke.ece651.team14.shared.Player;
-import edu.duke.ece651.team14.shared.Territory;
 
 public class MapFactoryTest {
   @Test
@@ -70,7 +65,7 @@ public class MapFactoryTest {
 
   @Test
   // Tests makeTerritories() method an ArrayList of 24 Territories
- public void test_makeTerritories() {
+  public void test_makeTerritories() {
     ArrayList<Territory> terrs = new MapFactory().makeTerritories();
     assertEquals(24, terrs.size());
     for (Territory t : terrs) {
@@ -108,11 +103,17 @@ public class MapFactoryTest {
     players.add(blue);
     players.add(green);
     f.addOwners(terrs, players);
-    for (int i = 0; i < terrs.size() / players.size(); i++) {
+    for (int i = 0; i < 6; i++) {
       assertEquals(terrs.get(i).getOwner(), red);
-      assertEquals(terrs.get(i + terrs.size() / players.size()).getOwner(), blue);
-      assertEquals(terrs.get(i + 2 * terrs.size() / players.size()).getOwner(), green);
+      assertEquals(terrs.get(i + 6).getOwner(), blue);
+      assertEquals(terrs.get(i + 18).getOwner(), green);
     }
+    assertEquals(terrs.get(12).getOwner(), red);
+    assertEquals(terrs.get(14).getOwner(), red);
+    assertEquals(terrs.get(15).getOwner(), blue);
+    assertEquals(terrs.get(17).getOwner(), blue);
+    assertEquals(terrs.get(13).getOwner(), green);
+    assertEquals(terrs.get(16).getOwner(), green);
   }
 
   @Test

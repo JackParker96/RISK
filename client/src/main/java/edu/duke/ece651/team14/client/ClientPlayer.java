@@ -4,11 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import edu.duke.ece651.team14.shared.Communicator;
+import edu.duke.ece651.team14.shared.Map;
+import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
-import edu.duke.ece651.team14.shared.Map;
 
 public abstract class ClientPlayer {
   final Socket clientSocket;
@@ -20,8 +22,8 @@ public abstract class ClientPlayer {
   /**
    * Constructor
    * 
-   * @param hostName:       hostname of server
-   * @param serverPort:     port number if server
+   * @param hostName:       name of host server
+   * @param serverPort:     port number of host server
    * @param inputSource:    the source to read interactive input, e.g. System.in.
    * @param outPrintStream: e.g. System.out
    * @throws IOException
@@ -44,7 +46,7 @@ public abstract class ClientPlayer {
     this.inputReader = inputSource;
     this.out = outPrintStream;
   }
-
+  
   /**
    * Receive the player object from server to identify the player's color.
    * 
@@ -118,6 +120,14 @@ public abstract class ClientPlayer {
    */
   protected abstract int readInt(String prompt) throws IOException;
 
+  //public abstract Order getOrder();
+
+  //public abstract ArrayList<Order> getAllOrders();
+
+  //public abstract void sendOrders();
+
+  //public abstract void doOneTurn();
+  
   /**
    * Release the resources the client holds
    * 

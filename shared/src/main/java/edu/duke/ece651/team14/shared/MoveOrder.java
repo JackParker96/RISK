@@ -15,7 +15,7 @@ public class MoveOrder extends Order {
    * @param unitType    is the type of unit to send
    */
   public MoveOrder(Territory origin, Territory destination, int numUnits, Player player, String unitType) {
-    super(origin, destination, numUnits, player, unitType);
+    super(origin, destination, numUnits, player, unitType, "move");
   }
 
   /**
@@ -27,7 +27,7 @@ public class MoveOrder extends Order {
    * @param player      is the player making the order
    */
   public MoveOrder(Territory origin, Territory destination, int numUnits, Player player) {
-    super(origin, destination, numUnits, player);
+    super(origin, destination, numUnits, player, "move");
   }
 
 }

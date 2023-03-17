@@ -54,12 +54,13 @@ public class MoveOrderPathExistsRuleChecker extends OrderRuleChecker {
       return true;
     } else {
       // For debuggin
-      // System.out.println(current.getName() + " " + destination.getName());
+      // System.out.print(current.getName() + " " + destination.getName() + " ");
     }
     for (Territory t : current.getAdjacentTerritories()) {
+      // System.out.println("Checking " + t);
       if (t.getOwner().equals(origin.getOwner()) && !visited.contains(t)) {
         visited.add(t);
-        return mapDFS(visited, origin, t, destination);
+        if (mapDFS(visited, origin, t, destination)) return true;
       }
     }
     return false;

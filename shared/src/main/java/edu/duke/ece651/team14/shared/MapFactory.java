@@ -1,4 +1,4 @@
-package edu.duke.ece651.team14.server;
+package edu.duke.ece651.team14.shared;
 
 import java.util.ArrayList;
 
@@ -22,11 +22,44 @@ public class MapFactory implements AbstractMapFactory {
    * @return the map
    */
   public Map makeMap(String mapName, ArrayList<Player> players) {
+    if (mapName.equals("test")) {
+      return new Map(makeTestTerritories(players.get(0), players.get(1)), mapName);
+    }
     ArrayList<Territory> allTerritories = makeTerritories();
     addAdjacency(allTerritories);
     addOwners(allTerritories, players);
     Map m = new Map(allTerritories, mapName);
     return m;
+  }
+
+   /**
+   * Makes a list of Territorires for testing
+   */
+  public ArrayList<Territory> makeTestTerritories(Player p1, Player p2) {
+    ArrayList<Territory> terrs = new ArrayList<>();
+    for (int i = 0; i < 5; i++) {
+      terrs.add(new BasicTerritory(Integer.toString(i)));
+      if (i < 4) {
+        terrs.get(i).setOwner(p1);
+      } else {
+        terrs.get(i).setOwner(p2);
+      }
+    }
+
+    // Add adjacencies
+    terrs.get(0).addAdjacentTerritories(terrs.get(1));
+    terrs.get(1).addAdjacentTerritories(terrs.get(2));
+    terrs.get(2).addAdjacentTerritories(terrs.get(3));
+    terrs.get(2).addAdjacentTerritories(terrs.get(4));
+
+    terrs.get(1).addAdjacentTerritories(terrs.get(0));
+    terrs.get(2).addAdjacentTerritories(terrs.get(1));
+    terrs.get(3).addAdjacentTerritories(terrs.get(2));
+    terrs.get(4).addAdjacentTerritories(terrs.get(2));
+
+    terrs.get(1).addUnits(new BasicUnit());
+
+    return terrs;
   }
 
   /**
@@ -220,16 +253,35 @@ public class MapFactory implements AbstractMapFactory {
   public void addOwners(ArrayList<Territory> allTerritories, ArrayList<Player> players) {
     int numPlayers = players.size();
     if (!(numPlayers >= 2 && numPlayers <= 4)) {
-      throw new IllegalArgumentException("This clas only supports 2-4 groups.");
+      throw new IllegalArgumentException("This class only supports 2-4 groups.");
     }
 
     int numTerr = allTerritories.size();
     int territoriesPerPlayer = numTerr / numPlayers;
 
-    for (int i = 0; i < territoriesPerPlayer; i++) {
-      for (int player = 0; player < numPlayers; player++) {
-        allTerritories.get(i + player * territoriesPerPlayer).setOwner(players.get(player));
+    if (numPlayers == 3) {
+      for (int i = 0; i < 6; i++) {
+        for (int player = 0; player < 2; player++) {
+          allTerritories.get(i + player * 6).setOwner(players.get(player));
+        }
+        allTerritories.get(i + 3 * 6).setOwner(players.get(2));
+      }
+      allTerritories.get(12).setOwner(players.get(0));
+      allTerritories.get(14).setOwner(players.get(0));
+      allTerritories.get(15).setOwner(players.get(1));
+      allTerritories.get(17).setOwner(players.get(1));
+      allTerritories.get(13).setOwner(players.get(2));
+      allTerritories.get(16).setOwner(players.get(2));
+    }
+    
+    else {
+      for (int i = 0; i < territoriesPerPlayer; i++) {
+        for (int player = 0; player < numPlayers; player++) {
+          allTerritories.get(i + player * territoriesPerPlayer).setOwner(players.get(player));
+        }
       }
     }
+
+  
   }
 }

@@ -39,11 +39,11 @@ public class App {
   public void startGame() throws IOException, ClassNotFoundException {
     try {
       serverAdmin.acceptPlayersPhase(num_players);
-      serverAdmin.InitializeGamePhase();
+      serverAdmin.initializeGamePhase();
     } finally {
       serverAdmin.releaseResources();
     }
-    System.out.println("done");
+    System.out.println("\nStarting game...\n");
   }
 
   // ./gradlew :server:run --args "[portnum] [num_players]"

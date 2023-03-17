@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 /**
  * This class wraps the socket output stream and input steam to send and recv
@@ -17,10 +18,11 @@ public class Communicator {
   private final ObjectInputStream in;
 
   /**
-   * Creates a Communicator object with given output and input streams, immediately flushes output
+   * Creates a Communicator object with given output and input streams,
+   * immediately flushes output
    *
    * @param socketOut is the output socket
-   * @param socketIn is the input socket
+   * @param socketIn  is the input socket
    *
    * @throws IOException
    */
@@ -84,6 +86,18 @@ public class Communicator {
    */
   public BasicPlayer recvBasicPlayer() throws IOException, ClassNotFoundException {
     return (BasicPlayer) recvObject();
+  }
+
+  /**
+   * Returns an ArrayList of orders from other end of connection
+   *
+   * @throws IOException
+   * @throws ClassNotFoundException
+   *
+   * @return an ArrayList of orders
+   */
+  public ArrayList<Order> recvOrders() throws IOException, ClassNotFoundException {
+    return (ArrayList<Order>) recvObject();
   }
 
   /**
