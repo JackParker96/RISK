@@ -11,6 +11,7 @@ import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.MoveOrder;
 import edu.duke.ece651.team14.shared.MoveOrderPathExistsRuleChecker;
+import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
@@ -258,42 +259,80 @@ public class TextClientPlayer extends ClientPlayer {
   }
 
   /**
-   * Allows player to create a MoveOrder - checks that four conditions are met:
+   * Prompt user to enter information to construct a MoveOrder
+   * Checks that four conditions are met:
    * (1) Player owns territory to send units from
    * (2) Player owns territory to send units to
    * (3) Path exists connecting origin and destination
    * (4) Number of units to send does not exceed number of units on origin
    * territory
    *
+   * @param m       is the map at the end of the previous turn
+   * @param checker is used to check that a path exists between the two
+   *                territories
+   * @return the MoveOrder constructed based on player's responses to prompts (if
+   *         the MoveOrder meets the four conditions above). Otherwise, return
+   *         null
+   */
+  public MoveOrder tryCommitMoveOrder(Map m, MoveOrderPathExistsRuleChecker checker) throws IOException {
+    String originPrompt = "Territory to move units from:";
+    String destPrompt = "Territory to move units to:";
+    Territory origin = askForTerritoryOwnedByPlayer(originPrompt, m);
+    Territory dest = askForTerritoryOwnedByPlayer(destPrompt, m);
+    // The following method call automatically checks that the player isn't trying
+    // to send more units than were in their territory at the end of the previous
+    // turn
+    int numUnits = getNumUnitsToSend(origin);
+    MoveOrder order = new MoveOrder(origin, dest, numUnits, myPlayer);
+    String check = checker.checkMyRule(m, order);
+    if (check == null) {
+      return order;
+    }
+    return null;
+  }
+
+  /**
+   * Walk player through creating a single move order.
+   * In order for a MoveOrder to be returned by this following, the following 5
+   * conditions must be met:
+   * (1) Player owns territory to send units from
+   * (2) Player owns territory to send units to
+   * (3) Path exists connecting origin and destination
+   * (4) Number of units to send does not exceed number of units on origin
+   * territory
+   * (5) Considering all the move orders the player has placed this turn, the sum
+   * of units moved out of any territory does not exceed the number of units on
+   * that territory at the end of the previous turn
+   *
    * @param m is the current game map
    * @return a MoveOrder object constructed based on the player's responses to
    *         prompts
    */
-  public MoveOrder commitMoveOrder(Map m) throws IOException {
+  public MoveOrder getMoveOrder(Map m, OrderVerifier verifier) throws IOException {
     out.println(
-        "Type 'D' if you're done committing move order for this turn. Type anything else to begin creating a new move order");
+        "Type 'D' if you're done committing move orders for this turn. Type anything else to begin creating a new move order");
     String response = inputReader.readLine().toLowerCase();
     if (response.equals("d")) {
       return null;
     }
-    String originPrompt = "Territory to move units from:";
-    String destPrompt = "Territory to move units to:";
-    MoveOrderPathExistsRuleChecker pathChecker = new MoveOrderPathExistsRuleChecker(null);
     while (true) {
-      Territory origin = askForTerritoryOwnedByPlayer(originPrompt, m);
-      Territory dest = askForTerritoryOwnedByPlayer(destPrompt, m);
-      int numUnits = getNumUnitsToSend(origin);
-      MoveOrder order = new MoveOrder(origin, dest, numUnits, myPlayer);
-      String check = pathChecker.checkMyRule(m, order);
-      if (check != null) {
-        out.println(check);
-        out.println("Try entering the info for your move order again");
+      MoveOrder order = tryCommitMoveOrder(m, new MoveOrderPathExistsRuleChecker(null));
+      if (order == null) {
+        out.println("Error: Try entering the info for your move order again");
         continue;
       }
-      // Use an OrderVerifier to check that the MoveOrder is okay
-      // Write another method for this
+      // Check condition #5 from the description of this method
+      String checkResult = verifier.verifyOrder(order);
+      if (checkResult != null) {
+        out.println(checkResult);
+        out.println(
+            "Considering all the move orders you've placed so far during this turn, the total number of units moved out of "
+                + order.getOrigin().toString() + " exceeds the total number of units on "
+                + order.getOrigin().toString());
+        out.println("Try entering the info for your move order again");
+      }
       return order;
     }
   }
-  
+
 }

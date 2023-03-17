@@ -28,6 +28,8 @@ import edu.duke.ece651.team14.shared.BasicUnit;
 import edu.duke.ece651.team14.shared.Color;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.Map;
+import edu.duke.ece651.team14.shared.MapFactory;
+import edu.duke.ece651.team14.shared.MoveOrder;
 import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.Unit;
@@ -68,6 +70,29 @@ public class TextClientPlayerTest {
     PrintStream out = new PrintStream(new ByteArrayOutputStream(), true);
     ClientPlayer cp = new TextClientPlayer("localhost", 4444, in, out);
     sock.close();
+  }
+
+  @Test
+  public void test_getMoveOrder() throws IOException {
+    MapFactory f = new MapFactory();
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    TextClientPlayer tcp = createTextClientPlayer("c\n0\n1\n2\n", new Color("blue"), bytes);
+    Player p1 = tcp.myPlayer;
+    Player p2 = new BasicPlayer(new Color("red"), "p2");
+    ArrayList<Player> players = new ArrayList<>();
+    players.add(p1);
+    players.add(p2);
+    Map testMap = f.makeMap("test", players);
+    testMap.getTerritoryByName("0").addUnits(new BasicUnit());
+    testMap.getTerritoryByName("0").addUnits(new BasicUnit());
+    OrderVerifier verifier = new OrderVerifier(testMap);
+    MoveOrder order = tcp.getMoveOrder(testMap, verifier);
+    String intro = "Type 'D' if you're done committing move orders for this turn. Type anything else to begin creating a new move order\n";
+    String from = "Territory to move units from:\n";
+    String to = "Territory to move units to:\n";
+    String num = "Enter the number of units you want to send\n";
+    String expected = intro + from + to + num;
+    assertEquals(expected, bytes.toString());
   }
 
   @Test
