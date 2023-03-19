@@ -37,7 +37,7 @@ public class MapFactory implements AbstractMapFactory {
    */
   public ArrayList<Territory> makeTestTerritories(Player p1, Player p2) {
     ArrayList<Territory> terrs = new ArrayList<>();
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 7; i++) {
       terrs.add(new BasicTerritory(Integer.toString(i)));
       if (i < 4) {
         terrs.get(i).setOwner(p1);
@@ -51,11 +51,15 @@ public class MapFactory implements AbstractMapFactory {
     terrs.get(1).addAdjacentTerritories(terrs.get(2));
     terrs.get(2).addAdjacentTerritories(terrs.get(3));
     terrs.get(2).addAdjacentTerritories(terrs.get(4));
+    terrs.get(4).addAdjacentTerritories(terrs.get(5));
+    terrs.get(4).addAdjacentTerritories(terrs.get(6));
 
     terrs.get(1).addAdjacentTerritories(terrs.get(0));
     terrs.get(2).addAdjacentTerritories(terrs.get(1));
     terrs.get(3).addAdjacentTerritories(terrs.get(2));
     terrs.get(4).addAdjacentTerritories(terrs.get(2));
+    terrs.get(5).addAdjacentTerritories(terrs.get(4));
+    terrs.get(6).addAdjacentTerritories(terrs.get(4));
 
     terrs.get(1).addUnits(new BasicUnit());
 
