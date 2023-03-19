@@ -22,7 +22,8 @@ public class BasicUnit implements Unit {
    * @return true if the unit wasn't already dead
    * @throws IllegalArgumentException if the unit is alreay dead
    */
-  public boolean tryToKill() throws IllegalArgumentException {
+  @Override
+  public boolean tryToKill(){
     if (!alive) {
       throw new IllegalArgumentException("Unit already dead");
     }
