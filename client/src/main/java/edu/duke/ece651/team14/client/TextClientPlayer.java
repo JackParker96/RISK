@@ -228,8 +228,7 @@ public class TextClientPlayer extends ClientPlayer {
   public int getNumUnitsToSend(Territory fromTerr) throws IOException {
     // Check that fromTerr is owned by the Player
     if (!fromTerr.getOwner().equals(myPlayer)) {
-      throw new IllegalArgumentException(
-          "Player (" + myPlayer.toString() + ") does not own (" + fromTerr.toString() + ")");
+      throw new IllegalArgumentException("You do not own that territory");
     }
     int maxCanSend = fromTerr.getNumUnits();
     while (true) {
@@ -250,8 +249,7 @@ public class TextClientPlayer extends ClientPlayer {
       }
       // Check that not too many units are being sent
       if (numToSend > maxCanSend) {
-        out.println("You have " + maxCanSend + " units on " + fromTerr.toString() + " - You cannot send " + numToSend
-            + " units");
+        out.println("You're trying to send more units than you have");
         continue;
       }
       return numToSend;
@@ -293,8 +291,10 @@ public class TextClientPlayer extends ClientPlayer {
 
   /**
    * Walk player through creating a single move order.
-   * In order for a MoveOrder to be returned by this following, the following 5
+   *
+   * In order for a MoveOrder to be returned by this method, the following 5
    * conditions must be met:
+   *
    * (1) Player owns territory to send units from
    * (2) Player owns territory to send units to
    * (3) Path exists connecting origin and destination
@@ -304,7 +304,12 @@ public class TextClientPlayer extends ClientPlayer {
    * of units moved out of any territory does not exceed the number of units on
    * that territory at the end of the previous turn
    *
-   * @param m is the current game map
+   * If any of the above 5 conditions are not met, the player is immediately
+   * prompted to correct their mistake
+   *
+   * @param m        is the current game map
+   * @param verifier is used to check condition #5 (see documentation for the
+   *                 OrderVerifier class)
    * @return a MoveOrder object constructed based on the player's responses to
    *         prompts
    */
@@ -317,20 +322,13 @@ public class TextClientPlayer extends ClientPlayer {
     }
     while (true) {
       MoveOrder order = tryCommitMoveOrder(m, new MoveOrderPathExistsRuleChecker(null));
+      // order will be null if and only if the path check fails
       if (order == null) {
-        out.println("Error: Try entering the info for your move order again");
+        out.println("There is no valid path between origin and destination. Try again.");
         continue;
       }
       // Check condition #5 from the description of this method
       String checkResult = verifier.verifyOrder(order);
-      if (checkResult != null) {
-        out.println(checkResult);
-        out.println(
-            "Considering all the move orders you've placed so far during this turn, the total number of units moved out of "
-                + order.getOrigin().toString() + " exceeds the total number of units on "
-                + order.getOrigin().toString());
-        out.println("Try entering the info for your move order again");
-      }
       return order;
     }
   }

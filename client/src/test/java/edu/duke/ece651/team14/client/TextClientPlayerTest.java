@@ -37,6 +37,19 @@ import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
 public class TextClientPlayerTest {
 
+  // Messages sent as output to the user that are useful to be able to call on for
+  // the various tests in this file
+  String intro = "Type 'D' if you're done committing move orders for this turn. Type anything else to begin creating a new move order\n";
+  String from = "Territory to move units from:\n";
+  String to = "Territory to move units to:\n";
+  String num = "Enter the number of units you want to send\n";
+  String badNum = "Please enter a valid number\n";
+  String dontOwn = "You do not own that territory\n";
+  String atLeastOne = "You must send at least one unit\n";
+  String badPath = "There is no valid path between origin and destination. Try again.\n";
+  String tooMany = "You're trying to send more units than you have\n";
+  String tooManyTotal = "During this turn, you have moved too many units out of the origin you specified\n";
+
   /**
    * Helper method to create a simple TextClientPlayer
    */
@@ -60,6 +73,45 @@ public class TextClientPlayerTest {
     t.addUnits(units);
   }
 
+  /**
+   * In order to create a move order, you have to construct a lot of other
+   * objects, so we created a helper method to create all those objects
+   *
+   * @param input is the input by the user to the system as they are pompted to
+   *              construct a move over
+   * @param bytes (when converted to a string) is the output of the system based
+   *              on the user's inputs
+   * @return the output of the system based on the user's inputs to create a move
+   *         order
+   */
+  public String test_getMoveOrder_helper(ByteArrayOutputStream bytes, String input) throws IOException {
+    MapFactory f = new MapFactory();
+    TextClientPlayer tcp = createTextClientPlayer(input, new Color("blue"), bytes);
+    Player p1 = tcp.myPlayer;
+    Player p2 = new BasicPlayer(new Color("red"), "p2");
+    ArrayList<Player> players = new ArrayList<>();
+    players.add(p1);
+    players.add(p2);
+    Map testMap = f.makeMap("test", players);
+    // I'm going to add one more territory to test map owned by p1 so that I can
+    // test what happens when a player tries to move units along an invalid path
+    // (there are no invalid paths in testMap right now)
+    Territory t = new BasicTerritory("7");
+    assertEquals("7", t.getName());
+    t.addAdjacentTerritories(testMap.getTerritoryByName("5"));
+    testMap.getTerritoryByName("5").addAdjacentTerritories(t);
+    t.setOwner(p1);
+    testMap.getMap().put("7", t);
+    // Put 5 units on each territory of the map
+    for (int i = 0; i < 8; i++) {
+      Territory terr = testMap.getTerritoryByName(String.valueOf(i));
+      putUnitsOnTerr(terr, 5);
+    }
+    OrderVerifier verifier = new OrderVerifier(testMap);
+    MoveOrder order = tcp.getMoveOrder(testMap, verifier);
+    return bytes.toString();
+  }
+
   // TODO: figure out how to test normal (non-mocked) constructor
   // Breaking on new Communicator line in constructor
   @Disabled
@@ -72,27 +124,96 @@ public class TextClientPlayerTest {
     sock.close();
   }
 
+  // Testing getMoveOrder when everything entered by user is legal
   @Test
-  public void test_getMoveOrder() throws IOException {
-    MapFactory f = new MapFactory();
+  public void test_getMoveOrder_simple() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    TextClientPlayer tcp = createTextClientPlayer("c\n0\n1\n2\n", new Color("blue"), bytes);
+    String input = "c\n0\n1\n2\n";
+    String actual = test_getMoveOrder_helper(bytes, input);
+    String expected = intro + from + to + num;
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void test_getMoveOrder_done() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    String input = "d\n";
+    String actual = test_getMoveOrder_helper(bytes, input);
+    String expected = intro;
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void test_getMoveOrder_invalidOrigin() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    String input = "c\n6\n0\n1\n5\n";
+    String expected = intro + from + dontOwn + from + to + num;
+    String actual = test_getMoveOrder_helper(bytes, input);
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void test_getMoveOrder_invalidDest() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    String input = "c\n0\n6\n3\n5\n";
+    String expected = intro + from + to + dontOwn + to +  num;
+    String actual = test_getMoveOrder_helper(bytes, input);
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void test_getMoveOrder_tooMany() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    String input = "c\n0\n3\n6\n5\n";
+    String expected = intro + from + to + num + tooMany + num;
+    String actual = test_getMoveOrder_helper(bytes, input);
+    assertEquals(expected, actual);
+  }
+  
+  @Test
+  public void test_getMoveOrder_badPath() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    String input = "c\n2\n7\n3\n2\n0\n5\n";
+    String expected = intro + from + to + num + badPath + from + to + num;
+    String actual = test_getMoveOrder_helper(bytes, input);
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void test_getMoveOrder_tooManyTotal() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    MapFactory f = new MapFactory();
+    String input = "c\n0\n1\n3\nc\n0\n2\n3\n2\n";
+    TextClientPlayer tcp = createTextClientPlayer(input, new Color("blue"), bytes);
     Player p1 = tcp.myPlayer;
     Player p2 = new BasicPlayer(new Color("red"), "p2");
     ArrayList<Player> players = new ArrayList<>();
     players.add(p1);
     players.add(p2);
     Map testMap = f.makeMap("test", players);
-    testMap.getTerritoryByName("0").addUnits(new BasicUnit());
-    testMap.getTerritoryByName("0").addUnits(new BasicUnit());
+    Territory t = new BasicTerritory("7");
+    assertEquals("7", t.getName());
+    t.addAdjacentTerritories(testMap.getTerritoryByName("5"));
+    testMap.getTerritoryByName("5").addAdjacentTerritories(t);
+    t.setOwner(p1);
+    testMap.getMap().put("7", t);
+    for (int i = 0; i < 8; i++) {
+      Territory terr = testMap.getTerritoryByName(String.valueOf(i));
+      putUnitsOnTerr(terr, 5);
+    }
     OrderVerifier verifier = new OrderVerifier(testMap);
-    MoveOrder order = tcp.getMoveOrder(testMap, verifier);
-    String intro = "Type 'D' if you're done committing move orders for this turn. Type anything else to begin creating a new move order\n";
-    String from = "Territory to move units from:\n";
-    String to = "Territory to move units to:\n";
-    String num = "Enter the number of units you want to send\n";
-    String expected = intro + from + to + num;
-    assertEquals(expected, bytes.toString());
+    // Order #1
+    MoveOrder order1 = tcp.getMoveOrder(testMap, verifier);
+    String expected1 = intro + from + to + num;
+    assertEquals(expected1, bytes.toString());
+    assertEquals(testMap.getTerritoryByName("0"), order1.getOrigin());
+    assertEquals(testMap.getTerritoryByName("1"), order1.getDestination());
+    assertEquals(3, order1.getNumUnits());
+    assertEquals(p1, order1.getPlayer());
+    // Order #2
+    MoveOrder order2 = tcp.getMoveOrder(testMap, verifier);
+    String expected2 = expected1 + intro + from + to + num + tooMany + num;
+    assertEquals(expected2, bytes.toString());
   }
 
   @Test
@@ -128,9 +249,9 @@ public class TextClientPlayerTest {
     String prompt = "Enter the number of units you want to send\n";
     String invalidNum = "Please enter a valid number\n";
     String negative = "You must send at least one unit\n";
-    String tooMany = "You have 3 units on gondor - You cannot send 4 units\n";
+    String over = tooMany;
     String expected = prompt + invalidNum + prompt + invalidNum + prompt + invalidNum + prompt + negative + prompt
-        + negative + prompt + prompt + prompt + tooMany + prompt;
+        + negative + prompt + prompt + prompt + over + prompt;
     assertEquals(1, tcp.getNumUnitsToSend(gondor));
     assertEquals(3, tcp.getNumUnitsToSend(gondor));
     assertEquals(2, tcp.getNumUnitsToSend(gondor));
