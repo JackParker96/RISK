@@ -6,16 +6,15 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import edu.duke.ece651.team14.shared.Communicator;
-import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapTextView;
+import edu.duke.ece651.team14.shared.MoveOrder;
+import edu.duke.ece651.team14.shared.MoveOrderPathExistsRuleChecker;
 import edu.duke.ece651.team14.shared.Order;
-import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 import edu.duke.ece651.team14.shared.Territory;
-import edu.duke.ece651.team14.shared.BasicTerritory;
+import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
 public class TextClientPlayer extends ClientPlayer {
   /**
@@ -230,8 +229,7 @@ public class TextClientPlayer extends ClientPlayer {
   public int getNumUnitsToSend(Territory fromTerr) throws IOException {
     // Check that fromTerr is owned by the Player
     if (!fromTerr.getOwner().equals(myPlayer)) {
-      throw new IllegalArgumentException(
-          "Player (" + myPlayer.toString() + ") does not own (" + fromTerr.toString() + ")");
+      throw new IllegalArgumentException("You do not own that territory");
     }
     int maxCanSend = fromTerr.getNumUnits();
     while (true) {
@@ -252,8 +250,7 @@ public class TextClientPlayer extends ClientPlayer {
       }
       // Check that not too many units are being sent
       if (numToSend > maxCanSend) {
-        out.println("You have " + maxCanSend + " units on " + fromTerr.toString() + " - You cannot send " + numToSend
-            + " units");
+        out.println("You're trying to send more units than you have");
         continue;
       }
       return numToSend;
@@ -261,23 +258,117 @@ public class TextClientPlayer extends ClientPlayer {
   }
 
   /**
-   * Prompt the user to place an order to the server
+   * Prompt user to enter information to construct a MoveOrder
+   * Checks that four conditions are met:
+   * (1) Player owns territory to send units from
+   * (2) Player owns territory to send units to
+   * (3) Path exists connecting origin and destination
+   * (4) Number of units to send does not exceed number of units on origin
+   * territory
    *
-   * @param m is the Map associated with the current game
-   * @return an Order object that another function can send to the server
+   * @param m       is the map at the end of the previous turn
+   * @param checker is used to check that a path exists between the two
+   *                territories
+   * @return the MoveOrder constructed based on player's responses to prompts (if
+   *         the MoveOrder meets the four conditions above). Otherwise, return
+   *         null
    */
-  public Order getOrder(Map m) throws IOException {
-    out.println("You will now enter an Order");
-    String orderType = getOrderType();
-    if (orderType.equals("commit")) {
+  public MoveOrder tryCommitMoveOrder(Map m, MoveOrderPathExistsRuleChecker checker) throws IOException {
+    String originPrompt = "Territory to move units from:";
+    String destPrompt = "Territory to move units to:";
+    Territory origin = askForTerritoryOwnedByPlayer(originPrompt, m);
+    Territory dest = askForTerritoryOwnedByPlayer(destPrompt, m);
+    // The following method call automatically checks that the player isn't trying
+    // to send more units than were in their territory at the end of the previous
+    // turn
+    int numUnits = getNumUnitsToSend(origin);
+    MoveOrder order = new MoveOrder(origin, dest, numUnits, myPlayer);
+    String check = checker.checkMyRule(m, order);
+    if (check == null) {
+      return order;
+    }
+    return null;
+  }
+
+  /**
+   * Walk player through creating a single move order.
+   *
+   * In order for a MoveOrder to be returned by this method, the following 5
+   * conditions must be met:
+   *
+   * (1) Player owns territory to send units from
+   * (2) Player owns territory to send units to
+   * (3) Path exists connecting origin and destination
+   * (4) Number of units to send does not exceed number of units on origin
+   * territory
+   * (5) Considering all the move orders the player has placed this turn, the sum
+   * of units moved out of any territory does not exceed the number of units on
+   * that territory at the end of the previous turn
+   *
+   * If any of the above 5 conditions are not met, the player is immediately
+   * prompted to correct their mistake
+   *
+   * @param m        is the current game map
+   * @param verifier is used to check condition #5 (see documentation for the
+   *                 OrderVerifier class)
+   * @return a MoveOrder object constructed based on the player's responses to
+   *         prompts
+   */
+  public MoveOrder getMoveOrder(Map m, OrderVerifier verifier) throws IOException {
+    out.println(
+        "Type 'D' if you're done committing move orders for this turn. Type anything else to begin creating a new move order");
+    String response = inputReader.readLine().toLowerCase();
+    if (response.equals("d")) {
       return null;
     }
-    String fromPrompt = "Enter the name of the 'from' territory for your order";
-    Territory fromTerr = askForTerritoryOwnedByPlayer(fromPrompt, m);
-    String toPrompt = "Enter the name of the 'to' territory for your order";
-    Territory toTerr = askForTerritoryOwnedByPlayer(toPrompt, m);
+    while (true) {
+      MoveOrder order = tryCommitMoveOrder(m, new MoveOrderPathExistsRuleChecker(null));
+      // order will be null if and only if the path check fails
+      if (order == null) {
+        out.println("There is no valid path between origin and destination. Try again.");
+        continue;
+      }
+      // Check condition #5 from the description of this method
+      String checkResult = verifier.verifyOrder(order);
+      return order;
+    }
+  }
 
-    return null;
+  /**
+   * Get all the move orders from one player for one turn
+   *
+   * @param m        is the map returned by the server at the end of the previous
+   *                 turn
+   * @param verifier isn OrderVerifier used to make sure players aren't sending
+   *                 too many units out of a territory over the course of a whole
+   *                 turn
+   * @return an ArrayList of verified MoveOrders that are all ready to be sent
+   *         over to the Server
+   */
+  public ArrayList<MoveOrder> getAllMoveOrders(Map m, OrderVerifier verifier) throws IOException {
+    out.println("Time to place move orders! You can enter as many move orders as you'd like");
+    ArrayList<MoveOrder> verifiedOrders = new ArrayList<>();
+    while (true) {
+      MoveOrder verifiedOrder = getMoveOrder(m, verifier);
+      if (verifiedOrder == null) {
+        break;
+      }
+      verifiedOrders.add(verifiedOrder);
+    }
+    return verifiedOrders;
+  }
+
+  /**
+   * Execute the entire Move Orders phase for one player
+   * Prompt user for move orders, verify all the orders on the client side, and
+   * send orders to server
+   *
+   * @param m        is the game map
+   * @param verifier is an OrderVerifier
+   */
+  public void doMoveOrdersPhase(Map m, OrderVerifier verifier) throws IOException {
+    ArrayList<MoveOrder> moveOrders = getAllMoveOrders(m, verifier);
+    communicator.sendObject(moveOrders);
   }
 
 }
