@@ -5,6 +5,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.Map;
@@ -331,6 +332,43 @@ public class TextClientPlayer extends ClientPlayer {
       String checkResult = verifier.verifyOrder(order);
       return order;
     }
+  }
+
+  /**
+   * Get all the move orders from one player for one turn
+   *
+   * @param m        is the map returned by the server at the end of the previous
+   *                 turn
+   * @param verifier isn OrderVerifier used to make sure players aren't sending
+   *                 too many units out of a territory over the course of a whole
+   *                 turn
+   * @return an ArrayList of verified MoveOrders that are all ready to be sent
+   *         over to the Server
+   */
+  public ArrayList<MoveOrder> getAllMoveOrders(Map m, OrderVerifier verifier) throws IOException {
+    out.println("Time to place move orders! You can enter as many move orders as you'd like");
+    ArrayList<MoveOrder> verifiedOrders = new ArrayList<>();
+    while (true) {
+      MoveOrder verifiedOrder = getMoveOrder(m, verifier);
+      if (verifiedOrder == null) {
+        break;
+      }
+      verifiedOrders.add(verifiedOrder);
+    }
+    return verifiedOrders;
+  }
+
+  /**
+   * Execute the entire Move Orders phase for one player
+   * Prompt user for move orders, verify all the orders on the client side, and
+   * send orders to server
+   *
+   * @param m        is the game map
+   * @param verifier is an OrderVerifier
+   */
+  public void doMoveOrdersPhase(Map m, OrderVerifier verifier) throws IOException {
+    ArrayList<MoveOrder> moveOrders = getAllMoveOrders(m, verifier);
+    communicator.sendObject(moveOrders);
   }
 
 }

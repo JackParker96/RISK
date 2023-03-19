@@ -7,11 +7,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
@@ -39,6 +41,7 @@ public class TextClientPlayerTest {
 
   // Messages sent as output to the user that are useful to be able to call on for
   // the various tests in this file
+  String moveIntro = "Time to place move orders! You can enter as many move orders as you'd like\n";
   String intro = "Type 'D' if you're done committing move orders for this turn. Type anything else to begin creating a new move order\n";
   String from = "Territory to move units from:\n";
   String to = "Territory to move units to:\n";
@@ -124,6 +127,76 @@ public class TextClientPlayerTest {
     sock.close();
   }
 
+  // TODO: In this test, tcp needs to be assigned a Communicator (right now the
+  // Communicator is set to null). I'm not sure how to construct a test
+  // Communicator
+  @Disabled
+  @Test
+  public void test_doMoveOrdersPhase() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    MapFactory f = new MapFactory();
+    TextClientPlayer tcp = createTextClientPlayer("c\n0\n1\n5\nd\n", new Color("blue"), bytes);
+    Player p1 = tcp.myPlayer;
+    Player p2 = new BasicPlayer(new Color("red"), "p2");
+    ArrayList<Player> players = new ArrayList<>();
+    players.add(p1);
+    players.add(p2);
+    Map testMap = f.makeMap("test", players);
+    putUnitsOnTerr(testMap.getTerritoryByName("0"), 5);
+    OrderVerifier verifier = new OrderVerifier(testMap);
+    tcp.doMoveOrdersPhase(testMap, verifier);
+  }
+
+  @Test
+  public void test_getAllMoveOrders() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    MapFactory f = new MapFactory();
+    String input1 = "c\n0\n1\n3\n";
+    String input2 = "c\n0\n1\n3\n2\n";
+    String input3 = "c\n1\n2\n6\nd\n";
+    String input = input1 + input2 + input3;
+    TextClientPlayer tcp = createTextClientPlayer(input, new Color("blue"), bytes);
+    Player p1 = tcp.myPlayer;
+    Player p2 = new BasicPlayer(new Color("red"), "p2");
+    ArrayList<Player> players = new ArrayList<>();
+    players.add(p1);
+    players.add(p2);
+    Map testMap = f.makeMap("test", players);
+    Territory t = new BasicTerritory("7");
+    assertEquals("7", t.getName());
+    t.addAdjacentTerritories(testMap.getTerritoryByName("5"));
+    testMap.getTerritoryByName("5").addAdjacentTerritories(t);
+    t.setOwner(p1);
+    testMap.getMap().put("7", t);
+    for (int i = 0; i < 8; i++) {
+      Territory terr = testMap.getTerritoryByName(String.valueOf(i));
+      putUnitsOnTerr(terr, 5);
+    }
+    OrderVerifier verifier = new OrderVerifier(testMap);
+    ArrayList<MoveOrder> orders = tcp.getAllMoveOrders(testMap, verifier);
+    assertEquals(3, orders.size());
+    String expected1 = moveIntro + intro + from + to + num;
+    String expected2 = intro + from + to + num + tooMany + num;
+    String expected3 = intro + from + to + num + intro;
+    String expected = expected1 + expected2 + expected3;
+    assertEquals(expected, bytes.toString());
+    // Check Order 1
+    assertEquals(testMap.getTerritoryByName("0"), orders.get(0).getOrigin());
+    assertEquals(testMap.getTerritoryByName("1"), orders.get(0).getDestination());
+    assertEquals(p1, orders.get(0).getPlayer());
+    assertEquals(3, orders.get(0).getNumUnits());
+    // Check Order 2
+    assertEquals(testMap.getTerritoryByName("0"), orders.get(1).getOrigin());
+    assertEquals(testMap.getTerritoryByName("1"), orders.get(1).getDestination());
+    assertEquals(p1, orders.get(1).getPlayer());
+    assertEquals(2, orders.get(1).getNumUnits());
+    // Check Order 3
+    assertEquals(testMap.getTerritoryByName("1"), orders.get(2).getOrigin());
+    assertEquals(testMap.getTerritoryByName("2"), orders.get(2).getDestination());
+    assertEquals(p1, orders.get(2).getPlayer());
+    assertEquals(6, orders.get(2).getNumUnits());
+  }
+
   // Testing getMoveOrder when everything entered by user is legal
   @Test
   public void test_getMoveOrder_simple() throws IOException {
@@ -156,7 +229,7 @@ public class TextClientPlayerTest {
   public void test_getMoveOrder_invalidDest() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     String input = "c\n0\n6\n3\n5\n";
-    String expected = intro + from + to + dontOwn + to +  num;
+    String expected = intro + from + to + dontOwn + to + num;
     String actual = test_getMoveOrder_helper(bytes, input);
     assertEquals(expected, actual);
   }
@@ -169,7 +242,7 @@ public class TextClientPlayerTest {
     String actual = test_getMoveOrder_helper(bytes, input);
     assertEquals(expected, actual);
   }
-  
+
   @Test
   public void test_getMoveOrder_badPath() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
