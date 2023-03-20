@@ -7,12 +7,12 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import edu.duke.ece651.team14.shared.AttackOrder;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.MoveOrder;
 import edu.duke.ece651.team14.shared.MoveOrderPathExistsRuleChecker;
-import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
@@ -305,6 +305,20 @@ public class TextClientPlayer extends ClientPlayer {
   }
 
   /**
+  public AttackOrder tryCommitAttackOrder(Map m, ) throws IOException {
+    String originPrompt = "Territory to attack from:";
+    String destPrompt = "Territory you want to attack:";
+    Territory origin = askForTerritoryOwnedByPlayer(originPrompt, m);
+    // Keep prompting player for destination territory until they enter a territory that is 
+    while (true) {
+      Territory dest = askForTerritoryNotOwnedByPlayer(destPrompt, m);
+      if (!origin.getAdjacentTerritories().contains(dest)) {
+        
+      }
+    }
+    }*/
+
+  /**
    * Walk player through creating a single move order.
    *
    * In order for a MoveOrder to be returned by this method, the following 5
@@ -349,6 +363,27 @@ public class TextClientPlayer extends ClientPlayer {
   }
 
   /**
+  public AttackOrder getAttackOrder(Map m, OrderVerifier verifier) throws IOException {
+    out.println(
+        "Type 'D' if you're done committing attack orders for this turn. Type anything else to begin creating a new attack order");
+    String response = inputReader.readLine().toLowerCase();
+    if (response.equals("d")) {
+      return null;
+    }
+    while (true) {
+      AttackOrder order = tryCommitAttackOrder(m);
+      if (order == null) {
+        out.println("You can only attack a territory if it's adjecent to the territory you're attacking from");
+        continue;
+      }
+      // Check condition #5 from the description of this method
+      String checkResult = verifier.verifyOrder(order);
+      return order;
+    }
+  }
+  */
+
+  /**
    * Get all the move orders from one player for one turn
    *
    * @param m        is the map returned by the server at the end of the previous
@@ -373,6 +408,21 @@ public class TextClientPlayer extends ClientPlayer {
   }
 
   /**
+  public ArrayList<AttackOrder> getAllAttackOrders(Map m, OrderVerifier verifier) throws IOException {
+    out.println("Time to place attack orders! You can enter as many attack orders as you'd like");
+    ArrayList<AttackOrder> verifiedOrders = new ArrayList<>();
+    while (true) {
+      AttackOrder verifiedOrder = getAttackOrder(m, verifier);
+      if (verifiedOrder == null) {
+        break;
+      }
+      verifiedOrders.add(verifiedOrder);
+    }
+    return verifiedOrders;
+  }
+  */
+  
+  /**
    * Execute the entire Move Orders phase for one player
    * Prompt user for move orders, verify all the orders on the client side, and
    * send orders to server
@@ -385,4 +435,11 @@ public class TextClientPlayer extends ClientPlayer {
     communicator.sendObject(moveOrders);
   }
 
+  /**
+  public void doAttackOrdersPhase(Map m, OrderVerifier verifier) throws IOException {
+    ArrayList<AttackOrder> attackOrders = getAllAttackOrders(m, verifier);
+    communicator.sendObject(attackOrders)
+  }
+  */
+  
 }
