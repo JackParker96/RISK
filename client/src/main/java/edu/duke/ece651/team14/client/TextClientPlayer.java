@@ -59,12 +59,14 @@ public class TextClientPlayer extends ClientPlayer {
    * @throws ClassNotFoundException
    */
   public void placeUnitsPhase() throws IOException, ClassNotFoundException {
-    displayMap(recvMap());
+    Map m = recvMap();
+    displayMap(m);
     out.println("You are the " + myPlayer + " player, please add some units to your territory");
-    UnitPlacementOrder upo = communicator.recvUnitPOrder();
+    UnitPlacementOrder upo = m.getUnitsPlacementOrder(myPlayer);
     placeUnits(upo, 30);
     communicator.sendObject(upo);
     // wait for other to finish
+    out.println("Wait for other players to finish placing units...");
     displayMap(recvMap());
   }
 
@@ -118,7 +120,8 @@ public class TextClientPlayer extends ClientPlayer {
    */
   protected int placeOneTerr(UnitPlacementOrder upo, int remainingUnits, int index) throws IOException {
     out.println("You have " + remainingUnits + " Units left");
-    int inputInt = readInt("Please enter the number of units you want to put in " + upo.getName(index));
+    int inputInt = readInt("Please enter the number of units you want to put in " + upo.getName(index)
+        + GetProgressStr(index + 1, upo.size()));
     if (index < upo.size() - 1 && (inputInt >= remainingUnits)) {
       throw new IllegalArgumentException("Make sure all your territories have Units");
     }
@@ -127,6 +130,17 @@ public class TextClientPlayer extends ClientPlayer {
     }
     upo.setNumUnits(index, inputInt);
     return inputInt;
+  }
+
+  /**
+   * Return string of format (cur/total)
+   * 
+   * @param cur
+   * @param total
+   * @return
+   */
+  protected String GetProgressStr(int cur, int total) {
+    return "(" + Integer.toString(cur) + "/" + Integer.toString(total) + ")";
   }
 
   /**

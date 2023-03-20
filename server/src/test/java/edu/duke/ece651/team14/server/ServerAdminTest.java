@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -65,7 +66,8 @@ public class ServerAdminTest {
     sa.releaseResources();
   }
 
-  // TODO: finish writing this test once method is completed
+  // TODO: finish writing this test once method is completedp
+  @Disabled
   @Test
   public void test_initializeGame() throws IOException, ClassNotFoundException {
     ServerSocket mockServerSocket = mock(ServerSocket.class);

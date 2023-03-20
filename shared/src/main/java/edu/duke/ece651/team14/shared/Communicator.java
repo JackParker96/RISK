@@ -38,6 +38,7 @@ public class Communicator {
    * @param input
    */
   public void sendObject(Object obj) throws IOException {
+    this.out.reset();// make it "forget" past objects
     this.out.writeObject(obj);
     this.out.flush();// send buffered data immediately
   }

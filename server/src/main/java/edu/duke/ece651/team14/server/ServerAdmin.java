@@ -86,26 +86,20 @@ public class ServerAdmin {
   public void initializeGamePhase() throws IOException, ClassNotFoundException {
     MapFactory f = new MapFactory();
     this.map = f.makeMap("Earth", new ArrayList<Player>(this.playerCommunicators.keySet()));
-    // System.out.println(view.displayMap());
     // send the player object to client
     for (Player p : playerCommunicators.keySet()) {
       Communicator c = playerCommunicators.get(p);
       c.sendObject(p);
       c.sendObject(map);
-      // TODO: change this, doesn't need to send empty placement order
-      c.sendObject(map.getUnitsPlacementOrder(p));
     }
-    // receivePlacementOrders();
+    receivePlacementOrders();
   }
 
-  // throwing java.lang.ClassCastException: BasicPlayer cannot be cast to class
   // UnitPlacementOrder
-  // commented out in initializeGamePhase() method for now
-  public void receivePlacementOrders() throws IOException, ClassNotFoundException {
+  protected void receivePlacementOrders() throws IOException, ClassNotFoundException {
     for (Player p : playerCommunicators.keySet()) {
       Communicator c = playerCommunicators.get(p);
-      UnitPlacementOrder upo = (UnitPlacementOrder) c.recvObject();
-      // might need rule checker here, may not, clients have do a lot rule checking
+      UnitPlacementOrder upo = c.recvUnitPOrder();
       System.out.println("recv unit placement request from " + p);
       map.handleUnitPlacementOrder(upo);
     }
