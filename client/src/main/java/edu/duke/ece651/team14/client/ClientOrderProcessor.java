@@ -47,11 +47,12 @@ public abstract class ClientOrderProcessor {
       try {
         numUnits = Integer.parseInt(numStr);
       } catch (NumberFormatException e) {
-        clientPlayer.sendMsg(e.getMessage());
+        clientPlayer.sendMsg("Invalid number");
         continue;
       }
       if (numUnits < 1) {
         clientPlayer.sendMsg("Must send at least one unit");
+        continue;
       }
       clientPlayer.sendMsg("Sending " + numUnits + " units");
       return numUnits;
