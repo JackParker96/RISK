@@ -46,6 +46,22 @@ public abstract class ClientPlayer {
     this.inputReader = inputSource;
     this.out = outPrintStream;
   }
+
+  /**
+   * Read one line of input for the user
+   */
+  public String getInput() throws IOException {
+    return inputReader.readLine();
+  }
+  
+  /**
+   * Display a message to the client
+   *
+   * @param msg is the message to display
+   */
+  public void sendMsg(String msg) {
+    out.println(msg);
+  }
   
   /**
    * Receive the player object from server to identify the player's color.
