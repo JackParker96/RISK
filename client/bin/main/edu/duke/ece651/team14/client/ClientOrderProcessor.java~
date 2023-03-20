@@ -1,0 +1,24 @@
+package edu.duke.ece651.team14.client;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import edu.duke.ece651.team14.shared.Map;
+import edu.duke.ece651.team14.shared.Order;
+
+public abstract class ClientOrderProcessor {
+  private ClientPlayer clientPlayer;
+  private Map map;
+  private ArrayList<Order> verifiedOrders;
+
+  public ClientOrderProcessor(ClientPlayer clientPlayer, Map map) {
+    this.clientPlayer = clientPlayer;
+    this.map = map;
+    this.verifiedOrders = new ArrayList<>();
+  }
+
+  public abstract Order processOrder();
+
+  public abstract void processAllOrdersForOneTurn();
+  
+}

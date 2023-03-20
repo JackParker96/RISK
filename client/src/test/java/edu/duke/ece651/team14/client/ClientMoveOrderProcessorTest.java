@@ -30,7 +30,8 @@ public class ClientMoveOrderProcessorTest {
   String originTerr = "Origin territory for order:\n";
   String destTerr = "Destination territory for order:\n";
   String num = "Number of units to send:\n";
-  
+  String terrErr = "Territory does not exist in Map\n";
+
   public TextClientPlayer createTextClientPlayer(String inputData, Color c, OutputStream bytes) throws IOException {
     Player p = new BasicPlayer(c, "A");
     BufferedReader in = new BufferedReader(new StringReader(inputData));
@@ -80,16 +81,73 @@ public class ClientMoveOrderProcessorTest {
   public void test_processSimpleMoveOrder() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     String input = "c\n0\n1\n5\nd\n";
-    String expected = intro + doneOrNot + originTerr + "Setting Origin: 0\n"+ destTerr + "Setting Destination: 1\n" + num + "Sending 5 units\n" + doneOrNot;
+    String expected = intro + doneOrNot + originTerr + "Setting Origin: 0\n" + destTerr + "Setting Destination: 1\n"
+        + num + "Sending 5 units\n" + doneOrNot;
     String actual = helper(bytes, input);
     assertEquals(expected, actual);
   }
 
   @Test
-  public void test_originErrors() throws IOException {
+  public void test_terrNotOnMap() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    String input = "c\ngondor\n1\n";
-    String expected = "";
+    String input = "c\n8\n0\n8\n1\n1\nd\n";
+    String expected = intro + doneOrNot + originTerr + terrErr + originTerr + "Setting Origin: 0\n" + destTerr + terrErr
+        + destTerr + "Setting Destination: 1\n" + num + "Sending 1 units\n" + doneOrNot;
+    String actual = helper(bytes, input);
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void test_notOwned() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    String input = "c\n6\n1\n3\nc\n0\n4\n3\nd\n";
+    String expected = intro + doneOrNot + originTerr + "Setting Origin: 6\n" + destTerr + "Setting Destination: 1\n"
+        + num + "Sending 3 units\n" + "Player does not own origin territory\n" + doneOrNot + originTerr
+        + "Setting Origin: 0\n" + destTerr + "Setting Destination: 4\n" + num + "Sending 3 units\n"
+        + "Player does not own destination territory\n" + doneOrNot;
+    String actual = helper(bytes, input);
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void test_invalidPath() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    String input = "c\n0\n7\n3\nd\n";
+    String expected = intro + doneOrNot + originTerr + "Setting Origin: 0\n" + destTerr + "Setting Destination: 7\n"
+        + num + "Sending 3 units\n" + "Player does not own path from origin to destination\n" + doneOrNot;
+    String actual = helper(bytes, input);
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void test_badNums() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    String input = "c\n0\n1\n-1\n0\nthree\n4\nd\n";
+    String expected = intro + doneOrNot + originTerr + "Setting Origin: 0\n" + destTerr + "Setting Destination: 1\n"
+        + num + "Must send at least one unit\n" + num + "Must send at least one unit\n" + num + "Invalid number\n" + num
+        + "Sending 4 units\n" + doneOrNot;
+    String actual = helper(bytes, input);
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void test_tooManySingleOrder() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    String input = "c\n0\n1\n6\nd\n";
+    String expected = intro + doneOrNot + originTerr + "Setting Origin: 0\n" + destTerr + "Setting Destination: 1\n"
+        + num + "Sending 6 units\n" + "Not enough units of given type in destination territory\n" + doneOrNot;
+    String actual = helper(bytes, input);
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void test_tooManyTotal() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    String input = "c\n0\n1\n3\nc\n0\n1\n3\nd\n";
+    String expected = intro + doneOrNot + originTerr + "Setting Origin: 0\n" + destTerr + "Setting Destination: 1\n"
+        + num + "Sending 3 units\n" + doneOrNot + originTerr + "Setting Origin: 0\n" + destTerr
+        + "Setting Destination: 1\n" + num + "Sending 3 units\n"
+        + "Not enough units of given type in destination territory\n" + doneOrNot;
     String actual = helper(bytes, input);
     assertEquals(expected, actual);
   }
