@@ -2,6 +2,8 @@ package edu.duke.ece651.team14.shared;
 
 import java.io.Serializable;
 
+import java.util.HashSet;
+
 /**
  * A class to represent a player in the RISC game
  */
@@ -22,6 +24,36 @@ public abstract class Player implements Serializable{
     this.name = name;
   }
 
+  /**
+   * Check if this Player has won the game
+   *
+   * @param m is the Map corresponding to the game
+   * @return true if the Player has won, false if not
+   */
+  public boolean hasWon(Map m) {
+    if (this.equals(m.getWinner())) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Check if this Player has lost the game
+   *
+   * @param m is ther Map corresponding to the game
+   * @return true if the Player has lost, false if not
+   */
+  public boolean hasLost(Map m) {
+    HashSet<Player> nonLosers = new HashSet<>();
+    for (Territory t : m.getMap().values()) {
+      nonLosers.add(t.getOwner());
+    }
+    if (nonLosers.contains(this)) {
+      return false;
+    }
+    return true;
+  }
+  
   /**
    * Returns the player color
    *

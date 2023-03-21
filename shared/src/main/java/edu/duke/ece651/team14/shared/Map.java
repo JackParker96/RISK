@@ -3,6 +3,7 @@ package edu.duke.ece651.team14.shared;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Class to represent RISC Map of territories.
@@ -24,6 +25,24 @@ public class Map implements Serializable {
       map.put(t.getName(), t);
     }
     this.name = name;
+  }
+
+  /**
+   * Check if any Player controls all Territories on the map
+   *
+   * @return the Player who has achieved world domination, return null if no
+   *         Player has achieved world domination
+   */
+  public Player getWinner() {
+    HashSet<Player> activePlayers = new HashSet<>();
+    for (Territory t : map.values()) {
+      activePlayers.add(t.getOwner());
+    }
+    if (activePlayers.size() == 1) {
+      ArrayList<Player> player = new ArrayList<Player>(activePlayers);
+      return player.get(0);
+    }
+    return null;
   }
 
   /**
@@ -65,9 +84,11 @@ public class Map implements Serializable {
     return ans;
   }
 
-  /** 
-   * Initialize a unit placement order, with all units set to 0. It is used to send to clients,
+  /**
+   * Initialize a unit placement order, with all units set to 0. It is used to
+   * send to clients,
    * let the client fill out the order.
+   * 
    * @param p
    * @return the unitplacement order with units num 0.
    */
@@ -75,21 +96,22 @@ public class Map implements Serializable {
     HashMap<Player, ArrayList<Territory>> ownershipInfo = groupTerritoriesByPlayer();
     ArrayList<Territory> terrs = ownershipInfo.get(p);
     UnitPlacementOrder upo = new UnitPlacementOrder();
-    for(Territory t:terrs){
+    for (Territory t : terrs) {
       upo.addOneTerrPlacement(t.getName(), 0);
     }
     return upo;
   }
 
-  /** 
+  /**
    * Add units specified by the unit placement order
+   * 
    * @param upo
    */
-  public void handleUnitPlacementOrder(UnitPlacementOrder upo){
-    for(int i=0;i<upo.size();i++){
+  public void handleUnitPlacementOrder(UnitPlacementOrder upo) {
+    for (int i = 0; i < upo.size(); i++) {
       Territory t = getTerritoryByName(upo.getName(i));
       ArrayList<Unit> units = new ArrayList<>();
-      for(int j=0;j<upo.getNumUnits(i);j++){
+      for (int j = 0; j < upo.getNumUnits(i); j++) {
         units.add(new BasicUnit());
       }
       t.addUnits(units);

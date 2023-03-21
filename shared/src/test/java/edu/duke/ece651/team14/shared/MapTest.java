@@ -2,6 +2,7 @@ package edu.duke.ece651.team14.shared;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
@@ -10,6 +11,25 @@ import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 
 public class MapTest {
+
+  @Test
+  public void test_getWinner() {
+    MapFactory f = new MapFactory();
+    Player p1 = new BasicPlayer(new Color("blue"), "p1");
+    Player p2 = new BasicPlayer(new Color("red"), "p2");
+    ArrayList<Player> players = new ArrayList<>();
+    players.add(p1);
+    players.add(p2);
+    Map map = f.makeMap("test", players);
+    assertNull(map.getWinner());
+    map.getTerritoryByName("6").setOwner(p1);
+    assertNull(map.getWinner());
+    map.getTerritoryByName("4").setOwner(p1);
+    assertNull(map.getWinner());
+    map.getTerritoryByName("5").setOwner(p1);
+    assertEquals(p1, map.getWinner());
+  }
+  
   @Test
   // Tests getName() method
   public void test_name() {
