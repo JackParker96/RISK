@@ -13,7 +13,7 @@ public class App {
   /**
    * Constructor
    *
-   * @param portNum: server port number - must be greater than 1024
+   * @param portNum:     server port number - must be greater than 1024
    * @param num_players: number of players
    * @throws IOException
    */
@@ -37,12 +37,8 @@ public class App {
   }
 
   public void startGame() throws IOException, ClassNotFoundException {
-    try {
-      serverAdmin.acceptPlayersPhase(num_players);
-      serverAdmin.initializeGamePhase();
-    } finally {
-      serverAdmin.releaseResources();
-    }
+    serverAdmin.acceptPlayersPhase(num_players);
+    serverAdmin.initializeGamePhase();
     System.out.println("\nStarting game...\n");
   }
 
@@ -54,7 +50,10 @@ public class App {
       App a = new App(port, num_players);
       System.out.println(a.getMessage());
       a.startGame();
-      a.serverAdmin.closeServer();
+      //test with one turn first
+      a.serverAdmin.executeTurn(a.serverAdmin.playerCommunicators, a.serverAdmin.map);
+      System.out.println("One turn executed");
+      a.serverAdmin.releaseResources();
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
       System.out.println("Exiting game...");
