@@ -40,6 +40,33 @@ public class TextClientPlayer extends ClientPlayer {
   }
 
   /**
+   * Let Player know that a Player has won the game
+   *
+   * @param m is the Map of the game
+   * @throw IllegalArgumentException if Map m doesn't have a winner
+   */
+  public void displayWinInfo(Map m) throws IllegalArgumentException {
+    if (m.getWinner() == null) {
+      throw new IllegalArgumentException("Error: Nobody has won the game yet");
+    }
+    sendMsg(m.getWinner() + " has won the game!");
+  }
+
+  /**
+   * Let this Player know that they have lost the game
+   *
+   * @param m is the Map of the game
+   * @throw IllegalArgumentException is this player hasn't actually lost
+   */
+  public void displayLossInfo(Map m) throws IllegalArgumentException {
+    if (!myPlayer.hasLost(m)) {
+      throw new IllegalArgumentException("Error: This player has not lost the game");
+    }
+    sendMsg(
+        "You have lost! You may cotinue to watch the rest of the game, or you may choose to disconnect at any time");
+  }
+
+  /**
    * Receive the player object from server to identify the player's color.
    * 
    * @throws IOException

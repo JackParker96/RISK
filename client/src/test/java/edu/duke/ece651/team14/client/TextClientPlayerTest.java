@@ -52,6 +52,45 @@ public class TextClientPlayerTest {
   }
 
   @Test
+  public void test_winIO() {
+    MapFactory f = new MapFactory();
+    Player p1 = new BasicPlayer(new Color("blue"), "Xincheng");
+    Player p2 = new BasicPlayer(new Color("red"), "Maya");
+    ArrayList<Player> players = new ArrayList<>();
+    players.add(p1);
+    players.add(p2);
+    Map map = f.makeMap("test", players);
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(bytes, true);
+    BufferedReader in = new BufferedReader(new StringReader("test\n"));
+    TextClientPlayer tcp = new TextClientPlayer(null, null, in, out);
+    tcp.myPlayer = p1;
+    assertThrows(IllegalArgumentException.class, () -> tcp.displayLossInfo(map));
+    assertThrows(IllegalArgumentException.class, () -> tcp.displayWinInfo(map));
+    map.getTerritoryByName("6").setOwner(p1);
+    assertThrows(IllegalArgumentException.class, () -> tcp.displayLossInfo(map));
+    assertThrows(IllegalArgumentException.class, () -> tcp.displayWinInfo(map));
+    map.getTerritoryByName("4").setOwner(p1);
+    assertThrows(IllegalArgumentException.class, () -> tcp.displayLossInfo(map));
+    assertThrows(IllegalArgumentException.class, () -> tcp.displayWinInfo(map));
+    map.getTerritoryByName("5").setOwner(p1);
+    assertThrows(IllegalArgumentException.class, () -> tcp.displayLossInfo(map));
+    tcp.displayWinInfo(map);
+    String expected = "Xincheng has won the game!\n";
+    assertEquals(expected, bytes.toString());
+    map.getTerritoryByName("0").setOwner(p2);
+    map.getTerritoryByName("1").setOwner(p2);
+    map.getTerritoryByName("2").setOwner(p2);
+    map.getTerritoryByName("3").setOwner(p2);
+    map.getTerritoryByName("4").setOwner(p2);
+    map.getTerritoryByName("5").setOwner(p2);
+    map.getTerritoryByName("6").setOwner(p2);
+    tcp.displayLossInfo(map);
+    String expected2 = expected + "You have lost! You may cotinue to watch the rest of the game, or you may choose to disconnect at any time\n";
+    assertEquals(expected2, bytes.toString());
+  }
+  
+  @Test
   public void test_placeUnits() throws FileNotFoundException, IOException, ClassNotFoundException {
     Socket mockClientSocket = mock(Socket.class);
     Communicator mockComuni = mock(Communicator.class);
