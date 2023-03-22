@@ -88,7 +88,8 @@ public class TextClientPlayer extends ClientPlayer {
   public void placeUnitsPhase() throws IOException, ClassNotFoundException {
     Map m = recvMap();
     displayMap(m);
-    out.println("You are the " + myPlayer + " player, please add some units to your territory");
+    out.println("You are the " + myPlayer.toString().toUpperCase()
+        + " player. Please add some units to your territories. You can add 0 or more units to each territory, as long as you do not exceed the total number allowed.");
     UnitPlacementOrder upo = m.getUnitsPlacementOrder(myPlayer);
     placeUnits(upo, 30);
     communicator.sendObject(upo);
@@ -149,8 +150,8 @@ public class TextClientPlayer extends ClientPlayer {
     out.println("You have " + remainingUnits + " Units left");
     int inputInt = readInt("Please enter the number of units you want to put in " + upo.getName(index)
         + GetProgressStr(index + 1, upo.size()));
-    if (index < upo.size() - 1 && (inputInt >= remainingUnits)) {
-      throw new IllegalArgumentException("Make sure all your territories have Units");
+    if (inputInt > remainingUnits) {
+      throw new IllegalArgumentException("You are placing more units than you were allotted!");
     }
     if (index == upo.size() - 1 && inputInt != remainingUnits) {
       throw new IllegalArgumentException("You need to place all units!");
@@ -167,7 +168,7 @@ public class TextClientPlayer extends ClientPlayer {
    * @return
    */
   protected String GetProgressStr(int cur, int total) {
-    return "(" + Integer.toString(cur) + "/" + Integer.toString(total) + ")";
+    return " (" + Integer.toString(cur) + "/" + Integer.toString(total) + ")";
   }
 
   /**
@@ -186,8 +187,8 @@ public class TextClientPlayer extends ClientPlayer {
           throw new EOFException("reach end of file");
         }
         int ans = Integer.parseInt(s);
-        if (ans <= 0) {
-          throw new IllegalArgumentException("Unit number cannot be less than 1");
+        if (ans < 0) {
+          throw new IllegalArgumentException("Unit number cannot be less than 0");
         }
         return ans;
       } catch (NumberFormatException ex) {
