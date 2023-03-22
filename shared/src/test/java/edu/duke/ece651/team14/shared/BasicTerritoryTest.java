@@ -37,7 +37,6 @@ public class BasicTerritoryTest {
   public void test_addUnits_getNumUnits() {
     BasicTerritory gondor = new BasicTerritory("Gondor");
     assertEquals(0, gondor.getNumUnits());
-    assertThrows(IllegalArgumentException.class, () -> gondor.addUnits(new ArrayList<Unit>()));
     gondor.addUnits(new BasicUnit());
     assertEquals(1, gondor.getNumUnits());
     ArrayList<Unit> more_units = new ArrayList<Unit>();

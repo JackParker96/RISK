@@ -96,12 +96,8 @@ public abstract class Territory implements Serializable {
    *
    * @param units is a list of units to add to the territory
    * @return true if units successfully added
-   * @throws IllegalArgumentException if the list of units is empty
    */
-  public void addUnits(ArrayList<Unit> units) throws IllegalArgumentException {
-    if (units.size() == 0) {
-      throw new IllegalArgumentException("Can't add 0 units to a territory - must add 1 or more");
-    }
+  public void addUnits(ArrayList<Unit> units) {
     this.units.addAll(units);
   }
 
