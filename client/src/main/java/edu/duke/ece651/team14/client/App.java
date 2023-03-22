@@ -6,8 +6,11 @@ package edu.duke.ece651.team14.client;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
+import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MyName;
+import edu.duke.ece651.team14.shared.Order;
 
 public class App {
   ClientPlayer client;
@@ -44,8 +47,20 @@ public class App {
     try{
       a.client.whoAmIPhase();
       a.client.placeUnitsPhase();
+      Map map = a.client.recvMap();
+      ClientMoveOrderProcessor moveProc = new ClientMoveOrderProcessor(a.client, map);
+      ArrayList<Order> moveOrders = moveProc.processAllOrdersForOneTurn(hostName);
+      a.client.communicator.sendObject(moveOrders);
+      System.out.println("\nsubmitted move orders");
+      a.client.displayMap(map);
+      // i think the client socket closes before server can read the data
+
+      
+      //ClientAttackOrderProcessor attackProc = new ClientAttackOrderProcessor(a.client, map);
+      //ArrayList<Order> attackOrders = attackProc.processAllOrdersForOneTurn(hostName);
+      //a.client.communicator.sendObject(attackOrders);
     } finally{
-      a.client.release();
+      //a.client.release();
     }
   }
 }

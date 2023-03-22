@@ -124,9 +124,10 @@ public class ServerAdmin {
       throws IOException, ClassNotFoundException {
     sendMap(playerCommunicators.values(), map);
     HashMap<Player, HashMap<String, ArrayList<Order>>> orders = receiveAllOrders(playerCommunicators);
+    System.out.println("received all orders");
     resolveAllMoveOrders(orders, map);
     // resolveAttackOrders();
-
+    System.out.println("resolved all move orders");
   }
 
   /**
@@ -206,6 +207,7 @@ public class ServerAdmin {
     for (Player p : communicators.keySet()) {
       orders.put(p, receiveOrdersFromOnePlayer(communicators.get(p)));
     }
+    System.out.println("receiving all orders...");
     return orders;
   }
 
