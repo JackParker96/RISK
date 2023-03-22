@@ -19,13 +19,13 @@ public abstract class ClientOrderProcessor {
     this.verifiedOrders = new ArrayList<>();
   }
 
-  public String promptForDoneEnteringOrders(String type) throws IOException {
+  protected String promptForDoneEnteringOrders(String type) throws IOException {
     clientPlayer.sendMsg("Type 'D' if you're done entering " + type
         + " orders for this turn. Type anything else to continue entering orders");
     return clientPlayer.getInput().toLowerCase();
   }
 
-  public Territory promptForTerr(String type) throws IOException {
+  protected Territory promptForTerr(String type) throws IOException {
     while (true) {
       clientPlayer.sendMsg(type + " territory for order:");
       String terrStr = clientPlayer.getInput().toLowerCase();
@@ -39,7 +39,7 @@ public abstract class ClientOrderProcessor {
     }
   }
 
-  public int promptForNumUnits() throws IOException {
+  protected int promptForNumUnits() throws IOException {
     while (true) {
       clientPlayer.sendMsg("Number of units to send:");
       String numStr = clientPlayer.getInput();
@@ -59,7 +59,7 @@ public abstract class ClientOrderProcessor {
     }
   }
 
-  public abstract Order processOrder() throws IOException;
+  protected abstract Order processOrder() throws IOException;
 
   public ArrayList<Order> processAllOrdersForOneTurn(String type) throws IOException {
     clientPlayer.sendMsg("Time to place all your " + type + " orders for this turn");

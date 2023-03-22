@@ -22,7 +22,7 @@ public class ClientAttackOrderProcessor extends ClientOrderProcessor {
         new DestinationNotOwnedRuleChecker(new NumberOfUnitsRuleChecker(new AdjacentTerritoryRuleChecker(null))));
   }
 
-  public Order processOrder() throws IOException {
+  protected Order processOrder() throws IOException {
     while (true) {
       String done = promptForDoneEnteringOrders("attack");
       if (done.equals("d")) {

@@ -50,6 +50,8 @@ public class BattleFieldTest {
     assertEquals(1, bf.getNumArmies());
     assertEquals(blue_devil, duke.getOwner());
     assertEquals(5, duke.getNumUnits());
+    String expected_result = "The BuleDevil player defends the Territory duke successfully!";
+    assertEquals(expected_result,bf.getResult());
   }
 
   @Test
@@ -59,7 +61,7 @@ public class BattleFieldTest {
     Player blue_devil = new BasicPlayer(new Color("blue"), "BuleDevil");
     duke.setOwner(blue_devil);
     duke.addUnits(uf.makeUnits(5, "basic"));
-    // make a mock resolver that always make defender wins
+    // make a mock resolver that always make attacker wins
     CombatResolver mockResolver = mock(CombatResolver.class);
     Mockito.when(mockResolver.getCombatResult()).thenReturn(false);
     Player attcker1 = new BasicPlayer(new Color("yellow"), "attcker1");

@@ -118,6 +118,16 @@ public class Map implements Serializable {
     }
   }
 
+
+  /** 
+   * Add one basic unit to all territories.
+   */
+  public void allAddOneUnit(){
+    for(Territory t:map.values()){
+      t.addUnits(new BasicUnit());
+    }
+  }
+
   /**
    * Returns the map's name
    *

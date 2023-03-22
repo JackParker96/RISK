@@ -143,7 +143,10 @@ public abstract class ClientPlayer {
   //public abstract void sendOrders();
 
   //public abstract void doOneTurn();
-  
+
+  protected abstract void playOneTurn() throws IOException, ClassNotFoundException;
+
+  public abstract void playGamePhase() throws IOException, ClassNotFoundException;
   /**
    * Release the resources the client holds
    * 

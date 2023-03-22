@@ -7,13 +7,10 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import edu.duke.ece651.team14.shared.AttackOrder;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapTextView;
-import edu.duke.ece651.team14.shared.MoveOrder;
-import edu.duke.ece651.team14.shared.MoveOrderPathExistsRuleChecker;
-import edu.duke.ece651.team14.shared.Territory;
+import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
 public class TextClientPlayer extends ClientPlayer {
@@ -94,7 +91,6 @@ public class TextClientPlayer extends ClientPlayer {
     communicator.sendObject(upo);
     // wait for other to finish
     out.println("Wait for other players to finish placing units...");
-    displayMap(recvMap());
   }
 
   /**
@@ -194,6 +190,44 @@ public class TextClientPlayer extends ClientPlayer {
         out.println("Wrong int format, try again");
       } catch (IllegalArgumentException ex) {
         out.println(ex.getMessage());
+      }
+    }
+  }
+
+  /**
+   * For this client, prompt the user to place all move and attack orders, send to
+   * server.
+   * 
+   * @param recv_map
+   * @throws IOException
+   * @throws ClassNotFoundException
+   */
+  protected void playOneTurn() throws IOException, ClassNotFoundException {
+    Map recv_map = recvMap();
+    displayMap(recv_map);
+    ArrayList<Order> allOrders = new ArrayList<>();
+    if (!this.myPlayer.hasLost(recv_map)) {//has not lost yet
+      ClientMoveOrderProcessor moveProc = new ClientMoveOrderProcessor(this, recv_map);
+      allOrders.addAll(moveProc.processAllOrdersForOneTurn("MOVE"));
+      ClientAttackOrderProcessor attackProc = new ClientAttackOrderProcessor(this, recv_map);
+      allOrders.addAll(attackProc.processAllOrdersForOneTurn("ATTACK"));
+    }else{
+      out.println("You have lost");
+    }
+    this.communicator.sendObject(allOrders);
+    String oneTurnResult = this.communicator.recvString();
+    out.println(oneTurnResult);
+  }
+
+  public void playGamePhase() throws IOException, ClassNotFoundException {
+    while (true) {
+      playOneTurn();
+      String game_info = this.communicator.recvString();
+      if (game_info.equals("Gameover")) {// one global winner occurs, exit game.
+        Map finalMap = recvMap();
+        displayMap(finalMap);
+        out.println(finalMap.getWinner()+" has won the game!");
+        break;
       }
     }
   }

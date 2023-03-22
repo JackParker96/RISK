@@ -11,15 +11,11 @@ import java.util.HashMap;
 import edu.duke.ece651.team14.shared.BasicPlayer;
 import edu.duke.ece651.team14.shared.Color;
 import edu.duke.ece651.team14.shared.Communicator;
-import edu.duke.ece651.team14.shared.DestinationOwnershipRuleChecker;
+import edu.duke.ece651.team14.shared.DiceResolver;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapFactory;
-import edu.duke.ece651.team14.shared.MoveOrderPathExistsRuleChecker;
 import edu.duke.ece651.team14.shared.Order;
-import edu.duke.ece651.team14.shared.OrderRuleChecker;
-import edu.duke.ece651.team14.shared.OriginOwnershipRuleChecker;
 import edu.duke.ece651.team14.shared.Player;
-import edu.duke.ece651.team14.shared.UnitMover;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
 public class ServerAdmin {
@@ -85,8 +81,9 @@ public class ServerAdmin {
    */
   public void initializeGamePhase() throws IOException, ClassNotFoundException {
     MapFactory f = new MapFactory();
-    this.map = f.makeMap("Earth", new ArrayList<Player>(this.playerCommunicators.keySet()));
-    // send the player object to client
+    //this.map = f.makeMap("Earth", new ArrayList<Player>(this.playerCommunicators.keySet()));
+    this.map = f.makeMap("test", new ArrayList<Player>(this.playerCommunicators.keySet()));
+    //send the player object to client
     for (Player p : playerCommunicators.keySet()) {
       Communicator c = playerCommunicators.get(p);
       c.sendObject(p);
@@ -103,11 +100,20 @@ public class ServerAdmin {
       System.out.println("recv unit placement request from " + p);
       map.handleUnitPlacementOrder(upo);
     }
-    // all placement order received
-    for (Player p : playerCommunicators.keySet()) {
-      Communicator c = playerCommunicators.get(p);
-      System.out.println("send placed map to " + p);
-      c.sendObject(map);
+  }
+
+  public void playGamePhase() throws IOException, ClassNotFoundException {
+    while (true) {
+      executeOneTurn();
+      Player winner = this.map.getWinner();
+      if (winner != null) {
+        sendResults("Gameover");
+        sendMap();
+        break;
+      } else {
+        sendResults("Continue");
+        this.map.allAddOneUnit();
+      }
     }
   }
 
@@ -120,73 +126,39 @@ public class ServerAdmin {
    * @throws IOException
    * @throws ClassNotFoundException
    */
-  public void executeTurn(HashMap<Player, Communicator> playerCommunicators, Map map)
+  protected void executeOneTurn()
       throws IOException, ClassNotFoundException {
-    sendMap(playerCommunicators.values(), map);
-    HashMap<Player, HashMap<String, ArrayList<Order>>> orders = receiveAllOrders(playerCommunicators);
-    System.out.println("received all orders");
-    resolveAllMoveOrders(orders, map);
-    // resolveAttackOrders();
-    System.out.println("resolved all move orders");
+    sendMap();
+    HashMap<String, ArrayList<Order>> orders = receiveAllOrders();
+    // resolve move
+    ServerMoveResolver smr = new ServerMoveResolver(map);
+    smr.resolveAllMoveOrders(orders.get("move"));
+    // resolve attack
+    ServerAttackOrderResolver sar = new ServerAttackOrderResolver(map, new DiceResolver());
+    String results = sar.resolveAllAttackOrders(orders.get("attack"));
+    sendResults(results);
   }
 
   /**
-   * Resolves all move orders for a round of turns
-   *
-   * @param orders is the HashMap of all orders for the round of turns
-   * @param map    is the game map
-   *
+   * Send the results of one turn to all players, can be any string to notify the
+   * clients.
+   * 
+   * @param results
+   * @throws IOException
    */
-  public void resolveAllMoveOrders(HashMap<Player, HashMap<String, ArrayList<Order>>> orders, Map map) {
-    OrderRuleChecker checker = new OriginOwnershipRuleChecker(
-        new DestinationOwnershipRuleChecker(new MoveOrderPathExistsRuleChecker(null)));
-    for (Player player : orders.keySet()) {
-      resolveOnePlayerMoveOrders(orders.get(player), map, checker);
+  protected void sendResults(String results) throws IOException {
+    for (Communicator c : playerCommunicators.values()) {
+      c.sendObject(results);
     }
-  }
-
-  /**
-   * Resolves all the move orders for one player for a given turn
-   *
-   * @param orders  is the HashMap of orders grouped by type
-   * @param map     is the map
-   * @param checker is the OrderRuleChecker
-   */
-  public void resolveOnePlayerMoveOrders(HashMap<String, ArrayList<Order>> orders, Map map, OrderRuleChecker checker) {
-    for (Order o : orders.get("move")) {
-      resolveMoveOrder(o, map, checker);
-    }
-  }
-
-  /**
-   * Resolves a single move order
-   */
-  public String resolveMoveOrder(Order order, Map map, OrderRuleChecker checker) {
-    String checkerResult = checker.checkOrder(map, order);
-    if (checkerResult != null) {
-      return checkerResult;
-    }
-    UnitMover.moveUnits(order.getOrigin(), order.getDestination(), order.getNumUnits(), order.getUnitType());
-    return null;
-  }
-
-  /**
-   * Resolves attack orders, returns list of combat events
-   */
-  public void resolveAttackOrders() {
-    return;
   }
 
   /**
    * Sends the given map through every given Communicator
    *
-   * @param communicators is the list of Communicators
-   * @param m             is the game map
-   *
    * @throws IOException
    */
-  public void sendMap(Iterable<Communicator> communicators, Map map) throws IOException {
-    for (Communicator c : communicators) {
+  protected void sendMap() throws IOException {
+    for (Communicator c : playerCommunicators.values()) {
       c.sendObject(map);
     }
   }
@@ -194,37 +166,20 @@ public class ServerAdmin {
   /**
    * Receives orders from every player for a given turn
    *
-   * @param communicators is a HashMap of communicators to use
    *
    * @throw IOException
    * @throw ClassNotFoundException
    *
    * @return a HashMap of the orders
    */
-  public HashMap<Player, HashMap<String, ArrayList<Order>>> receiveAllOrders(
-      HashMap<Player, Communicator> communicators) throws IOException, ClassNotFoundException {
-    HashMap<Player, HashMap<String, ArrayList<Order>>> orders = new HashMap<>();
-    for (Player p : communicators.keySet()) {
-      orders.put(p, receiveOrdersFromOnePlayer(communicators.get(p)));
+  protected HashMap<String, ArrayList<Order>> receiveAllOrders() throws IOException, ClassNotFoundException {
+    ArrayList<Order> allOrders = new ArrayList<>();
+    for (Player p : playerCommunicators.keySet()) {
+      Communicator c = playerCommunicators.get(p);
+      allOrders.addAll(c.recvOrders());
     }
-    System.out.println("receiving all orders...");
-    return orders;
-  }
-
-  /**
-   * Receives a list of orders from player associated with given Communicator
-   *
-   * @param c is the communicator from which to get orders
-   *
-   * @throws IOException
-   * @throws ClassNotFoundException
-   *
-   * @return HashMap of orders arranged by order type
-   */
-  public HashMap<String, ArrayList<Order>> receiveOrdersFromOnePlayer(Communicator c)
-      throws IOException, ClassNotFoundException {
-    c.sendObject("Init order phase");
-    return sortOrders(c.recvOrders());
+    System.out.println("receiving all orders for one turn");
+    return sortOrders(allOrders);
   }
 
   /**
@@ -235,7 +190,7 @@ public class ServerAdmin {
    *
    * @return the HashMap of Orders arranged by order type
    */
-  public HashMap<String, ArrayList<Order>> sortOrders(ArrayList<Order> orders) {
+  protected HashMap<String, ArrayList<Order>> sortOrders(ArrayList<Order> orders) {
     HashMap<String, ArrayList<Order>> sortedOrders = new HashMap<>();
     sortedOrders.put("move", new ArrayList<Order>());
     sortedOrders.put("attack", new ArrayList<Order>());
@@ -243,15 +198,6 @@ public class ServerAdmin {
       sortedOrders.get(o.getOrderType()).add(o);
     }
     return sortedOrders;
-  }
-
-  /**
-   * Close server socket
-   *
-   * @throws IOException
-   */
-  public void closeServer() throws IOException {
-    serverSocket.close();
   }
 
   /**
@@ -266,7 +212,7 @@ public class ServerAdmin {
     for (Socket s : clientSockets) {
       s.close();
     }
-    closeServer();
+    this.serverSocket.close();
   }
 
 }

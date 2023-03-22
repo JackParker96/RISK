@@ -18,18 +18,17 @@ public class App {
    * @throws IOException
    */
   public App(int portNum, int num_players) throws IOException {
-    try {
-      if (num_players < 2) {
-        throw new IllegalArgumentException("To play, you need a minimum of 2 players.");
-      }
-      if (num_players > 4) {
-        throw new IllegalArgumentException("To play, you cannot exceed a maximum of 4 players.");
-      }
-      this.serverAdmin = new ServerAdmin(portNum);
-      this.num_players = num_players;
-    } finally {
-      // empty
+    if (num_players < 2) {
+      throw new IllegalArgumentException("To play, you need a minimum of 2 players.");
     }
+    if (num_players > 4) {
+      throw new IllegalArgumentException("To play, you cannot exceed a maximum of 4 players.");
+    }
+    if (portNum <= 1024 || portNum > 65535) {
+      throw new IllegalArgumentException("Invalid port number.");
+    }
+    this.serverAdmin = new ServerAdmin(portNum);
+    this.num_players = num_players;
   }
 
   public String getMessage() {
@@ -37,9 +36,14 @@ public class App {
   }
 
   public void startGame() throws IOException, ClassNotFoundException {
-    serverAdmin.acceptPlayersPhase(num_players);
-    serverAdmin.initializeGamePhase();
-    System.out.println("\nStarting game...\n");
+    try {
+      System.out.println("\nStarting game...\n");
+      serverAdmin.acceptPlayersPhase(num_players);
+      serverAdmin.initializeGamePhase();
+      serverAdmin.playGamePhase();
+    } finally {
+      serverAdmin.releaseResources();// the purpose is when exception happens, these resources are always released.
+    }
   }
 
   // ./gradlew :server:run --args "[portnum] [num_players]"
@@ -50,15 +54,8 @@ public class App {
       App a = new App(port, num_players);
       System.out.println(a.getMessage());
       a.startGame();
-      //test with one turn first
-      a.serverAdmin.executeTurn(a.serverAdmin.playerCommunicators, a.serverAdmin.map);
-      System.out.println("One turn executed");
-      a.serverAdmin.releaseResources();
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
-      System.out.println("Exiting game...");
-    } catch (ClassNotFoundException e) {
-      System.out.println("System error.");
       System.out.println("Exiting game...");
     }
   }

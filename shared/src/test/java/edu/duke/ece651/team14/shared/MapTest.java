@@ -11,6 +11,24 @@ import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 
 public class MapTest {
+  @Test
+  public void test_addoneUnit(){
+    MapFactory f = new MapFactory();
+    Player p1 = new BasicPlayer(new Color("blue"), "p1");
+    Player p2 = new BasicPlayer(new Color("red"), "p2");
+    ArrayList<Player> players = new ArrayList<>();
+    players.add(p1);
+    players.add(p2);
+    Map map = f.makeMap("test", players);
+    map.allAddOneUnit();
+    for(Territory t:map.getMap().values()){
+      if(t.getName().equals("1")){
+        assertEquals(2, t.getNumUnits());
+      }else{
+        assertEquals(1,t.getNumUnits());
+      }
+    }
+  }
 
   @Test
   public void test_getWinner() {

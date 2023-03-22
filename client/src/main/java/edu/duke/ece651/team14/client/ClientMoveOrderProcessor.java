@@ -22,7 +22,7 @@ public class ClientMoveOrderProcessor extends ClientOrderProcessor {
         new DestinationOwnershipRuleChecker(new MoveOrderPathExistsRuleChecker(new NumberOfUnitsRuleChecker(null))));
   }
 
-  public Order processOrder() throws IOException {
+  protected Order processOrder() throws IOException {
     while (true) {
       String done = promptForDoneEnteringOrders("move");
       if (done.equals("d")) {
