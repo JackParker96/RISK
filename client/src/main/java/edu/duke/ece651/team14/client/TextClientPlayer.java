@@ -209,12 +209,15 @@ public class TextClientPlayer extends ClientPlayer {
     if (!this.myPlayer.hasLost(recv_map)) {//has not lost yet
       ClientMoveOrderProcessor moveProc = new ClientMoveOrderProcessor(this, recv_map);
       allOrders.addAll(moveProc.processAllOrdersForOneTurn("MOVE"));
+      displayMap(recv_map);
       ClientAttackOrderProcessor attackProc = new ClientAttackOrderProcessor(this, recv_map);
       allOrders.addAll(attackProc.processAllOrdersForOneTurn("ATTACK"));
     }else{
-      out.println("You have lost");
+      displayLossInfo(recv_map);
+      //TODO:can also choose to disconnect
     }
     this.communicator.sendObject(allOrders);
+    out.println("Wait for other players to commit move/attack orders...");
     String oneTurnResult = this.communicator.recvString();
     out.println(oneTurnResult);
   }
@@ -226,7 +229,7 @@ public class TextClientPlayer extends ClientPlayer {
       if (game_info.equals("Gameover")) {// one global winner occurs, exit game.
         Map finalMap = recvMap();
         displayMap(finalMap);
-        out.println(finalMap.getWinner()+" has won the game!");
+        displayWinInfo(finalMap);
         break;
       }
     }

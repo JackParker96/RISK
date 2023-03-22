@@ -112,7 +112,6 @@ public class ServerAdmin {
         break;
       } else {
         sendResults("Continue");
-        this.map.allAddOneUnit();
       }
     }
   }
@@ -137,6 +136,7 @@ public class ServerAdmin {
     ServerAttackOrderResolver sar = new ServerAttackOrderResolver(map, new DiceResolver());
     String results = sar.resolveAllAttackOrders(orders.get("attack"));
     sendResults(results);
+    this.map.allAddOneUnit();
   }
 
   /**
