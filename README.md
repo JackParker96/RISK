@@ -13,25 +13,18 @@ Conquer the world and take over every territory on the map to win!
 
 ## Map
 
-Initial territory allocation is automatically determined at the start of the game. The world consists of 24 territories, split equally among the players. Each player begins with 30 units to distribute throughout their territories.
-
-<space><space><space><space>For 2 players: green, red
-
-<space><space><space><space>For 3 players: green, red, blue
-
-<space><space><space><space>For 4 players: green, red, blue, yellow
+Initial territory allocation is automatically determined at the start of the game. The world consists of 24 territories, split equally among the players. Each player begins with 30 units to distribute throughout their territories. </br>
+For 2 players: green, red </br>
+For 3 players: green, red, blue </br>
+For 4 players: green, red, blue, yellow
 
 ## Setup
 
-&emsp1.  Determine the number of players (2-4)
-
-&emsp2.  Open one terminal for the server and a terminal for each player (can be on separate computers)
-
-&emsp3.  In the server terminal, enter: ./gradlew :server:run --args "4444 \[number of players]"
-
-&emsp4.  In each player terminal, enter: ./gradlew : client:run --args "\[server name] 4444"
-
-&emsp5.  Follow in-game instructions to play game
+[^1]  Determine the number of players (2-4) </br>
+[^2]  Open one terminal for the server and a terminal for each player (can be on separate computers) </br>
+[^3]  In the server terminal, enter: ./gradlew :server:run --args "4444 \[number of players]" </br>
+[^4]  In each player terminal, enter: ./gradlew : client:run --args "\[server name] 4444" </br>
+[^5]  Follow in-game instructions to play game
 
 ## Coverage
 
