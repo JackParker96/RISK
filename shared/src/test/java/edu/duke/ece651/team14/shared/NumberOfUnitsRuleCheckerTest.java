@@ -29,7 +29,7 @@ public class NumberOfUnitsRuleCheckerTest {
     assertEquals("Order must have positive value for numUnits", o.checkMyRule(map, negativeUnits));
 
     MoveOrder m = new MoveOrder(origin, destination, 2, p);
-    assertEquals("Not enough units of given type in destination territory", o.checkMyRule(map, m));
+    assertEquals("Not enough units of given type in origin territory", o.checkMyRule(map, m));
 
     origin.addUnits(new BasicUnit());
 
@@ -38,7 +38,7 @@ public class NumberOfUnitsRuleCheckerTest {
     
     origin.addUnits(otherTypeUnit);
 
-    assertEquals("Not enough units of given type in destination territory", o.checkMyRule(map, m));
+    assertEquals("Not enough units of given type in origin territory", o.checkMyRule(map, m));
 
     origin.addUnits(new BasicUnit());
     
@@ -68,7 +68,7 @@ public class NumberOfUnitsRuleCheckerTest {
 
     MoveOrder notEnoughUnits = new MoveOrder(origin, destination, 2, p);
 
-    assertEquals("Not enough units of given type in destination territory", o.checkOrder(map, notEnoughUnits));
+    assertEquals("Not enough units of given type in origin territory", o.checkOrder(map, notEnoughUnits));
     
   }
 

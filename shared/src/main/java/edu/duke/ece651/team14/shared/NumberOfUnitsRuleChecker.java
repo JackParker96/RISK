@@ -41,7 +41,7 @@ public class NumberOfUnitsRuleChecker extends OrderRuleChecker {
     if (numSameType >= order.getNumUnits()) {
       return null;
     } else {
-      return "Not enough units of given type in destination territory";
+      return "Not enough units of given type in origin territory";
     }
   }
 

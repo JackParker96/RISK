@@ -123,7 +123,7 @@ public class ClientMoveOrderProcessorTest {
     String expected5 = introAtt + doneAtt + originTerr + "Setting Origin: 2\n" + destTerr + "Setting Destination: 4\n"
         + num + "Sending 3 units\n" + doneAtt + originTerr + "Setting Origin: 2\n" + destTerr
         + "Setting Destination: 4\n" + num + "Sending 3 units\n"
-        + "Not enough units of given type in destination territory\n" + doneAtt;
+        + "Not enough units of given type in origin territory\n" + doneAtt;
     String actual5 = helper(bytes5, input5, "attack");
     assertEquals(expected5, actual5);
   }
@@ -176,7 +176,7 @@ public class ClientMoveOrderProcessorTest {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     String input = "c\n0\n1\n6\nd\n";
     String expected = intro + doneOrNot + originTerr + "Setting Origin: 0\n" + destTerr + "Setting Destination: 1\n"
-        + num + "Sending 6 units\n" + "Not enough units of given type in destination territory\n" + doneOrNot;
+        + num + "Sending 6 units\n" + "Not enough units of given type in origin territory\n" + doneOrNot;
     String actual = helper(bytes, input, "move");
     assertEquals(expected, actual);
   }
@@ -188,7 +188,7 @@ public class ClientMoveOrderProcessorTest {
     String expected = intro + doneOrNot + originTerr + "Setting Origin: 0\n" + destTerr + "Setting Destination: 1\n"
         + num + "Sending 3 units\n" + doneOrNot + originTerr + "Setting Origin: 0\n" + destTerr
         + "Setting Destination: 1\n" + num + "Sending 3 units\n"
-        + "Not enough units of given type in destination territory\n" + doneOrNot;
+        + "Not enough units of given type in origin territory\n" + doneOrNot;
     String actual = helper(bytes, input, "move");
     assertEquals(expected, actual);
   }
