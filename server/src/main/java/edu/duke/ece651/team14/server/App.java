@@ -50,7 +50,6 @@ public class App {
    */
   public void runGame() throws IOException, ClassNotFoundException {
     try {
-      System.out.println("");
       serverAdmin.acceptPlayersPhase(num_players);
       System.out.println("\nStarting game...\n");
       serverAdmin.initializeGamePhase();

@@ -117,7 +117,7 @@ public class ServerAdmin {
       if (winner != null) {
         sendResults("Gameover");
         sendMap();
-        break;
+        break; 
       } else {
         sendResults("Continue");
       }

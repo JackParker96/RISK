@@ -213,7 +213,6 @@ public class TextClientPlayer extends ClientPlayer {
     if (!this.myPlayer.hasLost(recv_map)) {//has not lost yet
       ClientMoveOrderProcessor moveProc = new ClientMoveOrderProcessor(this, recv_map);
       allOrders.addAll(moveProc.processAllOrdersForOneTurn("MOVE"));
-      displayMap(recv_map);
       ClientAttackOrderProcessor attackProc = new ClientAttackOrderProcessor(this, recv_map);
       allOrders.addAll(attackProc.processAllOrdersForOneTurn("ATTACK"));
     }else{
