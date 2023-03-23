@@ -48,7 +48,7 @@ public class ServerMoveResolver {
    */
   public void resolveMoveOrder(Order order, OrderRuleChecker checker) {
     String checkerResult = checker.checkOrder(this.map, order);
-    if (checkerResult != null) {
+    if (checkerResult == null) {
       throw new IllegalArgumentException("Illegal move order");
     }
     Territory origin = map.getTerritoryByName(order.getOrigin().getName());
