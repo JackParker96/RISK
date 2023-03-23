@@ -41,7 +41,7 @@ public class ServerAttackOrderResolver {
     for (Order o : orders) {
       String checkerResult = checker.checkOrder(this.map, o);
       if (checkerResult != null) {
-        System.out.println("Bad Attack Order detected:"+o+checkerResult);
+        System.out.println("Bad attack order :" + o + checkerResult);
         badOrders.add(o);
       }
     }
