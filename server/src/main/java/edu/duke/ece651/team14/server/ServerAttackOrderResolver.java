@@ -3,12 +3,17 @@ package edu.duke.ece651.team14.server;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import edu.duke.ece651.team14.shared.AdjacentTerritoryRuleChecker;
 import edu.duke.ece651.team14.shared.AttackOrder;
 import edu.duke.ece651.team14.shared.BasicTerritory;
 import edu.duke.ece651.team14.shared.BattleField;
 import edu.duke.ece651.team14.shared.CombatResolver;
+import edu.duke.ece651.team14.shared.DestinationNotOwnedRuleChecker;
 import edu.duke.ece651.team14.shared.Map;
+import edu.duke.ece651.team14.shared.NumberOfUnitsRuleChecker;
 import edu.duke.ece651.team14.shared.Order;
+import edu.duke.ece651.team14.shared.OrderRuleChecker;
+import edu.duke.ece651.team14.shared.OriginOwnershipRuleChecker;
 import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.UnitMover;
 
@@ -30,8 +35,19 @@ public class ServerAttackOrderResolver {
    * @param orders: stores move and attack orders
    */
   public String resolveAllAttackOrders(ArrayList<Order> orders) {
-    HashMap<String, BattleField> battleFields = new HashMap<>();
+    ArrayList<Order> badOrders = new ArrayList<Order>();
+    OrderRuleChecker checker = new OriginOwnershipRuleChecker(new DestinationNotOwnedRuleChecker(new AdjacentTerritoryRuleChecker(new NumberOfUnitsRuleChecker(null))));
+    for (Order o : orders) {
+      String checkerResult = checker.checkOrder(this.map, o);
+      if (checkerResult != null) {
+        badOrders.add(o);
+      }
+    }
+    for (Order b : badOrders) {
+      orders.remove(b);
+    }
     // initialize all battlefields
+    HashMap<String, BattleField> battleFields = new HashMap<>();
     for (Order o : orders) {
       String locationName = o.getDestination().getName();
       if (!battleFields.containsKey(locationName)) {// battle field not created yet
