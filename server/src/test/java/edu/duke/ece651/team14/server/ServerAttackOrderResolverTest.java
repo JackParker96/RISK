@@ -35,6 +35,9 @@ public class ServerAttackOrderResolverTest {
     Territory t0 = map.getTerritoryByName("0");// player1
     Territory t4 = map.getTerritoryByName("4");// player2
 
+    t0.setOwner(p1);
+    t4.setOwner(p2);
+
     addUnits(t0, t4);
     AttackOrder a1 = new AttackOrder(t0, t4, 2, p1);
     AttackOrder a2 = new AttackOrder(t0, t4, 1, p1);

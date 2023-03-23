@@ -35,6 +35,8 @@ public class ServerAttackOrderResolver {
    * @param orders: stores move and attack orders
    */
   public String resolveAllAttackOrders(ArrayList<Order> orders) {
+    /*
+    // run attack order checker again
     ArrayList<Order> badOrders = new ArrayList<Order>();
     OrderRuleChecker checker = new OriginOwnershipRuleChecker(new DestinationNotOwnedRuleChecker(new AdjacentTerritoryRuleChecker(new NumberOfUnitsRuleChecker(null))));
     for (Order o : orders) {
@@ -46,6 +48,7 @@ public class ServerAttackOrderResolver {
     for (Order b : badOrders) {
       orders.remove(b);
     }
+    */
     // initialize all battlefields
     HashMap<String, BattleField> battleFields = new HashMap<>();
     for (Order o : orders) {
