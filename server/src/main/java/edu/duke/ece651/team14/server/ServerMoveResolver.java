@@ -15,6 +15,11 @@ import edu.duke.ece651.team14.shared.UnitMover;
 public class ServerMoveResolver {
   private final Map map;
 
+  /**
+   * Constructor to resolve move orders sent to server
+   *
+   * @param map: map of game
+   */
   public ServerMoveResolver(Map map) {
     this.map = map;
   }
@@ -22,7 +27,7 @@ public class ServerMoveResolver {
   /**
    * Resolves all move orders for one turn
    *
-   * @param orders stores move and attack orders.
+   * @param orders: stores move and attack orders
    *
    */
   public void resolveAllMoveOrders(ArrayList<Order> orders) {
@@ -34,13 +39,17 @@ public class ServerMoveResolver {
   }
 
   /**
-   * Resolves a single move order, throw exception if something wrong with the
-   * order
+   * Resolves a single move order
+   * 
+   * @param order: a move order
+   * @param checker: checks whether move order is legal
+
+   * @throws IllegalArgumentException if something wrong with the order
    */
   public void resolveMoveOrder(Order order, OrderRuleChecker checker) {
     String checkerResult = checker.checkOrder(this.map, order);
     if (checkerResult != null) {
-      // throw new IllegalArgumentException(checkerResult);
+      throw new IllegalArgumentException("Illegal move order");
     }
     Territory origin = map.getTerritoryByName(order.getOrigin().getName());
     Territory destination = map.getTerritoryByName(order.getDestination().getName());

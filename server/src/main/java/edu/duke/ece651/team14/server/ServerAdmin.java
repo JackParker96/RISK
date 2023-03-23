@@ -75,7 +75,7 @@ public class ServerAdmin {
   }
 
   /**
-   * Server initializes map and sends it to players
+   * Server initializes game and sends empty to players to recieve orders
    *
    * @throws IOException, ClassNotFoundException
    */
@@ -92,7 +92,11 @@ public class ServerAdmin {
     receivePlacementOrders();
   }
 
-  // UnitPlacementOrder
+  /**
+   * Collects initial unit placements from players
+   *
+   * @throws IOException, ClassNotFoundException
+   */
   protected void receivePlacementOrders() throws IOException, ClassNotFoundException {
     for (Player p : playerCommunicators.keySet()) {
       Communicator c = playerCommunicators.get(p);
@@ -102,6 +106,11 @@ public class ServerAdmin {
     }
   }
 
+  /** 
+   * Runs through all stages of the game
+   *
+   * @throws IOException, ClassNotFoundException
+   */
   public void playGamePhase() throws IOException, ClassNotFoundException {
     while (true) {
       executeOneTurn();
@@ -122,8 +131,7 @@ public class ServerAdmin {
    * @param playerCommunicators is the HashMap of communicators
    * @param map                 is the game map
    *
-   * @throws IOException
-   * @throws ClassNotFoundException
+   * @throws IOException, ClassNotFoundException
    */
   protected void executeOneTurn()
       throws IOException, ClassNotFoundException {
@@ -141,7 +149,7 @@ public class ServerAdmin {
 
   /**
    * Send the results of one turn to all players, can be any string to notify the
-   * clients.
+   * clients
    * 
    * @param results
    * @throws IOException
@@ -167,8 +175,7 @@ public class ServerAdmin {
    * Receives orders from every player for a given turn
    *
    *
-   * @throw IOException
-   * @throw ClassNotFoundException
+   * @throw IOException, ClassNotFoundException
    *
    * @return a HashMap of the orders
    */

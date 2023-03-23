@@ -28,6 +28,7 @@ public abstract class ClientPlayer {
    * @param outPrintStream: e.g. System.out
    * @throws IOException
    */
+  /*
   public ClientPlayer(String hostName, int serverPort, BufferedReader inputSource, PrintStream outPrintStream)
       throws IOException {
     this.clientSocket = new Socket(hostName, serverPort);
@@ -35,6 +36,7 @@ public abstract class ClientPlayer {
     this.inputReader = inputSource;
     this.out = outPrintStream;
   }
+  */
 
   /**
    * Constructor, which is convenient for mock object.

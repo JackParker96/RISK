@@ -31,18 +31,28 @@ public class App {
     this.num_players = num_players;
   }
 
+  /*
+   * Returns message, checks that Object was created properly
+   *
+   * @return String
+   */
   public String getMessage() {
     return "Hello from the server for " + MyName.getName();
   }
 
-  public void startGame() throws IOException, ClassNotFoundException {
+  /*
+   * Runs through all stages of the game from the server side
+   *
+   * @throws IOException, ClassNotFoundException
+   */
+  public void runGame() throws IOException, ClassNotFoundException {
     try {
       System.out.println("\nStarting game...\n");
       serverAdmin.acceptPlayersPhase(num_players);
       serverAdmin.initializeGamePhase();
       serverAdmin.playGamePhase();
     } finally {
-      serverAdmin.releaseResources();// the purpose is when exception happens, these resources are always released.
+      serverAdmin.releaseResources(); // when exception happens, resources should always be released
     }
   }
 
@@ -53,7 +63,7 @@ public class App {
       int num_players = Integer.parseInt(args[1]);
       App a = new App(port, num_players);
       System.out.println(a.getMessage());
-      a.startGame();
+      a.runGame();
     } catch (IllegalArgumentException e) {
       System.out.println(e.getMessage());
       System.out.println("Exiting game...");

@@ -15,12 +15,20 @@ import edu.duke.ece651.team14.shared.UnitMover;
 public class ServerAttackOrderResolver {
   private final Map map;
   private final CombatResolver resolver;
-  
+
+  /*
+   * Constructor to resolve attack orders sent to server
+   */
   public ServerAttackOrderResolver(Map map, CombatResolver resolver) {
     this.map = map;
     this.resolver = resolver;
   }
 
+  /*
+   * Resolves all attack orders for one turn
+   *
+   * @param orders: stores move and attack orders
+   */
   public String resolveAllAttackOrders(ArrayList<Order> orders) {
     HashMap<String, BattleField> battleFields = new HashMap<>();
     // initialize all battlefields
@@ -32,7 +40,7 @@ public class ServerAttackOrderResolver {
         battleFields.put(locationName, field);
       }
     }
-    // process attackers.
+    // process attackers
     for (Order o : orders) {
       String locationName = o.getDestination().getName();
       String attackerTerrName = o.getOrigin().getName();
@@ -43,7 +51,7 @@ public class ServerAttackOrderResolver {
       UnitMover.moveUnits(attackerTerritory,blackHole, o.getNumUnits(), o.getUnitType());
       battleFields.get(locationName).addAttackerArmy((AttackOrder) o);
     }
-    // combat start.
+    // combat start
     StringBuilder sb = new StringBuilder();
     for(BattleField field:battleFields.values()){
       field.resolve();
