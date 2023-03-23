@@ -50,8 +50,9 @@ public class App {
    */
   public void runGame() throws IOException, ClassNotFoundException {
     try {
-      System.out.println("\nStarting game...\n");
+      System.out.println("");
       serverAdmin.acceptPlayersPhase(num_players);
+      System.out.println("\nStarting game...\n");
       serverAdmin.initializeGamePhase();
       serverAdmin.playGamePhase();
     } finally {
@@ -68,8 +69,8 @@ public class App {
       System.out.println(a.getMessage());
       a.runGame();
     } catch (Exception e) {
-      System.out.println(e.getMessage());
-      System.out.println("Exiting game...");
+      System.out.println("Error detected: " + e.getMessage());
+      System.out.println("Exiting...");
     }
   }
 }
