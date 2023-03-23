@@ -25,7 +25,10 @@ public class App {
       throw new IllegalArgumentException("To play, you cannot exceed a maximum of 4 players.");
     }
     if (portNum <= 1024 || portNum > 65535) {
-      throw new IllegalArgumentException("Invalid port number.");
+      throw new IllegalArgumentException("Invalid port number. Use port 4444 to run RISC server.");
+    }
+    if (portNum != 4444) {
+      throw new IllegalArgumentException("Use port 4444 to run RISC server.");
     }
     this.serverAdmin = new ServerAdmin(portNum);
     this.num_players = num_players;
@@ -64,7 +67,7 @@ public class App {
       App a = new App(port, num_players);
       System.out.println(a.getMessage());
       a.runGame();
-    } catch (IllegalArgumentException e) {
+    } catch (Exception e) {
       System.out.println(e.getMessage());
       System.out.println("Exiting game...");
     }

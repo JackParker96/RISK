@@ -21,6 +21,8 @@ class AppTest {
   void test_incorrectPlayerNum() throws IOException, ClassNotFoundException {
     assertThrows(IllegalArgumentException.class, () -> new App(4444, 1));
     assertThrows(IllegalArgumentException.class, () -> new App(4444, 5));
+    assertThrows(IllegalArgumentException.class, () -> new App(4443, 3));
+    assertThrows(IllegalArgumentException.class, () -> new App(7000000, 5));
     assertThrows(IllegalArgumentException.class, () -> new App(1, 2));
   }
 
