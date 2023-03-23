@@ -48,13 +48,14 @@ public class ServerMoveResolver {
    */
   public void resolveMoveOrder(Order order, OrderRuleChecker checker) {
     String checkerResult = checker.checkOrder(this.map, order);
-    // if (checkerResult != null) {
-    // throw new IllegalArgumentException("Illegal move order");
-    // }
+    if(checkerResult==null){
     Territory origin = map.getTerritoryByName(order.getOrigin().getName());
     Territory destination = map.getTerritoryByName(order.getDestination().getName());
     // received order with new territory object, not the one in the server's map
     UnitMover.moveUnits(origin, destination, order.getNumUnits(), order.getUnitType());
+    }else{
+      System.out.println("Bad move order:"+order+checkerResult);
+    }
   }
 
 }

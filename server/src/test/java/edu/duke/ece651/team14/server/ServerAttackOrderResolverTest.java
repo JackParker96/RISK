@@ -32,15 +32,15 @@ public class ServerAttackOrderResolverTest {
     MapFactory m = new MapFactory();
     Map map = m.makeMap("test", players);
 
-    Territory t0 = map.getTerritoryByName("0");// player1
+    Territory t2 = map.getTerritoryByName("2");// player1
     Territory t4 = map.getTerritoryByName("4");// player2
 
-    t0.setOwner(p1);
+    t2.setOwner(p1);
     t4.setOwner(p2);
 
-    addUnits(t0, t4);
-    AttackOrder a1 = new AttackOrder(t0, t4, 2, p1);
-    AttackOrder a2 = new AttackOrder(t0, t4, 1, p1);
+    addUnits(t2, t4);
+    AttackOrder a1 = new AttackOrder(t2, t4, 2, p1);
+    AttackOrder a2 = new AttackOrder(t2, t4, 1, p1);
     ArrayList<Order> atkOrders = new ArrayList<>();
     atkOrders.add(a1);
     atkOrders.add(a2);

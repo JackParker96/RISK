@@ -24,8 +24,10 @@ public class MoveOrderPathExistsRuleChecker extends OrderRuleChecker {
    *         explaining broken rule otherwise
    */
   public String checkMyRule(Map map, Order order) {
-    Territory origin = order.getOrigin();
-    Territory destination = order.getDestination();
+    //Territory origin = order.getOrigin();
+    //Territory destination = order.getDestination();
+    Territory origin = map.getTerritoryByName(order.getOrigin().getName());
+    Territory destination = map.getTerritoryByName(order.getDestination().getName());
     ArrayList<Territory> visited = new ArrayList<>();
     visited.add(origin);
     if (mapDFS(visited, origin, origin, destination)) {
@@ -33,7 +35,6 @@ public class MoveOrderPathExistsRuleChecker extends OrderRuleChecker {
     } else {
       return "Player does not own path from origin to destination";
     }
-
   }
 
   /**

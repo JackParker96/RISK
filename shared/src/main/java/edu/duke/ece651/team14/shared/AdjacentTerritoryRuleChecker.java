@@ -18,7 +18,9 @@ public class AdjacentTerritoryRuleChecker extends OrderRuleChecker {
    *         explaining broken rule otherwise
    */
   public String checkMyRule(Map map, Order order) {
-    if (order.getOrigin().isAdjacentTo(order.getDestination())) {
+    Territory origin = map.getTerritoryByName(order.getOrigin().getName());
+    Territory destination = map.getTerritoryByName(order.getDestination().getName());
+    if (origin.isAdjacentTo(destination)) {
       return null;
     } else {
       return "Territories are not adjacent";
