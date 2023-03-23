@@ -65,8 +65,9 @@ public class App {
     Socket clientSocket = new Socket(hostName, port);
     Communicator comm = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
     //App a = new App(hostName, port);   // for old constructor
-      App a = new App(clientSocket, comm);
-    System.out.println(a.getMessage());
+    App a = new App(clientSocket, comm);
+    System.out.println("Welcome to the RISC player terminal\n\nInitializing game setup...\n");  
+    //System.out.println(a.getMessage());
     try{
       a.client.whoAmIPhase();
       a.client.placeUnitsPhase();

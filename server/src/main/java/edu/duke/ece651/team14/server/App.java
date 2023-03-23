@@ -65,7 +65,8 @@ public class App {
       int port = Integer.parseInt(args[0]);
       int num_players = Integer.parseInt(args[1]);
       App a = new App(port, num_players);
-      System.out.println(a.getMessage());
+      System.out.println("Welcome to the RISC server terminal\n");
+      //System.out.println(a.getMessage());
       a.runGame();
     } catch (Exception e) {
       System.out.println("Error detected: " + e.getMessage());
