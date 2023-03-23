@@ -63,8 +63,8 @@ public class UnitPlacementOrder implements Serializable {
    * @param num
    */
   public void setNumUnits(int index, int num){
-    if(num<=0){
-      throw new IllegalArgumentException("Num of units must larger than 0");
+    if(num<0){
+      throw new IllegalArgumentException("Number of units placed must can't be negative");
     }
     placements.get(index).num_units = num;
   }

@@ -45,7 +45,6 @@ public class UnitPlacementOrderTest {
       }
       upo_recv.setNumUnits(0, 5);
       assertEquals(5, upo_recv.getNumUnits(0));
-      assertThrows(IllegalArgumentException.class, () -> upo_recv.setNumUnits(0, 0));
       assertThrows(IllegalArgumentException.class, () -> upo_recv.setNumUnits(0, -1));
     } finally {
       testCommunicator.release();
