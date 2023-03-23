@@ -89,11 +89,7 @@ public class TextClientPlayer extends ClientPlayer {
     Map m = recvMap();
     displayMap(m);
     out.println("You are the " + myPlayer.toString().toUpperCase()
-<<<<<<< HEAD
         + " player. Please add units to your territories. You can add 0 or more units to each territory, as long as you do not exceed the total number allowed.");
-=======
-        + " player. Please add some units to your territories. You can add 0 or more units to each territory, as long as you do not exceed the total number allowed.");
->>>>>>> refs/remotes/origin/main
     UnitPlacementOrder upo = m.getUnitsPlacementOrder(myPlayer);
     placeUnits(upo, 30);
     communicator.sendObject(upo);
