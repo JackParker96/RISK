@@ -35,7 +35,7 @@ public class App {
   }
 
   /*
-   * Returns message, checks that Object was created properly
+   * Returns message, verifies that Server App class was created properly
    *
    * @return String
    */
