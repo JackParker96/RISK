@@ -50,7 +50,7 @@ public class Communicator {
    * @throws IOException
    */
   public Object recvObject() throws IOException, ClassNotFoundException {
-    return in.readObject();
+     return in.readObject();
   }
 
   /**

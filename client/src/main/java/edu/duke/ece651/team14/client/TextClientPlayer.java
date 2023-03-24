@@ -17,22 +17,9 @@ public class TextClientPlayer extends ClientPlayer {
   /**
    * Constructor
    * 
-   * @param hostName:       hostname of server
-   * @param serverPort:     port number if server
+   * @param clientSocket:   client socket
    * @param inputSource:    the source to read interactive input, e.g. System.in.
    * @param outPrintStream: e.g. System.out
-   * @throws IOException
-   */
-
-  /*
-  public TextClientPlayer(String hostName, int serverPort, BufferedReader inputSource, PrintStream outPrintStream)
-      throws IOException {
-    super(hostName, serverPort, inputSource, outPrintStream);
-  }
-  */
-
-  /**
-   * Constructor, which is convenient for mock object.
    */
   public TextClientPlayer(Socket clientSocket, Communicator communicator, BufferedReader inputSource,
       PrintStream outPrintStream) {
@@ -109,7 +96,7 @@ public class TextClientPlayer extends ClientPlayer {
     placeUnits(upo, 30);
     communicator.sendObject(upo);
     // wait for other to finish
-    out.println("Wait for other players to finish placing units...");
+    out.println("Wait for other players to finish placing units...\n");
   }
 
   /**
@@ -221,7 +208,7 @@ public class TextClientPlayer extends ClientPlayer {
    * @throws IOException
    * @throws ClassNotFoundException
    */
-  protected void playOneTurn() throws IOException, ClassNotFoundException {
+  protected boolean playOneTurn() throws IOException, ClassNotFoundException {
     Map recv_map = recvMap();
     displayMap(recv_map);
     ArrayList<Order> allOrders = new ArrayList<>();
@@ -232,17 +219,24 @@ public class TextClientPlayer extends ClientPlayer {
       allOrders.addAll(attackProc.processAllOrdersForOneTurn("ATTACK"));
     }else{
       displayLossInfo(recv_map);
-      //TODO:can also choose to disconnect
+      boolean decision = wantsToDisconnect();
+      if(decision){
+        return false;//want to exit
+      }
     }
     this.communicator.sendObject(allOrders);
     out.println("Wait for other players to commit move/attack orders...");
     String oneTurnResult = this.communicator.recvString();
     out.println(oneTurnResult);
+    return true;//means continue
   }
 
   public void playGamePhase() throws IOException, ClassNotFoundException {
     while (true) {
-      playOneTurn();
+      boolean continueGame = playOneTurn();
+      if(!continueGame){
+        break;
+      }
       String game_info = this.communicator.recvString();
       if (game_info.equals("Gameover")) {// one global winner occurs, exit game.
         Map finalMap = recvMap();

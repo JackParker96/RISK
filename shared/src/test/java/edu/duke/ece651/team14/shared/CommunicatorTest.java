@@ -56,4 +56,24 @@ public class CommunicatorTest {
       testCommunicator.release();
     }
   }
+
+  @Test
+  void test_recvOrders() throws IOException, ClassNotFoundException {
+    Communicator testCommunicator = null;
+    try {
+      FileOutputStream testOut = new FileOutputStream("recvTest.txt");
+      FileInputStream testIn = new FileInputStream("recvTest.txt");
+      testCommunicator = new Communicator(testOut, testIn);
+      ArrayList<Order> orders = new ArrayList<>();
+      orders.add(new MoveOrder(new BasicTerritory("1"), new BasicTerritory("2"), 3, null));
+      orders.add(new AttackOrder(new BasicTerritory("2"), new BasicTerritory("1"), 3, null));
+      testCommunicator.sendObject(orders);
+      ArrayList<Order> recv_orders = testCommunicator.recvOrders();
+      assertEquals(orders.get(0).getOrigin(), recv_orders.get(1).getDestination());
+      assertEquals(recv_orders.get(0).getDestination(), recv_orders.get(1).getOrigin());
+    } finally {
+      testCommunicator.release();
+    }
+  }
+
 }

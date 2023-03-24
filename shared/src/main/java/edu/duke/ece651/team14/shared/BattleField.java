@@ -43,12 +43,12 @@ public class BattleField {
     }
 
     /**
-     * Get the unit to attend one fight.
+     * Precondition: isDefeated() return false;
      * 
-     * @return
+     * @return return the unit to fight,
      */
     public Unit getUnitToFight() {
-      return units.get(units.size() - 1);
+      return units.get(units.size() - 1);// error when unit size is 0;must satisfy precondition
     }
 
     /**
@@ -66,6 +66,7 @@ public class BattleField {
     this.resolver = resolver;
     this.location = location;
     this.combatList = new ArrayList<Army>();
+    this.result = "\nOn Territory "+this.location+": \n";
     addDefenderArmy();
   }
 
@@ -104,6 +105,7 @@ public class BattleField {
    * gives advantages to the player who originally own the territory
    */
   public void resolve() {
+    this.result += recordBattleInfo();
     while (!hasWinner()) {
       for (int i = 0; i < combatList.size(); i++) {
         int another_index = (i + 1) % combatList.size();
@@ -119,25 +121,49 @@ public class BattleField {
   }
 
   /**
+   * Return detail information about the battle.
+   */
+  protected String recordBattleInfo() {
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i < combatList.size(); i++) {
+      Player p = combatList.get(i).player;
+      int numUnits = combatList.get(i).units.size();
+      String action = "";
+      if (i == 0) {
+        action = "defends";
+      } else {
+        action = "attacks";
+      }
+      sb.append("The " + p + " player " + action + " with " + numUnits + " units\n");
+    }
+    return sb.toString();
+  }
+
+  /**
    * Have one unit from the defender and one unit from the attacker army fight.
    * 
    * @param defender
    * @param attacker
    */
   protected void resolveOneFight(Army defender, Army attacker) {
-    boolean defenderWins = resolver.getCombatResult();
-    if (defenderWins) {
-      attacker.getUnitToFight().tryToKill();// defender wins and the attacker's unit dies
-      // in this version tryTokill always succeed.
-      attacker.removeDeadUnit();
-      if (attacker.isDefeated()) {
-        combatList.remove(attacker);
-      }
-    } else {
-      defender.getUnitToFight().tryToKill();// attacker wins and the defender's unit dies
-      defender.removeDeadUnit();
-      if (defender.isDefeated()) {
-        combatList.remove(defender);
+    if (attacker.isDefeated()) {
+      combatList.remove(attacker);
+    } else if (defender.isDefeated()) {
+      combatList.remove(defender);
+    } else {// both has left unit to fight
+      boolean defenderWins = resolver.getCombatResult();
+      if (defenderWins) {
+        attacker.getUnitToFight().tryToKill();// defender wins and the attacker's unit dies
+        attacker.removeDeadUnit();
+        if (attacker.isDefeated()) {
+          combatList.remove(attacker);
+        }
+      } else {// defender Loses
+        defender.getUnitToFight().tryToKill();// attacker wins and the defender's unit dies
+        defender.removeDeadUnit();
+        if (defender.isDefeated()) {
+          combatList.remove(defender);
+        }
       }
     }
   }
@@ -159,10 +185,10 @@ public class BattleField {
     if (!this.location.getOwner().equals(winner)) {// the ownership of this territory changed
       this.location.setOwner(winner);
       this.location.addUnits(combatList.get(0).units);
-      this.result = "The " + winner.getName() + " player conquers Territory " + this.location.getName() + "!";
+      this.result += "The " + winner.getName() + " player conquers Territory " + this.location.getName() + "!";
     } // else : no need to set owner, and the units remains there
     else {
-      this.result = "The " + winner.getName() + " player defends the Territory " + this.location.getName()
+      this.result += "The " + winner.getName() + " player defends Territory " + this.location.getName()
           + " successfully!";
     }
   }

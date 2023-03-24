@@ -46,26 +46,28 @@ public class ServerAttackOrderResolverTest {
 
     addUnits(t0, t1);
     addUnits(t2, t4);
-    
+
     AttackOrder a1 = new AttackOrder(t2, t4, 2, p1);
     AttackOrder a2 = new AttackOrder(t2, t4, 1, p1);
-    Order b1 = new AttackOrder(t2, t4, 100, p1);    // not enough units in t2 to move into t4
-    Order b2 = new AttackOrder(t0, t1, 1, p1);      // destination t1 is owned by p1
-    Order b3 = new AttackOrder(t4, t0, 1, p1);      // origin t1 is not owned by p1
-    
+    Order b1 = new AttackOrder(t2, t4, 100, p1); // not enough units in t2 to move into t4
+    Order b2 = new AttackOrder(t0, t1, 1, p1); // destination t1 is owned by p1
+    Order b3 = new AttackOrder(t4, t0, 1, p1); // origin t1 is not owned by p1
+
     ArrayList<Order> atkOrders = new ArrayList<>();
     atkOrders.add(a1);
     atkOrders.add(a2);
     atkOrders.add(b1);
     atkOrders.add(b2);
     atkOrders.add(b3);
-    
+
     // make a mock resolver that always make defender wins
     CombatResolver mockResolver = mock(CombatResolver.class);
     Mockito.when(mockResolver.getCombatResult()).thenReturn(true);
     ServerAttackOrderResolver saor = new ServerAttackOrderResolver(map, mockResolver);
     String results = saor.resolveAllAttackOrders(atkOrders);
-    assertEquals("The p2 player defends the Territory 4 successfully!\n", results);
+    assertEquals(
+        "\nOn Territory 4: \nThe p2 player defends with 6 units\nThe p1 player attacks with 3 units\nThe p2 player defends Territory 4 successfully!\n",
+        results);
   }
 
   // Helper method to add Units to two given Territories
