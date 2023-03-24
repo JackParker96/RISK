@@ -217,7 +217,7 @@ public class TextClientPlayer extends ClientPlayer {
       allOrders.addAll(attackProc.processAllOrdersForOneTurn("ATTACK"));
     }else{
       displayLossInfo(recv_map);
-      //TODO:can also choose to disconnect
+      //TODO:a function choose to disconnect or watch
       return false;//want to exit
     }
     this.communicator.sendObject(allOrders);
