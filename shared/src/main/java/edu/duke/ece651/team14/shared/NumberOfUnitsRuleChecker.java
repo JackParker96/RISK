@@ -31,7 +31,9 @@ public class NumberOfUnitsRuleChecker extends OrderRuleChecker {
     if (order.getNumUnits() < 0) {
       return "Order must have positive value for numUnits";
     }
-    ArrayList<Unit> units = order.getOrigin().getUnits();
+    Territory targetTerr = map.getTerritoryByName(order.getOrigin().getName());
+    //ArrayList<Unit> units = order.getOrigin().getUnits();
+    ArrayList<Unit> units = targetTerr.getUnits();
     int numSameType = 0;
     for (Unit u : units) {
       if (u.getType().equals(order.getUnitType())) {
