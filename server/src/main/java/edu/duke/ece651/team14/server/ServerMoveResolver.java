@@ -8,6 +8,7 @@ import edu.duke.ece651.team14.shared.MoveOrderPathExistsRuleChecker;
 import edu.duke.ece651.team14.shared.NumberOfUnitsRuleChecker;
 import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.OrderRuleChecker;
+import edu.duke.ece651.team14.shared.OriginDestNotSameTerrRuleChecker;
 import edu.duke.ece651.team14.shared.OriginOwnershipRuleChecker;
 import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.UnitMover;
@@ -31,8 +32,8 @@ public class ServerMoveResolver {
    *
    */
   public void resolveAllMoveOrders(ArrayList<Order> orders) {
-    OrderRuleChecker checker = new OriginOwnershipRuleChecker(
-        new DestinationOwnershipRuleChecker(new MoveOrderPathExistsRuleChecker(new NumberOfUnitsRuleChecker(null))));
+    OrderRuleChecker checker = new OriginDestNotSameTerrRuleChecker(new OriginOwnershipRuleChecker(
+        new DestinationOwnershipRuleChecker(new MoveOrderPathExistsRuleChecker(new NumberOfUnitsRuleChecker(null)))));
     for (Order o : orders) {
       resolveMoveOrder(o, checker);
     }
