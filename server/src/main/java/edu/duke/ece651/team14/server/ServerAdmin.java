@@ -81,8 +81,8 @@ public class ServerAdmin {
    */
   public void initializeGamePhase() throws IOException, ClassNotFoundException {
     MapFactory f = new MapFactory();
-    this.map = f.makeMap("Earth", new ArrayList<Player>(this.playerCommunicators.keySet())); // actual map
-    //this.map = f.makeMap("test", new ArrayList<Player>(this.playerCommunicators.keySet())); // test map
+    //this.map = f.makeMap("Earth", new ArrayList<Player>(this.playerCommunicators.keySet())); // actual map
+    this.map = f.makeMap("test", new ArrayList<Player>(this.playerCommunicators.keySet())); // test map
     for (Player p : playerCommunicators.keySet()) {
       Communicator c = playerCommunicators.get(p);
       c.sendObject(p);

@@ -1,6 +1,7 @@
 package edu.duke.ece651.team14.shared;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ public class BattleFieldTest {
   }
 
   @Test
-  public void test_adddefender_attackers() {
+  public void test_defender_always_win() {
     UnitsFactory uf = new UnitsFactory();
     Territory duke = new BasicTerritory("Duke");
     Player blue_devil = new BasicPlayer(new Color("blue"), "BuleDevil");
@@ -44,14 +45,64 @@ public class BattleFieldTest {
     Mockito.when(mockResolver.getCombatResult()).thenReturn(true);
     Player attcker1 = new BasicPlayer(new Color("yellow"), "attcker1");
     Player attacker2 = new BasicPlayer(new Color("green"), "Celtics");
-    BattleField bf = oneResolve(duke, blue_devil,attcker1,attacker2,mockResolver);
+    BattleField bf = oneResolve(duke, blue_devil, attcker1, attacker2, mockResolver);
     // test resolve
     bf.resolve();
     assertEquals(1, bf.getNumArmies());
     assertEquals(blue_devil, duke.getOwner());
     assertEquals(5, duke.getNumUnits());
-    String expected_result = "The BuleDevil player defends the Territory duke successfully!";
-    assertEquals(expected_result,bf.getResult());
+  }
+
+  @Test
+  public void test_defender_no_unit() {
+    Territory duke = new BasicTerritory("Duke");
+    Player blue_devil = new BasicPlayer(new Color("blue"), "BuleDevil");
+    duke.setOwner(blue_devil);
+    // make a mock resolver that always make defender wins
+    CombatResolver mockResolver = mock(CombatResolver.class);
+    Mockito.when(mockResolver.getCombatResult()).thenReturn(true);
+    Player attcker1 = new BasicPlayer(new Color("yellow"), "attcker1");
+    Player attacker2 = new BasicPlayer(new Color("green"), "Celtics");
+    BattleField bf = new BattleField(mockResolver, duke);
+    AttackOrder aktOrder = new AttackOrder(new BasicTerritory("dont cate"), duke, 5, attcker1);
+    AttackOrder aktOrder2 = new AttackOrder(new BasicTerritory("dont cate"), duke, 3, attcker1);
+    AttackOrder aktOrder3 = new AttackOrder(new BasicTerritory("dont cate"), duke, 3, attacker2);
+    AttackOrder aktOrder4 = new AttackOrder(new BasicTerritory("dont cate"), duke, 4, attacker2);
+    bf.addAttackerArmy(aktOrder);
+    bf.addAttackerArmy(aktOrder2);
+    bf.addAttackerArmy(aktOrder3);
+    bf.addAttackerArmy(aktOrder4);
+    // test resolve
+    bf.resolve();
+    assertEquals(attcker1, duke.getOwner());
+    String expected_result = "On Territory duke: \nPlayer BuleDevil defends with 0 units\nPlayer attcker1 attacks with 8 units\nPlayer Celtics attacks with 7 units\nThe attcker1 player conquers Territory duke!\n";
+    assertEquals(expected_result, bf.getResult());
+  }
+
+  @Test
+  public void test_attacker_no_unit() {
+    UnitsFactory uf = new UnitsFactory();
+    Territory duke = new BasicTerritory("Duke");
+    Player blue_devil = new BasicPlayer(new Color("blue"), "BuleDevil");
+    duke.setOwner(blue_devil);
+    duke.addUnits(uf.makeUnits(5, "basic"));
+    // make a mock resolver that always make defender wins
+    CombatResolver mockResolver = mock(CombatResolver.class);
+    Mockito.when(mockResolver.getCombatResult()).thenReturn(true);
+    Player attcker1 = new BasicPlayer(new Color("yellow"), "attcker1");
+    Player attacker2 = new BasicPlayer(new Color("green"), "Celtics");
+    BattleField bf = new BattleField(mockResolver, duke);
+    AttackOrder aktOrder = new AttackOrder(new BasicTerritory("dont cate"), duke, 0, attcker1);
+    AttackOrder aktOrder2 = new AttackOrder(new BasicTerritory("dont cate"), duke, 0, attcker1);
+    AttackOrder aktOrder3 = new AttackOrder(new BasicTerritory("dont cate"), duke, 3, attacker2);
+    AttackOrder aktOrder4 = new AttackOrder(new BasicTerritory("dont cate"), duke, 4, attacker2);
+    bf.addAttackerArmy(aktOrder);
+    bf.addAttackerArmy(aktOrder2);
+    bf.addAttackerArmy(aktOrder3);
+    bf.addAttackerArmy(aktOrder4);
+    // test resolve
+    bf.resolve();
+    assertEquals(blue_devil, duke.getOwner());
   }
 
   @Test
@@ -66,7 +117,7 @@ public class BattleFieldTest {
     Mockito.when(mockResolver.getCombatResult()).thenReturn(false);
     Player attcker1 = new BasicPlayer(new Color("yellow"), "attcker1");
     Player attacker2 = new BasicPlayer(new Color("green"), "Celtics");
-    BattleField bf = oneResolve(duke, blue_devil,attcker1,attacker2,mockResolver);
+    BattleField bf = oneResolve(duke, blue_devil, attcker1, attacker2, mockResolver);
     // test resolve
     bf.resolve();
     assertEquals(1, bf.getNumArmies());
@@ -75,7 +126,7 @@ public class BattleFieldTest {
   }
 
   @Test
-  public void test_real_resolver(){
+  public void test_real_resolver() {
     UnitsFactory uf = new UnitsFactory();
     Territory duke = new BasicTerritory("Duke");
     Player blue_devil = new BasicPlayer(new Color("blue"), "BuleDevil");
@@ -83,12 +134,11 @@ public class BattleFieldTest {
     duke.addUnits(uf.makeUnits(5, "basic"));
     Player attcker1 = new BasicPlayer(new Color("yellow"), "attcker1");
     Player attacker2 = new BasicPlayer(new Color("green"), "Celtics");
-    BattleField bf = oneResolve(duke, blue_devil,attcker1,attacker2,new DiceResolver());
+    BattleField bf = oneResolve(duke, blue_devil, attcker1, attacker2, new DiceResolver());
     // test resolve
     bf.resolve();
     assertEquals(1, bf.getNumArmies());
     System.out.println(duke.getOwner());
   }
-  
 
 }
