@@ -38,6 +38,20 @@ import edu.duke.ece651.team14.shared.Unit;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
 public class TextClientPlayerTest {
+
+  @Test
+  public void test_wantsToDisconnect() throws IOException {
+    Player p1 = new BasicPlayer(new Color("blue"), "Xincheng");
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    PrintStream out = new PrintStream(bytes, true);
+    BufferedReader in = new BufferedReader(new StringReader("d\nD\ne\n"));
+    TextClientPlayer tcp = new TextClientPlayer(null, null, in, out);
+    tcp.myPlayer = p1;
+    assertEquals(true, tcp.wantsToDisconnect());
+    assertEquals(true, tcp.wantsToDisconnect());
+    assertEquals(false, tcp.wantsToDisconnect());
+  }
+  
   @Test
   public void test_winIO() {
     MapFactory f = new MapFactory();
