@@ -146,7 +146,7 @@ public abstract class ClientPlayer {
 
   //public abstract void doOneTurn();
 
-  protected abstract void playOneTurn() throws IOException, ClassNotFoundException;
+  protected abstract boolean playOneTurn() throws IOException, ClassNotFoundException;
 
   public abstract void playGamePhase() throws IOException, ClassNotFoundException;
   /**

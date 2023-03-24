@@ -206,7 +206,7 @@ public class TextClientPlayer extends ClientPlayer {
    * @throws IOException
    * @throws ClassNotFoundException
    */
-  protected void playOneTurn() throws IOException, ClassNotFoundException {
+  protected boolean playOneTurn() throws IOException, ClassNotFoundException {
     Map recv_map = recvMap();
     displayMap(recv_map);
     ArrayList<Order> allOrders = new ArrayList<>();
@@ -218,16 +218,21 @@ public class TextClientPlayer extends ClientPlayer {
     }else{
       displayLossInfo(recv_map);
       //TODO:can also choose to disconnect
+      return false;//want to exit
     }
     this.communicator.sendObject(allOrders);
     out.println("Wait for other players to commit move/attack orders...");
     String oneTurnResult = this.communicator.recvString();
     out.println(oneTurnResult);
+    return true;//means continue
   }
 
   public void playGamePhase() throws IOException, ClassNotFoundException {
     while (true) {
-      playOneTurn();
+      boolean continueGame = playOneTurn();
+      if(!continueGame){
+        break;
+      }
       String game_info = this.communicator.recvString();
       if (game_info.equals("Gameover")) {// one global winner occurs, exit game.
         Map finalMap = recvMap();

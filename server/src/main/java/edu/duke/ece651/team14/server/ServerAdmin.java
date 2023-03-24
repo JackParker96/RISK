@@ -81,8 +81,8 @@ public class ServerAdmin {
    */
   public void initializeGamePhase() throws IOException, ClassNotFoundException {
     MapFactory f = new MapFactory();
-    //this.map = f.makeMap("Earth", new ArrayList<Player>(this.playerCommunicators.keySet()));   // actual map
-    this.map = f.makeMap("test", new ArrayList<Player>(this.playerCommunicators.keySet()));  // test map
+    this.map = f.makeMap("Earth", new ArrayList<Player>(this.playerCommunicators.keySet())); // actual map
+    //this.map = f.makeMap("test", new ArrayList<Player>(this.playerCommunicators.keySet())); // test map
     for (Player p : playerCommunicators.keySet()) {
       Communicator c = playerCommunicators.get(p);
       c.sendObject(p);
@@ -105,7 +105,7 @@ public class ServerAdmin {
     }
   }
 
-  /** 
+  /**
    * Runs through all stages of the game
    *
    * @throws IOException, ClassNotFoundException
@@ -117,11 +117,21 @@ public class ServerAdmin {
       if (winner != null) {
         sendResults("Gameover");
         sendMap();
-        break; 
+        break;
       } else {
         sendResults("Continue");
       }
     }
+  }
+
+  /**
+   * Game over phase, wait until all players disconnect.
+   * 
+   * @throws IOException
+   * @throws ClassNotFoundException
+   */
+  public void gameOverPhase() {
+    
   }
 
   /**
@@ -155,7 +165,11 @@ public class ServerAdmin {
    */
   protected void sendResults(String results) throws IOException {
     for (Communicator c : playerCommunicators.values()) {
-      c.sendObject(results);
+      try {
+        c.sendObject(results);
+      } catch (IOException ioe) {
+        continue;
+      }
     }
   }
 
@@ -166,7 +180,11 @@ public class ServerAdmin {
    */
   protected void sendMap() throws IOException {
     for (Communicator c : playerCommunicators.values()) {
-      c.sendObject(map);
+      try {
+        c.sendObject(map);
+      } catch (IOException ioe) {
+        continue;
+      }
     }
   }
 
@@ -181,8 +199,13 @@ public class ServerAdmin {
   protected HashMap<String, ArrayList<Order>> receiveAllOrders() throws IOException, ClassNotFoundException {
     ArrayList<Order> allOrders = new ArrayList<>();
     for (Player p : playerCommunicators.keySet()) {
-      Communicator c = playerCommunicators.get(p);
-      allOrders.addAll(c.recvOrders());
+      try {
+        Communicator c = playerCommunicators.get(p);
+        ArrayList<Order> orders = c.recvOrders();
+        allOrders.addAll(orders);
+      } catch (IOException ioe) {
+        continue;
+      }
     }
     System.out.println("receiving all orders for one turn");
     return sortOrders(allOrders);
