@@ -40,6 +40,21 @@ public class TextClientPlayer extends ClientPlayer {
   }
 
   /**
+   * Ask a player if they want to disconnect from the game
+   *
+   * @return true if the player indicates they want to disconnect, otherwise return false
+   */
+  public boolean wantsToDisconnect() throws IOException {
+    sendMsg("Type 'D' to disconnect");
+    sendMsg("Type anything else to continue watching the game");
+    String response = getInput().toLowerCase();
+    if (response.equals("d")) {
+      return true;
+    }
+    return false;
+  }
+  
+  /**
    * Let Player know that a Player has won the game
    *
    * @param m is the Map of the game
