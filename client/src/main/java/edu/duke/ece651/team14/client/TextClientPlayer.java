@@ -232,8 +232,10 @@ public class TextClientPlayer extends ClientPlayer {
       allOrders.addAll(attackProc.processAllOrdersForOneTurn("ATTACK"));
     }else{
       displayLossInfo(recv_map);
-      //TODO:a function choose to disconnect or watch
-      return false;//want to exit
+      boolean decision = wantsToDisconnect();
+      if(decision){
+        return false;//want to exit
+      }
     }
     this.communicator.sendObject(allOrders);
     out.println("Wait for other players to commit move/attack orders...");
