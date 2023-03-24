@@ -17,22 +17,9 @@ public class TextClientPlayer extends ClientPlayer {
   /**
    * Constructor
    * 
-   * @param hostName:       hostname of server
-   * @param serverPort:     port number if server
+   * @param clientSocket:   client socket
    * @param inputSource:    the source to read interactive input, e.g. System.in.
    * @param outPrintStream: e.g. System.out
-   * @throws IOException
-   */
-
-  /*
-  public TextClientPlayer(String hostName, int serverPort, BufferedReader inputSource, PrintStream outPrintStream)
-      throws IOException {
-    super(hostName, serverPort, inputSource, outPrintStream);
-  }
-  */
-
-  /**
-   * Constructor, which is convenient for mock object.
    */
   public TextClientPlayer(Socket clientSocket, Communicator communicator, BufferedReader inputSource,
       PrintStream outPrintStream) {

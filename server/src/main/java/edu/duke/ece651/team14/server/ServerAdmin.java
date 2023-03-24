@@ -131,7 +131,7 @@ public class ServerAdmin {
    * @throws ClassNotFoundException
    */
   public void gameOverPhase() {
-    
+    System.out.println("\nGame Over!");
   }
 
   /**

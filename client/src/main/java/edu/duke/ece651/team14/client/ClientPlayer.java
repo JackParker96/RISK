@@ -22,24 +22,10 @@ public abstract class ClientPlayer {
   /**
    * Constructor
    * 
-   * @param hostName:       name of host server
+   * @param clientSocket    client socket
    * @param serverPort:     port number of host server
    * @param inputSource:    the source to read interactive input, e.g. System.in.
    * @param outPrintStream: e.g. System.out
-   * @throws IOException
-   */
-  /*
-  public ClientPlayer(String hostName, int serverPort, BufferedReader inputSource, PrintStream outPrintStream)
-      throws IOException {
-    this.clientSocket = new Socket(hostName, serverPort);
-    this.communicator = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
-    this.inputReader = inputSource;
-    this.out = outPrintStream;
-  }
-  */
-
-  /**
-   * Constructor, which is convenient for mock object.
    */
   public ClientPlayer(Socket clientSocket, Communicator communicator, BufferedReader inputSource,
       PrintStream outPrintStream) {

@@ -54,6 +54,7 @@ public class App {
       System.out.println("\nStarting game...\n");
       serverAdmin.initializeGamePhase();
       serverAdmin.playGamePhase();
+      serverAdmin.gameOverPhase();
     } finally {
       serverAdmin.releaseResources(); // when exception happens, resources should always be released
     }
@@ -66,10 +67,9 @@ public class App {
       int num_players = Integer.parseInt(args[1]);
       App a = new App(port, num_players);
       System.out.println("Welcome to the RISC server terminal\n");
-      //System.out.println(a.getMessage());
       a.runGame();
     } catch (Exception e) {
-      System.out.println("Error detected: " + e.getMessage());
+      System.out.println("\nError detected: " + e.getMessage());
       System.out.println("Exiting...");
     }
   }
