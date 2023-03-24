@@ -88,7 +88,7 @@ public class TextClientPlayerTest {
     map.getTerritoryByName("6").setOwner(p2);
     tcp.displayLossInfo(map);
     String expected2 = expected
-        + "You have lost! You may cotinue to watch the rest of the game, or you may choose to disconnect at any time\n";
+        + "You have lost! You may continue to watch the rest of the game, or you may choose to disconnect at any time\n";
     assertEquals(expected2, bytes.toString());
   }
 

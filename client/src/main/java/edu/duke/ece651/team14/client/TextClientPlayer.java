@@ -65,7 +65,7 @@ public class TextClientPlayer extends ClientPlayer {
       throw new IllegalArgumentException("Error: This player has not lost the game");
     }
     sendMsg(
-        "You have lost! You may cotinue to watch the rest of the game, or you may choose to disconnect at any time");
+        "You have lost! You may continue to watch the rest of the game, or you may choose to disconnect at any time");
   }
 
   /**
