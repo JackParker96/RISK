@@ -188,7 +188,7 @@ public class BattleField {
       this.result += "The " + winner.getName() + " player conquers Territory " + this.location.getName() + "!";
     } // else : no need to set owner, and the units remains there
     else {
-      this.result += "The " + winner.getName() + " player defends the Territory " + this.location.getName()
+      this.result += "The " + winner.getName() + " player defends Territory " + this.location.getName()
           + " successfully!";
     }
   }
