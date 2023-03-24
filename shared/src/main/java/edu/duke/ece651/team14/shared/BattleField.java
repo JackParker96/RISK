@@ -66,7 +66,7 @@ public class BattleField {
     this.resolver = resolver;
     this.location = location;
     this.combatList = new ArrayList<Army>();
-    this.result = "On Territory "+this.location+": \n";
+    this.result = "\nOn Territory "+this.location+": \n";
     addDefenderArmy();
   }
 
@@ -134,7 +134,7 @@ public class BattleField {
       } else {
         action = "attacks";
       }
-      sb.append("Player " + p + " " + action + " with " + numUnits + " units\n");
+      sb.append("The " + p + " player" + action + " with " + numUnits + " units\n");
     }
     return sb.toString();
   }
