@@ -96,7 +96,7 @@ public class TextClientPlayer extends ClientPlayer {
     placeUnits(upo, 30);
     communicator.sendObject(upo);
     // wait for other to finish
-    out.println("Wait for other players to finish placing units...");
+    out.println("Wait for other players to finish placing units...\n");
   }
 
   /**

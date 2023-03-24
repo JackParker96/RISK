@@ -75,7 +75,7 @@ public class BattleFieldTest {
     // test resolve
     bf.resolve();
     assertEquals(attcker1, duke.getOwner());
-    String expected_result = "On Territory duke: \nPlayer BuleDevil defends with 0 units\nPlayer attcker1 attacks with 8 units\nPlayer Celtics attacks with 7 units\nThe attcker1 player conquers Territory duke!\n";
+    String expected_result = "\nOn Territory duke: \nThe BuleDevil player defends with 0 units\nThe attcker1 player attacks with 8 units\nThe Celtics player attacks with 7 units\nThe attcker1 player conquers Territory duke!";
     assertEquals(expected_result, bf.getResult());
   }
 

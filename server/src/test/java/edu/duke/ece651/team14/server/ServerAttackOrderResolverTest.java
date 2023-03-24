@@ -66,7 +66,7 @@ public class ServerAttackOrderResolverTest {
     ServerAttackOrderResolver saor = new ServerAttackOrderResolver(map, mockResolver);
     String results = saor.resolveAllAttackOrders(atkOrders);
     assertEquals(
-        "On Territory 4: \nPlayer p2 defends with 6 units\nPlayer p1 attacks with 3 units\nThe p2 player defends the Territory 4 successfully!\n\n",
+        "\nOn Territory 4: \nThe p2 player defends with 6 units\nThe p1 player attacks with 3 units\nThe p2 player defends the Territory 4 successfully!\n",
         results);
   }
 

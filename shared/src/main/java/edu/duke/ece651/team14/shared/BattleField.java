@@ -134,7 +134,7 @@ public class BattleField {
       } else {
         action = "attacks";
       }
-      sb.append("The " + p + " player" + action + " with " + numUnits + " units\n");
+      sb.append("The " + p + " player " + action + " with " + numUnits + " units\n");
     }
     return sb.toString();
   }
@@ -185,11 +185,11 @@ public class BattleField {
     if (!this.location.getOwner().equals(winner)) {// the ownership of this territory changed
       this.location.setOwner(winner);
       this.location.addUnits(combatList.get(0).units);
-      this.result += "The " + winner.getName() + " player conquers Territory " + this.location.getName() + "!\n";
+      this.result += "The " + winner.getName() + " player conquers Territory " + this.location.getName() + "!";
     } // else : no need to set owner, and the units remains there
     else {
       this.result += "The " + winner.getName() + " player defends the Territory " + this.location.getName()
-          + " successfully!\n";
+          + " successfully!";
     }
   }
 
