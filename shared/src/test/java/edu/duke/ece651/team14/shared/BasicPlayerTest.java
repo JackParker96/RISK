@@ -3,12 +3,38 @@ package edu.duke.ece651.team14.shared;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
 public class BasicPlayerTest {
+
+  @Test
+  public void test_resources() {
+    Player p = new BasicPlayer(new Color("blue"), "A");
+    assertEquals(0, p.getFoodAmt());
+    assertEquals(0, p.getTechAmt());
+    assertEquals(1, p.getMaxTechLevel());
+    p.addFoodResources(0);
+    p.addFoodResources(3);
+    p.useFoodResources(2);
+    assertEquals(1, p.getFoodAmt());
+    p.addTechResources(0);
+    p.addTechResources(5);
+    p.useTechResources(3);
+    assertEquals(2, p.getTechAmt());
+    assertThrows(IllegalArgumentException.class, () -> p.addFoodResources(-1));
+    assertThrows(IllegalArgumentException.class, () -> p.addTechResources(-1));
+    assertThrows(IllegalArgumentException.class, () -> p.useFoodResources(-1));
+    assertThrows(IllegalArgumentException.class, () -> p.useTechResources(-1));
+    assertThrows(IllegalArgumentException.class, () -> p.useFoodResources(2));
+    assertThrows(IllegalArgumentException.class, () -> p.useTechResources(3));
+    p.increaseMaxTechLevel();
+    p.increaseMaxTechLevel();
+    assertEquals(3, p.getMaxTechLevel());
+  }
 
   @Test
   public void test_hasWon() {
@@ -42,9 +68,9 @@ public class BasicPlayerTest {
 
   @Test
   public void test_hasLost() {
-    
+
   }
-  
+
   @Test
   public void test_player_constructor() {
     BasicPlayer p1 = new BasicPlayer(new Color("RED"), "p");
