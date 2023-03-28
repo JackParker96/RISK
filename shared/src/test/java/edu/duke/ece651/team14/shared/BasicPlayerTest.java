@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 public class BasicPlayerTest {
 
   @Test
-  public void test_resources() {
+  public void test_resources() throws MaxTechLevelException {
     Player p = new BasicPlayer(new Color("blue"), "A");
     assertEquals(0, p.getFoodAmt());
     assertEquals(0, p.getTechAmt());
@@ -34,6 +34,11 @@ public class BasicPlayerTest {
     p.increaseMaxTechLevel();
     p.increaseMaxTechLevel();
     assertEquals(3, p.getMaxTechLevel());
+    p.increaseMaxTechLevel();
+    p.increaseMaxTechLevel();
+    p.increaseMaxTechLevel();
+    assertEquals(6, p.getMaxTechLevel());
+    assertThrows(MaxTechLevelException.class, () -> p.increaseMaxTechLevel());
   }
 
   @Test

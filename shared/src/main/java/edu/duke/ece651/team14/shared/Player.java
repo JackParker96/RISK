@@ -123,7 +123,16 @@ public abstract class Player implements Serializable {
     techAmt -= toUse;
   }
 
-  public void increaseMaxTechLevel() {
+  /**
+   * Increment the max tech level of a Player by 1
+   *
+   * @throws MaxTechLevelException if the player's maxTechLevel is already maxed
+   *                               out at 6
+   */
+  public void increaseMaxTechLevel() throws MaxTechLevelException {
+    if (maxTechLevel == 6) {
+      throw new MaxTechLevelException("Max tech level is already maxed out for this player");
+    }
     maxTechLevel += 1;
   }
 
