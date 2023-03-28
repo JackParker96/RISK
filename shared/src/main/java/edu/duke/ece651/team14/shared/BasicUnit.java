@@ -7,6 +7,8 @@ public class BasicUnit implements Unit, Serializable {
   private String type;
   // Boolean representing whether the Unit is alive or dead
   private boolean alive;
+  // The current teech level of the Unit
+  private int techLevel;
 
   /**
    * Construct a BasicUnit
@@ -16,6 +18,29 @@ public class BasicUnit implements Unit, Serializable {
   public BasicUnit() {
     this.type = "basic";
     this.alive = true;
+    this.techLevel = 0;
+  }
+
+  /**
+   * Increase the tech level of a single unit
+   *
+   * @param numLevels is the number of levels the unit should be upgraded
+   * @throws MaxTechLevelException    if incrementing by numLevels would put the
+   *                                  units techLevel over 6
+   * @throws IllegalArgumentException if you try to increase by a negative number
+   */
+  public void increaseTechLevel(int numLevels) throws MaxTechLevelException {
+    if (techLevel + numLevels > 6) {
+      throw new MaxTechLevelException("Units can only be upgraded up to tech level 6");
+    }
+    if (numLevels < 0) {
+      throw new IllegalArgumentException("Can't increase tech level by a negative number");
+    }
+    techLevel += numLevels;
+  }
+
+  public int getTechLevel() {
+    return techLevel;
   }
 
   /**
@@ -25,7 +50,7 @@ public class BasicUnit implements Unit, Serializable {
    * @throws IllegalArgumentException if the unit is alreay dead
    */
   @Override
-  public boolean tryToKill(){
+  public boolean tryToKill() {
     if (!alive) {
       throw new IllegalArgumentException("Unit already dead");
     }
