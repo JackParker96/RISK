@@ -11,7 +11,7 @@ public abstract class Player implements Serializable{
   // Player color
   private final Color color;
 
-  // Player name
+  // Player name;color name
   private final String name;
   
   /**
