@@ -46,26 +46,7 @@ public class ServerAdmin {
   //   this.playerCommunicators = new HashMap<Player, Communicator>();
   // }
 
-  // /**
-  //  * Server accepts all the connections specified by num_players
-  //  * 
-  //  * @param num_players: total num of connections
-  //  * @throws IOException
-  //  */
-  // public void acceptPlayersPhase(int num_players) throws IOException {
-  //   int acceptedPlayers = 0;
-  //   while (acceptedPlayers < num_players) {
-  //     Socket clientSocket = serverSocket.accept();
-  //     clientSockets.add(clientSocket);
-  //     OutputStream out = clientSocket.getOutputStream();
-  //     InputStream in = clientSocket.getInputStream();
-  //     Communicator clientCommunicator = new Communicator(out, in);
-  //     Player p = new BasicPlayer(new Color(colorMap.get(acceptedPlayers)), colorMap.get(acceptedPlayers));
-  //     playerCommunicators.put(p, clientCommunicator);
-  //     System.out.println("Accepted player connection: " + p);
-  //     acceptedPlayers++;
-  //   }
-  // }
+  // 
 
   // /**
   //  * Server initializes game and sends empty to players to recieve orders
