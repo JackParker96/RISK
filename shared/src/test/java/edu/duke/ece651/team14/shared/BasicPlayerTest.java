@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 public class BasicPlayerTest {
-
   @Test
   public void test_resources() throws MaxTechLevelException {
     Player p = new BasicPlayer(new Color("blue"), "A");
@@ -69,11 +68,6 @@ public class BasicPlayerTest {
     assertFalse(p2.hasWon(map));
     assertEquals(true, p2.hasLost(map));
     assertFalse(p1.hasLost(map));
-  }
-
-  @Test
-  public void test_hasLost() {
-
   }
 
   @Test

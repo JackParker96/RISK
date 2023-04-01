@@ -1,7 +1,7 @@
 package edu.duke.ece651.team14.shared;
 
 import java.io.Serializable;
-
+import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
@@ -87,6 +87,24 @@ public abstract class Player implements Serializable {
    */
   public String getName() {
     return name;
+  }
+
+  /**
+   * At the start of each turn, update the amount of resources each player has
+   * based on their territories
+   *
+   * @param m is the map of all territories
+   */
+  public void updateResourcesInTurn(Map m) {
+    ArrayList<Territory> myTerrs = m.groupTerritoriesByPlayer().get(this);
+    int foodProduced = 0;
+    int techProduced = 0;
+    for (Territory t : myTerrs) {
+      foodProduced += t.getFoodProductionRate();
+      techProduced += t.getTechProductionRate();
+    }
+    addFoodResources(foodProduced);
+    addTechResources(techProduced);
   }
 
   public void addFoodResources(int toAdd) {
