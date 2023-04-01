@@ -19,6 +19,24 @@ public class BasicTerritoryTest {
   }
 
   @Test
+  public void test_productionRate_getters() {
+    BasicTerritory gondor = new BasicTerritory("Gondor");
+    assertEquals(0, gondor.getFoodProductionRate());
+    assertEquals(0, gondor.getTechProductionRate());
+  }
+
+  @Test
+  public void test_productionRate_setters() {
+    BasicTerritory gondor = new BasicTerritory("Gondor");
+    gondor.setFoodProductionRate(5);
+    assertEquals(5, gondor.getFoodProductionRate());
+    assertEquals(0, gondor.getTechProductionRate());
+    gondor.setTechProductionRate(10);
+    assertEquals(5, gondor.getFoodProductionRate());
+    assertEquals(10, gondor.getTechProductionRate());
+  }
+
+  @Test
   public void test_getNeighbors() {
     BasicTerritory gondor = new BasicTerritory("Gondor");
     assertEquals(0, gondor.getAdjacentTerritories().size());

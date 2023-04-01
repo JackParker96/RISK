@@ -11,6 +11,8 @@ public abstract class Territory implements Serializable {
   private Player owner;
   private ArrayList<Unit> units;
   private ArrayList<Territory> adjacentTerritories;
+  private int foodProductionRate;
+  private int techProductionRate;
 
   /**
    * Creates a Territory from a given name
@@ -22,7 +24,44 @@ public abstract class Territory implements Serializable {
     this.owner = null;
     this.units = new ArrayList<Unit>();
     this.adjacentTerritories = new ArrayList<>();
+    this.foodProductionRate = 0;
+    this.techProductionRate = 0;
+  }
 
+  /**
+   * Get the rate of food production for this territory per turn
+   *
+   * @return foodProductionRate
+   */
+  public int getFoodProductionRate() {
+    return foodProductionRate;
+  }
+
+  /**
+   * Get the rate of tech production for this territory per turn
+   *
+   * @return techProductionRate
+   */
+  public int getTechProductionRate() {
+    return techProductionRate;
+  }
+
+  /**
+   * Set the rate for food production for this territory
+   *
+   * @param rate is the amount of food resources being produced by this territory per turn 
+   */
+  public void setFoodProductionRate(int rate) {
+    foodProductionRate = rate;
+  }
+
+  /**
+   * Set the rate for technology production for this territory
+   * 
+   * @param rate is the amount of technology resources being produced by this territory per tern
+   */ 
+  public void setTechProductionRate(int rate) {
+    techProductionRate = rate;
   }
 
   /**

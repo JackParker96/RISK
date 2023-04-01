@@ -28,6 +28,7 @@ public class MapFactory implements AbstractMapFactory {
     ArrayList<Territory> allTerritories = makeTerritories();
     addAdjacency(allTerritories);
     addOwners(allTerritories, players);
+    initializeProductionRates(allTerritories);
     Map m = new Map(allTerritories, mapName);
     return m;
   }
@@ -102,6 +103,62 @@ public class MapFactory implements AbstractMapFactory {
     allTerritories.add(new BasicTerritory("Duke"));
 
     return allTerritories;
+  }
+  
+  /**
+   * Adds hard-coded resource production rates to given ArrayList of Territories
+   *
+   * @param allTerritories is the ArrayList of Territories to which to add production rates
+   */
+  public void initializeProductionRates(ArrayList<Territory> allTerritories) {
+    // Narnia
+    allTerritories.get(0).setFoodProductionRate(5);
+    // Midkemia
+    allTerritories.get(1).setTechProductionRate(10);
+    // Oz
+    allTerritories.get(2).setTechProductionRate(10);
+    // Gondor
+    allTerritories.get(3).setFoodProductionRate(5);
+    // Mordor
+    allTerritories.get(4).setTechProductionRate(10);
+    // Neverland
+    allTerritories.get(5).setFoodProductionRate(5);
+    // Elantris
+    allTerritories.get(6).setFoodProductionRate(5);
+    // Scadrial
+    allTerritories.get(7).setTechProductionRate(10);
+    // Roshar
+    allTerritories.get(8).setFoodProductionRate(5);
+    // Mt Olympus
+    allTerritories.get(9).setFoodProductionRate(5);
+    // Mt Othrys
+    allTerritories.get(10).setTechProductionRate(10);
+    // Camp Half-Blood
+    allTerritories.get(11).setTechProductionRate(10);
+    // Hogwarts
+    allTerritories.get(12).setFoodProductionRate(5);
+    // Diagon Alley
+    allTerritories.get(13).setFoodProductionRate(5);
+    // Platform 9 and 3/4
+    allTerritories.get(14).setTechProductionRate(10);
+    // Jurassic Park
+    allTerritories.get(15).setTechProductionRate(10);
+    // Gotham City
+    allTerritories.get(16).setTechProductionRate(10);
+    // Wakanda
+    allTerritories.get(17).setFoodProductionRate(5);
+    // The Capitol
+    allTerritories.get(18).setFoodProductionRate(5);
+    // District Twelve
+    allTerritories.get(19).setTechProductionRate(10);
+    // North Pole
+    allTerritories.get(20).setFoodProductionRate(5);
+    // Atlantis
+    allTerritories.get(21).setTechProductionRate(10);
+    // Wonka Chocolate Factory
+    allTerritories.get(22).setFoodProductionRate(5);
+    // Duke
+    allTerritories.get(23).setTechProductionRate(10);
   }
 
   /**
