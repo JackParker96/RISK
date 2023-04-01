@@ -65,7 +65,7 @@ public class MapFactoryTest {
 
   @Test
   // Tests some of the hard-coded production rates
-  public void test_someProductionRates() {
+  public void test_someResourceProductionRates() {
     MapFactory f = new MapFactory();
     ArrayList<Territory> terrs = f.makeTerritories();
     f.initializeProductionRates(terrs);
@@ -113,8 +113,8 @@ public class MapFactoryTest {
     // start of turn 2
     red.updateResourcesInTurn(m);
     blue.updateResourcesInTurn(m);
-    assertEquals(60, blue.getFoodAmt());
-    assertEquals(120, blue.getTechAmt());
+    assertEquals(60, red.getFoodAmt());
+    assertEquals(120, red.getTechAmt());
     assertEquals(60, blue.getFoodAmt());
     assertEquals(120, blue.getTechAmt());
   }
