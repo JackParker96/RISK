@@ -1,6 +1,8 @@
 package edu.duke.ece651.team14.server;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -64,6 +66,12 @@ public class GameTest {
     g.acceptPlayersPhase();
     HashMap<Account,PlayerInfo> pinfos = g.getPlayerInfos();
     assertEquals(4, pinfos.size());
+    assertTrue(g.gameStarted());
+    for(Account acc:test.accounts){
+      assertFalse(g.canReJoin(acc));
+      assertTrue(g.belongToGame(acc));
+    }
+    
   }
 
 }
