@@ -53,11 +53,7 @@ public class App {
     App a = new App(clientSocket, comm);
     System.out.println("Welcome to the RISC player terminal\n\nInitializing game setup...\n");  
     try{
-      a.client.loginPhase();
-      a.client.joinGamePhase();
-      a.client.whoAmIPhase();
-      a.client.placeUnitsPhase();
-      a.client.playGamePhase();
+      a.client.PlayGame();
       System.out.println("\nGame Over!");
     } finally{
       a.client.release();

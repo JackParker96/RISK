@@ -138,7 +138,9 @@ public abstract class ClientPlayer {
 
   public abstract void loginPhase() throws IOException, ClassNotFoundException;
 
-  public abstract void joinGamePhase() throws IOException, ClassNotFoundException;
+  public abstract String joinGamePhase() throws IOException, ClassNotFoundException;
+
+  public abstract void PlayGame() throws IOException,ClassNotFoundException;
   /**
    * Release the resources the client holds
    * 

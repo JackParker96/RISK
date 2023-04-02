@@ -77,7 +77,6 @@ public class TextClientPlayer extends ClientPlayer {
    * @throws ClassNotFoundException
    */
   public void whoAmIPhase() throws IOException, ClassNotFoundException {
-    this.communicator = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
     myPlayer = communicator.recvBasicPlayer();
   }
 
@@ -262,31 +261,67 @@ public class TextClientPlayer extends ClientPlayer {
       sendMsg(result);
       if (result.equals("Login Success")) {
         break;
-      }else{
+      } else {
         sendMsg("Try Again");
       }
     }
   }
 
-  public void joinGamePhase() throws IOException, ClassNotFoundException{
+  // Note: no error checking here.
+  public String joinGamePhase() throws IOException, ClassNotFoundException {
     ArrayList<Integer> unstarted_games = this.communicator.recvIDs();
     ArrayList<Integer> rejoinable_games = this.communicator.recvIDs();
-    sendMsg("You can create a new game by input 0[x], x is the number of players of this game\n");
-    sendMsg("You can join games:\n"+displayIDs(unstarted_games));
-    sendMsg("You can rejoin games:\n"+displayIDs(rejoinable_games));
-    String choice = getInput();
-    this.communicator.sendObject(choice);
+    String conn_choice = "";
+    while (true) {
+      conn_choice = getGameConnectionChoice();
+      if (conn_choice.equals("1")) {// reconnect
+        sendMsg("You can rejoin games:\n" + displayIDs(rejoinable_games));
+        if(rejoinable_games.size()==0){
+          continue;
+        }
+        break;
+      } else if (conn_choice.equals("2")) {
+        sendMsg("You can create a new game by input 0[x], x is the number of players of this game");
+        sendMsg("You can join games:\n" + displayIDs(unstarted_games));
+        break;
+      }
+    }
+    String game_choice = getInput();
+    this.communicator.sendObject(game_choice);
+    return conn_choice;
   }
 
-  protected String displayIDs(ArrayList<Integer> ids){
+  protected String displayIDs(ArrayList<Integer> ids) {
     StringBuilder sb = new StringBuilder();
-    if(ids.size()==0){
+    if (ids.size() == 0) {
       sb.append("Not Available");
-    }else{
-      for(int i:ids){
-        sb.append(i+"\n");
+    } else {
+      for (int i : ids) {
+        sb.append(i + "\n");
       }
     }
     return sb.toString();
+  }
+
+  // Note: no error checking here.
+  protected String getGameConnectionChoice() throws IOException {
+    sendMsg("Type 1 to reconnect to a game or Type 2 to join/create a game");
+    String choice = getInput();
+    return choice;
+  }
+
+  public void PlayGame() throws IOException, ClassNotFoundException {
+    loginPhase();
+    String choice = joinGamePhase();
+    // the server create a new communicator in the game, so reset it here also.
+    this.communicator = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
+    if (choice.equals("2")) {// play a new game.
+      whoAmIPhase();
+      placeUnitsPhase();
+      playGamePhase();
+    } else if (choice.equals("1")) {
+      whoAmIPhase();
+      playGamePhase();
+    }
   }
 }

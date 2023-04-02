@@ -62,13 +62,14 @@ public class RequestHandler implements Runnable {
       int num_players = choice.charAt(1) - '0';
       Game newGame = new Game(num_players, sockets, clientSocket, acc);
       allGames.add(newGame);
-      System.out.println("A new game with id:" + newGame.getID() + "created");
+      System.out.println("A new game with id:" + newGame.getID() + " created");
       try {
         newGame.runGame();
       } catch (Exception e) {
         System.out.println(e.getMessage());
       } finally {
         newGame.releaseResources();
+        allGames.remove(newGame);
       }
     } else {
       int game_id = choice.charAt(0) - '0';

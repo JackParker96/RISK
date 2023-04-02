@@ -52,7 +52,7 @@ public class Game {
     this.waitList = new LinkedBlockingQueue<>();
   }
 
-  public void runGame() throws InterruptedException,IOException,ClassNotFoundException{
+  public void runGame() throws InterruptedException, IOException, ClassNotFoundException {
     acceptPlayersPhase();
     initializeGamePhase();
     playGamePhase();
@@ -62,17 +62,27 @@ public class Game {
   protected void acceptPlayersPhase() throws IOException, InterruptedException {
     System.out.println("Wait for players to join...");
     while (cur_players < num_players) {
-      Pair<Account, Socket> new_join = waitList.take();// block until a new player join.
-      addPlayer(new_join.getKey(), new_join.getValue());
+      addPlayer();
       System.out.println("New player joins game " + game_id);
     }
     System.out.println("All player joined, start game id: " + game_id);
   }
 
-  protected void addPlayer(Account a, Socket s) throws IOException {
-    String colorName = colorMap.get(cur_players);
-    pinfos.put(a, new PlayerInfo(s, new BasicPlayer(new Color(colorName), colorName)));
-    cur_players++;
+  protected PlayerInfo addPlayer() throws IOException, InterruptedException {
+    Pair<Account, Socket> new_join = waitList.take();// block until a new player join.
+    Account a = new_join.getKey();
+    Socket s = new_join.getValue();
+    PlayerInfo new_pinfo = null;
+    if (!pinfos.containsKey(a)) {// new player joins
+      String colorName = colorMap.get(cur_players);
+      new_pinfo = new PlayerInfo(s, new BasicPlayer(new Color(colorName), colorName));
+      pinfos.put(a, new_pinfo);
+      cur_players++;
+    } else {
+      new_pinfo = new PlayerInfo(s, pinfos.get(a).getPlayer());
+      pinfos.put(a, new_pinfo);
+    }
+    return new_pinfo;
   }
 
   public void joinGame(Account a, Socket s) throws InterruptedException {
@@ -86,9 +96,8 @@ public class Game {
 
   protected void initializeGamePhase() throws IOException, ClassNotFoundException {
     MapFactory f = new MapFactory();
-    this.map = f.makeMap("Earth", getAllPlayers()); // actual map
-    // this.map = f.makeMap("test", new
-    // ArrayList<Player>(this.playerCommunicators.keySet())); // test map
+    // this.map = f.makeMap("Earth", getAllPlayers()); // actual map
+    this.map = f.makeMap("test", getAllPlayers()); // test map
     sendGameInitInfo();
     receivePlacementOrders();
   }
@@ -119,12 +128,23 @@ public class Game {
     }
   }
 
+  /**
+   * Add reconnected player to this game.
+   */
+  protected void addReconnectedPlayer() throws IOException,InterruptedException{
+    while(!waitList.isEmpty()){
+      PlayerInfo joined_pinfo = addPlayer();
+      joined_pinfo.getCommunicator().sendObject(joined_pinfo.getPlayer());
+    }
+  }
+  
   // * Runs through all stages of the game
   // *
   // * @throws IOException, ClassNotFoundException
   //
-  protected void playGamePhase() throws IOException, ClassNotFoundException {
+  protected void playGamePhase() throws IOException, ClassNotFoundException,InterruptedException{
     while (true) {
+      addReconnectedPlayer();
       executeOneTurn();
       Player winner = this.map.getWinner();
       if (winner != null) {
@@ -197,8 +217,21 @@ public class Game {
         pinfo.setDisconnected();
       }
     }
+    if (allDisconnected()) {// all players disconnect
+      throw new IllegalStateException("All players disconnect, terminate game.");
+    }
     System.out.println("receiving all orders for one turn");
     return sortOrders(allOrders);
+  }
+
+  protected boolean allDisconnected() {
+    boolean alldisc = true;
+    for (PlayerInfo pinfo : pinfos.values()) {
+      if (pinfo.isConnected()) {
+        alldisc &= false;
+      }
+    }
+    return alldisc;
   }
 
   /**
