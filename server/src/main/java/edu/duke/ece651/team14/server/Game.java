@@ -255,8 +255,8 @@ public class Game {
    * @return true if belongs to this game
    */
   public boolean canReJoin(Account acc) {
-    boolean disconnected = !pinfos.get(acc).isConnected();
-    return disconnected && belongToGame(acc);
+    boolean belongToGame = belongToGame(acc);
+    return belongToGame && !pinfos.get(acc).isConnected();
   }
 
   /**

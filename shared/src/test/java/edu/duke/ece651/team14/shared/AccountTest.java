@@ -2,6 +2,7 @@ package edu.duke.ece651.team14.shared;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
 
@@ -36,6 +37,7 @@ public class AccountTest {
     accounts.add(a2);
     accounts.add(a3);
     assertEquals(2, accounts.size());
+    assertTrue(accounts.contains(new Account("Drew", "123")));
   }
 
 }

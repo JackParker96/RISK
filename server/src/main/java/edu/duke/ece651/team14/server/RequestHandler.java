@@ -35,13 +35,13 @@ public class RequestHandler implements Runnable {
       String choice = c.recvString();
       joinGame(choice);
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      e.printStackTrace();
     }
   }
 
   protected void login() throws IOException, ClassNotFoundException {
     while (true) {
-      acc = (Account) c.recvObject();
+      acc = c.recvAccount();
       if (!accounts.contains(acc)) {
         c.sendObject("Wrong Account");
       }else{

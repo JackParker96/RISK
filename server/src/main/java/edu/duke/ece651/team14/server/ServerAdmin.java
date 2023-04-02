@@ -14,7 +14,7 @@ public class ServerAdmin {
   ServerSocket serverSocket;
   ClientSockets clientSockets; 
   List<Game> allGames;
-  static HashSet<Account> accounts;
+  static HashSet<Account> accounts = new HashSet<>();
   static{
     accounts.add(new Account("Jack", "passw0rd"));
     accounts.add(new Account("Evan", "passw0rd"));
