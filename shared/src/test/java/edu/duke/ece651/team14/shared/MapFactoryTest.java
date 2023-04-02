@@ -64,6 +64,62 @@ public class MapFactoryTest {
   }
 
   @Test
+  // Tests some of the hard-coded production rates
+  public void test_someResourceProductionRates() {
+    MapFactory f = new MapFactory();
+    ArrayList<Territory> terrs = f.makeTerritories();
+    f.initializeProductionRates(terrs);
+    Territory narnia = terrs.get(0);
+    Territory midkemia = terrs.get(1);
+    Territory oz = terrs.get(2);
+    Territory gondor = terrs.get(3);
+
+    assertEquals(5, narnia.getFoodProductionRate());
+    assertEquals(0, narnia.getTechProductionRate());
+
+    assertEquals(0, midkemia.getFoodProductionRate());
+    assertEquals(10, midkemia.getTechProductionRate());
+
+    assertEquals(0, oz.getFoodProductionRate());
+    assertEquals(10, oz.getTechProductionRate());
+
+    assertEquals(5, gondor.getFoodProductionRate());
+    assertEquals(0, gondor.getTechProductionRate());
+  }
+
+  @Test
+  // Tests to check resource amounts can be updated each turn
+  public void test_checkResourceProduction() {
+    MapFactory f = new MapFactory();
+    ArrayList<Territory> terrs = f.makeTerritories();
+    Player red = new BasicPlayer(new Color("red"), "red");
+    Player blue = new BasicPlayer(new Color("blue"), "blue");
+    ArrayList<Player> players = new ArrayList<>();
+    players.add(red);
+    players.add(blue);
+    f.addOwners(terrs, players);
+    f.initializeProductionRates(terrs);
+    Map m = f.makeMap("map", players);
+
+    // start of turn 1
+    red.updateResourcesInTurn(m);
+    blue.updateResourcesInTurn(m);
+    assertEquals(30, red.getFoodAmt());
+    assertEquals(60, red.getTechAmt());
+    // make sure all players start with same amount of food and technology resources
+    assertEquals(blue.getFoodAmt(), red.getFoodAmt());
+    assertEquals(blue.getTechAmt(), blue.getTechAmt());
+
+    // start of turn 2
+    red.updateResourcesInTurn(m);
+    blue.updateResourcesInTurn(m);
+    assertEquals(60, red.getFoodAmt());
+    assertEquals(120, red.getTechAmt());
+    assertEquals(60, blue.getFoodAmt());
+    assertEquals(120, blue.getTechAmt());
+  }
+
+  @Test
   // Tests makeTerritories() method an ArrayList of 24 Territories
   public void test_makeTerritories() {
     ArrayList<Territory> terrs = new MapFactory().makeTerritories();

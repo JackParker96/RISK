@@ -6,11 +6,18 @@ import org.junit.jupiter.api.Test;
 
 public class BasicUnitTest {
   @Test
-  public void test_constructor_isAlive_tryToKill() {
+  public void test_constructor_isAlive_tryToKill() throws MaxTechLevelException {
     BasicUnit maya_the_magnificent = new BasicUnit();
     BasicUnit xincheng_the_shrewd = new BasicUnit();
     BasicUnit evan_almighty = new BasicUnit();
     BasicUnit jack_the_jovial = new BasicUnit();
+    assertEquals(0, jack_the_jovial.getTechLevel());
+    jack_the_jovial.increaseTechLevel(0);
+    jack_the_jovial.increaseTechLevel(4);
+    assertThrows(MaxTechLevelException.class, () -> jack_the_jovial.increaseTechLevel(3));
+    jack_the_jovial.increaseTechLevel(2);
+    assertThrows(MaxTechLevelException.class, () -> jack_the_jovial.increaseTechLevel(1));
+    assertThrows(IllegalArgumentException.class, () -> jack_the_jovial.increaseTechLevel(-1));
     assertEquals(true, jack_the_jovial.isAlive());
     assertEquals(true, jack_the_jovial.tryToKill());
     assertFalse(jack_the_jovial.isAlive());
