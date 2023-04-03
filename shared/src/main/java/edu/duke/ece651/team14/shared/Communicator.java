@@ -50,7 +50,7 @@ public class Communicator {
    * @throws IOException
    */
   public Object recvObject() throws IOException, ClassNotFoundException {
-     return in.readObject();
+    return in.readObject();
   }
 
   /**
@@ -99,6 +99,21 @@ public class Communicator {
    */
   public ArrayList<Order> recvOrders() throws IOException, ClassNotFoundException {
     return (ArrayList<Order>) recvObject();
+  }
+
+  /**
+   * Receive a list of ids
+   * 
+   * @return
+   * @throws IOException
+   * @throws ClassNotFoundException
+   */
+  public ArrayList<Integer> recvIDs() throws IOException, ClassNotFoundException {
+    return (ArrayList<Integer>) recvObject();
+  }
+
+  public Account recvAccount() throws IOException, ClassNotFoundException {
+    return (Account) recvObject();
   }
 
   /**

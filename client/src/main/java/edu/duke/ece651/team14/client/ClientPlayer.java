@@ -14,7 +14,7 @@ import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 
 public abstract class ClientPlayer {
   final Socket clientSocket;
-  final Communicator communicator;
+  protected Communicator communicator;
   final BufferedReader inputReader;
   final PrintStream out;
   protected Player myPlayer;
@@ -135,6 +135,12 @@ public abstract class ClientPlayer {
   protected abstract boolean playOneTurn() throws IOException, ClassNotFoundException;
 
   public abstract void playGamePhase() throws IOException, ClassNotFoundException;
+
+  public abstract void loginPhase() throws IOException, ClassNotFoundException;
+
+  public abstract String joinGamePhase() throws IOException, ClassNotFoundException;
+
+  public abstract void PlayGame() throws IOException,ClassNotFoundException;
   /**
    * Release the resources the client holds
    * 

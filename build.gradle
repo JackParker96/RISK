@@ -7,6 +7,13 @@
 plugins {
     id 'com.bmuschko.clover' version '2.2.3'
     id 'java'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
+
+javafx {
+    version = "19.0.2.1"
+    modules = [ 'javafx.controls', 'javafx.fxml' ,'javafx.base']
 }
 
 

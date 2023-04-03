@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import edu.duke.ece651.team14.shared.Account;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapTextView;
@@ -29,7 +30,8 @@ public class TextClientPlayer extends ClientPlayer {
   /**
    * Ask a player if they want to disconnect from the game
    *
-   * @return true if the player indicates they want to disconnect, otherwise return false
+   * @return true if the player indicates they want to disconnect, otherwise
+   *         return false
    */
   public boolean wantsToDisconnect() throws IOException {
     sendMsg("Type 'D' to disconnect");
@@ -40,7 +42,7 @@ public class TextClientPlayer extends ClientPlayer {
     }
     return false;
   }
-  
+
   /**
    * Let Player know that a Player has won the game
    *
@@ -212,29 +214,29 @@ public class TextClientPlayer extends ClientPlayer {
     Map recv_map = recvMap();
     displayMap(recv_map);
     ArrayList<Order> allOrders = new ArrayList<>();
-    if (!this.myPlayer.hasLost(recv_map)) {//has not lost yet
+    if (!this.myPlayer.hasLost(recv_map)) {// has not lost yet
       ClientMoveOrderProcessor moveProc = new ClientMoveOrderProcessor(this, recv_map);
       allOrders.addAll(moveProc.processAllOrdersForOneTurn("MOVE"));
       ClientAttackOrderProcessor attackProc = new ClientAttackOrderProcessor(this, recv_map);
       allOrders.addAll(attackProc.processAllOrdersForOneTurn("ATTACK"));
-    }else{
+    } else {
       displayLossInfo(recv_map);
       boolean decision = wantsToDisconnect();
-      if(decision){
-        return false;//want to exit
+      if (decision) {
+        return false;// want to exit
       }
     }
     this.communicator.sendObject(allOrders);
     out.println("Wait for other players to commit move/attack orders...");
     String oneTurnResult = this.communicator.recvString();
     out.println(oneTurnResult);
-    return true;//means continue
+    return true;// means continue
   }
 
   public void playGamePhase() throws IOException, ClassNotFoundException {
     while (true) {
       boolean continueGame = playOneTurn();
-      if(!continueGame){
+      if (!continueGame) {
         break;
       }
       String game_info = this.communicator.recvString();
@@ -244,6 +246,82 @@ public class TextClientPlayer extends ClientPlayer {
         displayWinInfo(finalMap);
         break;
       }
+    }
+  }
+
+  public void loginPhase() throws IOException, ClassNotFoundException {
+    while (true) {
+      sendMsg("Enter your username:");
+      String username = getInput();
+      sendMsg("Enter your password:");
+      String password = getInput();
+      Account account = new Account(username, password);
+      this.communicator.sendObject(account);
+      String result = this.communicator.recvString();
+      sendMsg(result);
+      if (result.equals("Login Success")) {
+        break;
+      } else {
+        sendMsg("Try Again");
+      }
+    }
+  }
+
+  // Note: no error checking here.
+  public String joinGamePhase() throws IOException, ClassNotFoundException {
+    ArrayList<Integer> unstarted_games = this.communicator.recvIDs();
+    ArrayList<Integer> rejoinable_games = this.communicator.recvIDs();
+    String conn_choice = "";
+    while (true) {
+      conn_choice = getGameConnectionChoice();
+      if (conn_choice.equals("1")) {// reconnect
+        sendMsg("You can rejoin games:\n" + displayIDs(rejoinable_games));
+        if(rejoinable_games.size()==0){
+          continue;
+        }
+        break;
+      } else if (conn_choice.equals("2")) {
+        sendMsg("You can create a new game by input 0[x], x is the number of players of this game");
+        sendMsg("You can join games:\n" + displayIDs(unstarted_games));
+        break;
+      }
+    }
+    String game_choice = getInput();
+    this.communicator.sendObject(game_choice);
+    return conn_choice;
+  }
+
+  protected String displayIDs(ArrayList<Integer> ids) {
+    StringBuilder sb = new StringBuilder();
+    if (ids.size() == 0) {
+      sb.append("Not Available");
+    } else {
+      for (int i : ids) {
+        sb.append(i + "\n");
+      }
+    }
+    return sb.toString();
+  }
+
+  // Note: no error checking here.
+  protected String getGameConnectionChoice() throws IOException {
+    sendMsg("Type 1 to reconnect to a game or Type 2 to join/create a game");
+    String choice = getInput();
+    return choice;
+  }
+
+  public void PlayGame() throws IOException, ClassNotFoundException {
+    loginPhase();
+    String choice = joinGamePhase();
+    // the server create a new communicator in the game, so reset it here also.
+    this.communicator = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
+    if (choice.equals("2")) {// play a new game.
+      whoAmIPhase();
+      placeUnitsPhase();
+      playGamePhase();
+    } else if (choice.equals("1")) {
+      whoAmIPhase();
+      playGamePhase();
     }
   }
 }
