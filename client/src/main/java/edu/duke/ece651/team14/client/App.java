@@ -7,11 +7,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.URL;
+import java.util.List;
 
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.MyName;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class App {
+public class App extends Application {
   ClientPlayer client;
   /**
    * Constructor - can now be tested in unit tests!
@@ -44,8 +51,42 @@ public class App {
     return "Hello from the client for " + MyName.getName();
   }
 
+  /**
+   * Constructor to support GUI
+   *
+   */
+  public App() {
+    this.client = null;
+  }
+
+  @Override
+  public void init() throws IOException {
+    List<String> params = getParameters().getRaw();
+    String hostName = params.get(0);
+    int port = Integer.parseInt(params.get(1));
+    Socket clientSocket = new Socket(hostName, port);
+    Communicator comm = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
+    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    this.client = new TextClientPlayer(clientSocket, comm, input, System.out);
+  }
+
+  @Override
+  public void start(Stage stage) throws Exception {
+    stage.setTitle("RISC player");
+    URL xmlResource = getClass().getResource("/ui/login.xml");
+    Parent root = FXMLLoader.load(xmlResource);
+    Scene scene = new Scene(root, 500, 500);
+    stage.setScene(scene);
+    stage.show();
+  }
+
   // ./gradlew :client:run --args "vcm-xxxxx.vm.duke.edu [port_num]"
-  public static void main(String[] args) throws IOException, ClassNotFoundException {
+  public static void main(String[] args) {
+    launch(args[0], args[1]);
+
+
+    /*
+    CODE TO SUPPORT TEXT CLIENT PLAYER
     String hostName = args[0];
     int port = Integer.parseInt(args[1]);
     Socket clientSocket = new Socket(hostName, port);
@@ -58,5 +99,6 @@ public class App {
     } finally{
       a.client.release();
     }
+    */
   }
 }
