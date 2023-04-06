@@ -73,11 +73,9 @@ public class App extends Application {
   @Override
   public void start(Stage stage) throws Exception {
     stage.setTitle("RISC player");
-    URL xmlResource = getClass().getResource("/ui/test.xml");
+    URL xmlResource = getClass().getResource("/ui/login.xml");
     Parent root = FXMLLoader.load(xmlResource);
     Scene scene = new Scene(root, 500, 500);
-    URL cssResource = getClass().getResource("/ui/myCSS.css");
-    scene.getStylesheets().add(cssResource.toString());
     stage.setScene(scene);
     stage.show();
   }
