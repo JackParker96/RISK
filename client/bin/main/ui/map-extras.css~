@@ -1,0 +1,32 @@
+*{
+	-fx-base: #FFFFFF;
+}
+
+.label {
+	-fx-font-size: 10pt;
+	-fx-text-fill: black;
+}
+
+.green-territory {
+	-fx-shape: "M 200 100 L 440 100 L 560 300 L 440 500 L 200 500 L 80 300 L 200 100";
+	-fx-background-color: #D9EAD3FF;
+	-fx-border-color: #000000;
+}
+
+.red-territory {
+	-fx-shape: "M 200 100 L 440 100 L 560 300 L 440 500 L 200 500 L 80 300 L 200 100";
+	-fx-background-color: #F4CCCCFF;
+	-fx-border-color: #000000;
+}
+
+.blue-territory {
+	-fx-shape: "M 200 100 L 440 100 L 560 300 L 440 500 L 200 500 L 80 300 L 200 100";
+	-fx-background-color: #CFE2F3FF;
+	-fx-border-color: #000000;
+}
+
+.yellow-territory {
+	-fx-shape: "M 200 100 L 440 100 L 560 300 L 440 500 L 200 500 L 80 300 L 200 100";
+	-fx-background-color: #FFF2CCFF;
+	-fx-border-color: #000000;
+}

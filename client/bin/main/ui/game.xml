@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="800.0" maxWidth="1200.0" minHeight="800.0" minWidth="1200.0" prefHeight="800.0" prefWidth="1200.0" stylesheets="@game_frame.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TitledPane animated="false" layoutX="50.0" layoutY="85.0" maxHeight="510.0" maxWidth="535.0" minHeight="510.0" minWidth="535.0" prefHeight="510.0" prefWidth="535.0" text="world map">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="487.0" prefWidth="600.0" styleClass="anchorpane" stylesheets="@game_frame.css">
+               <children>
+                  <fx:include fx:id="map" layoutX="-33.0" layoutY="7.0" source="map.xml" />
+               </children></AnchorPane>
+        </content>
+         <font>
+            <Font name="Copperplate Gothic Light" size="12.0" />
+         </font>
+      </TitledPane>
+      <TitledPane animated="false" layoutX="615.0" layoutY="85.0" maxHeight="510.0" maxWidth="535.0" minHeight="510.0" minWidth="535.0" prefHeight="510.0" prefWidth="535.0" text="game stats">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="490.0" prefWidth="456.0" styleClass="anchorpane" />
+        </content>
+         <font>
+            <Font name="Copperplate Gothic Light" size="12.0" />
+         </font>
+      </TitledPane>
+      <TitledPane animated="false" layoutX="50.0" layoutY="610.0" maxHeight="175.0" maxWidth="1100.0" minHeight="175.0" minWidth="1100.0" prefHeight="175.0" prefWidth="1100.0" text="command center">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="anchorpane" />
+        </content>
+         <font>
+            <Font name="Copperplate Gothic Light" size="12.0" />
+         </font>
+      </TitledPane>
+      <Label layoutX="50.0" text="RISC">
+         <font>
+            <Font size="35.0" />
+         </font>
+         <padding>
+            <Insets top="10.0" />
+         </padding>
+      </Label>
+      <Label layoutX="50.0" layoutY="53.0" text="really interesting strategic conquest" />
+      <Label layoutX="944.0" layoutY="22.0" text="how to play">
+         <padding>
+            <Insets right="50.0" />
+         </padding></Label>
+      <Label layoutX="1057.0" layoutY="22.0" text="exit the game">
+         <padding>
+            <Insets right="60.0" />
+         </padding>
+      </Label>
+   </children>
+</AnchorPane>

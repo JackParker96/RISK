@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="477.0" prefWidth="600.0" stylesheets="@map-extras.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label id="midkemia-b" contentDisplay="GRAPHIC_ONLY" layoutX="144.0" layoutY="59.0" prefHeight="80.0" prefWidth="96.0" styleClass="green-territory" stylesheets="@map-extras.css" text="Midkemia b" />
+      <Label id="midkemia-l" layoutX="163.0" layoutY="88.0" onMouseClicked="#chooseTerritory" text="Midkemia" textAlignment="RIGHT" />
+      <Label id="gondor-b" contentDisplay="GRAPHIC_ONLY" layoutX="215.0" layoutY="99.0" prefHeight="80.0" prefWidth="96.0" styleClass="green-territory" stylesheets="@map-extras.css" text="Gondor b" />
+      <Label id="gondor-l" layoutX="241.0" layoutY="129.0" onMouseClicked="#chooseTerritory" text="Gondor" />
+      <Label id="oz-b" contentDisplay="GRAPHIC_ONLY" layoutX="286.0" layoutY="60.0" prefHeight="80.0" prefWidth="96.0" styleClass="green-territory" stylesheets="@map-extras.css" text="Oz b" />
+      <Label id="oz-l" layoutX="324.0" layoutY="88.0" onMouseClicked="#chooseTerritory" text="Oz " />
+      <Label id="neverland-b" contentDisplay="GRAPHIC_ONLY" layoutX="215.0" layoutY="20.0" prefHeight="80.0" prefWidth="96.0" styleClass="green-territory" stylesheets="@map-extras.css" text="Neverland b" />
+      <Label id="neverland-l" layoutX="232.0" layoutY="50.0" onMouseClicked="#chooseTerritory" text="Neverland" />
+      <Label id="narnia-b" contentDisplay="GRAPHIC_ONLY" layoutX="73.0" layoutY="98.0" prefHeight="80.0" prefWidth="96.0" styleClass="green-territory" stylesheets="@map-extras.css" text="Narnia b" />
+      <Label id="narnia-l" layoutX="102.0" layoutY="128.0" onMouseClicked="#chooseTerritory" text="Narnia" />
+      <Label id="mordor-b" contentDisplay="GRAPHIC_ONLY" layoutX="144.0" layoutY="138.0" prefHeight="80.0" prefWidth="96.0" styleClass="green-territory" stylesheets="@map-extras.css" text=" Mordor b" />
+      <Label id="mordor-l" layoutX="169.0" layoutY="167.0" onMouseClicked="#chooseTerritory" text="Mordor" />
+      <Label id="scadrial-b" contentDisplay="GRAPHIC_ONLY" layoutX="357.0" layoutY="99.0" prefHeight="80.0" prefWidth="96.0" styleClass="yellow-territory" stylesheets="@map-extras.css" text="Scadrial b" />
+      <Label id="scadrial-l" layoutX="382.0" layoutY="128.0" onMouseClicked="#chooseTerritory" text="Scadrial" />
+      <Label id="elantris-b" contentDisplay="GRAPHIC_ONLY" layoutX="286.0" layoutY="138.0" prefHeight="80.0" prefWidth="96.0" styleClass="yellow-territory" stylesheets="@map-extras.css" text="Elantris b" />
+      <Label id="elantris-l" layoutX="313.0" layoutY="167.0" onMouseClicked="#chooseTerritory" text="Elantris" />
+      <Label id="olympus-b" contentDisplay="GRAPHIC_ONLY" layoutX="357.0" layoutY="178.0" prefHeight="80.0" prefWidth="96.0" styleClass="yellow-territory" text="Mt Olympus b" />
+      <Label id="olympus-l" layoutX="369.0" layoutY="207.0" onMouseClicked="#chooseTerritory" text="Mt Olympus" />
+      <Label id="roshar-b" contentDisplay="GRAPHIC_ONLY" layoutX="428.0" layoutY="138.0" prefHeight="80.0" prefWidth="96.0" styleClass="yellow-territory" text="Roshar b" />
+      <Label id="roshar-l" layoutX="456.0" layoutY="167.0" onMouseClicked="#chooseTerritory" text="Roshar" />
+      <Label id="othrys-b" contentDisplay="GRAPHIC_ONLY" layoutX="286.0" layoutY="217.0" prefHeight="80.0" prefWidth="96.0" styleClass="yellow-territory" text="Mt Othrys b" />
+      <Label id="othrys-l" layoutX="305.0" layoutY="246.0" onMouseClicked="#chooseTerritory" text="Mt Othrys" />
+      <Label id="camp-half-blood-b" contentDisplay="GRAPHIC_ONLY" layoutX="428.0" layoutY="217.0" prefHeight="80.0" prefWidth="96.0" styleClass="yellow-territory" text="Camp Half-Blood b" wrapText="true" />
+      <Label id="camp-half-blood-l" layoutX="440.0" layoutY="231.0" onMouseClicked="#chooseTerritory" prefHeight="47.0" prefWidth="73.0" text="Camp Half-Blood" textAlignment="CENTER" wrapText="true" />
+      <Label id="gotham-city-b" contentDisplay="GRAPHIC_ONLY" layoutX="144.0" layoutY="296.0" prefHeight="80.0" prefWidth="96.0" styleClass="red-territory" text="Gotham City b" />
+      <Label id="gotham-city-l" layoutX="154.0" layoutY="326.0" onMouseClicked="#chooseTerritory" text="Gotham City " />
+      <Label id="diagon-alley-b" contentDisplay="GRAPHIC_ONLY" layoutX="73.0" layoutY="256.0" prefHeight="80.0" prefWidth="96.0" styleClass="red-territory" text="Diagon Alley b" />
+      <Label id="diagon-alley-l" layoutX="84.0" layoutY="287.0" onMouseClicked="#chooseTerritory" text="Diagon Alley" />
+      <Label id="hogwarts-b" contentDisplay="GRAPHIC_ONLY" layoutX="73.0" layoutY="177.0" prefHeight="80.0" prefWidth="96.0" styleClass="red-territory" text="Hogwarts b" />
+      <Label id="hogwarts-l" layoutX="93.0" layoutY="207.0" onMouseClicked="#chooseTerritory" text="Hogwarts" />
+      <Label id="platform-b" contentDisplay="GRAPHIC_ONLY" layoutX="144.0" layoutY="217.0" prefHeight="80.0" prefWidth="96.0" styleClass="red-territory" text="Platform 9 and 3/4 b" />
+      <Label id="platform-l" layoutX="163.0" layoutY="229.0" onMouseClicked="#chooseTerritory" prefHeight="55.0" prefWidth="57.0" text="Platform 9 and 3/4" textAlignment="CENTER" wrapText="true" />
+      <Label id="jurassic-park-b" contentDisplay="GRAPHIC_ONLY" layoutX="215.0" layoutY="257.0" prefHeight="80.0" prefWidth="96.0" styleClass="red-territory" text="Jurassic Park b" />
+      <Label id="jurassic-park-l" layoutX="226.0" layoutY="287.0" onMouseClicked="#chooseTerritory" text="Jurassic Park" />
+      <Label id="wakanda-b" contentDisplay="GRAPHIC_ONLY" layoutX="215.0" layoutY="178.0" prefHeight="80.0" prefWidth="96.0" styleClass="red-territory" text="Wakanda b" />
+      <Label id="wakanda-l" layoutX="235.0" layoutY="207.0" onMouseClicked="#chooseTerritory" text="Wakanda" />
+      <Label id="district12-b" contentDisplay="GRAPHIC_ONLY" layoutX="286.0" layoutY="375.0" prefHeight="80.0" prefWidth="96.0" styleClass="blue-territory" text="District Twelve b" />
+      <Label id="district12-l" layoutX="307.0" layoutY="393.0" onMouseClicked="#chooseTerritory" prefHeight="47.0" prefWidth="55.0" text="District Twelve" textAlignment="CENTER" wrapText="true" />
+      <Label id="duke-b" contentDisplay="GRAPHIC_ONLY" layoutX="357.0" layoutY="336.0" prefHeight="80.0" prefWidth="96.0" styleClass="blue-territory" text="Duke b" />
+      <Label id="duke-l" layoutX="389.0" layoutY="366.0" onMouseClicked="#chooseTerritory" text="Duke" />
+      <Label id="north-pole-b" contentDisplay="GRAPHIC_ONLY" layoutX="428.0" layoutY="296.0" prefHeight="80.0" prefWidth="96.0" styleClass="blue-territory" text="North Pole b" />
+      <Label id="north-pole-l" layoutX="444.0" layoutY="326.0" onMouseClicked="#chooseTerritory" text="North Pole" />
+      <Label id="wonka-b" contentDisplay="GRAPHIC_ONLY" layoutX="215.0" layoutY="336.0" prefHeight="80.0" prefWidth="96.0" styleClass="blue-territory" text="Wonka Chocolate Factory b" />
+      <Label id="wonka-l" layoutX="215.0" layoutY="342.0" onMouseClicked="#chooseTerritory" prefHeight="69.0" prefWidth="96.0" text="Wonka Chocolate Factory" textAlignment="CENTER" wrapText="true" />
+      <Label id="atlantis-b" contentDisplay="GRAPHIC_ONLY" layoutX="286.0" layoutY="296.0" prefHeight="80.0" prefWidth="96.0" styleClass="blue-territory" text="Atlantis b" />
+      <Label id="atlantis-l" layoutX="312.0" layoutY="326.0" onMouseClicked="#chooseTerritory" text="Atlantis" />
+      <Label id="capitol-b" contentDisplay="GRAPHIC_ONLY" layoutX="357.0" layoutY="257.0" prefHeight="80.0" prefWidth="96.0" styleClass="blue-territory" text="The Capitol b" />
+      <Label id="capitol-l" layoutX="371.0" layoutY="287.0" onMouseClicked="#chooseTerritory" text="The Capitol" />
+   </children>
+</AnchorPane>
