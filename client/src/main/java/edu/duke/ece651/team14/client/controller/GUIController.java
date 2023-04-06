@@ -77,12 +77,10 @@ public class GUIController {
   @FXML
   public void handleSubmitButtonAction(ActionEvent event) throws IOException {
     actiontarget.setText("Sign in button pressed");
-    URL url = new File("src/main/resources/ui/map.xml").toURI().toURL();
+    URL url = new File("src/main/resources/ui/game.xml").toURI().toURL();
     Parent root = FXMLLoader.load(url);
     stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     scene = new Scene(root);
-    URL mapResource = new File("src/main/resources/ui/map-extras.css").toURI().toURL();
-    scene.getStylesheets().add(mapResource.toString());
     stage.setScene(scene);
     stage.show();
   }
