@@ -9,11 +9,15 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <GridPane alignment="center" hgap="10" stylesheets="@game_frame.css" vgap="10" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team14.client.controller.GUIController">
 <padding><Insets bottom="10" left="25" right="25" top="25" /></padding>
-    <Text fill="WHITE" text="Welcome to RISC" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+    <Text fill="WHITE" text="Welcome to RISC" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
+      <font>
+         <Font name="System" size="16.0" />
+      </font></Text>
  
     <Label text="User Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
  
