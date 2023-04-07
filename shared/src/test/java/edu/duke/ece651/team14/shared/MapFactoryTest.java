@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class MapFactoryTest {
@@ -24,6 +23,31 @@ public class MapFactoryTest {
       assertTrue(t.getAdjacentTerritories().size() > 0);
       assertTrue(t.getAdjacentTerritories().size() < 24);
     }
+  }
+
+  @Test
+  public void test_findShortestPath() {
+    MapFactory f = new MapFactory();
+    ArrayList<Territory> terrs = f.makeTerritories();
+    f.addAdjacency(terrs);
+    Player red = new BasicPlayer(new Color("red"), "red");
+    Player blue = new BasicPlayer(new Color("blue"), "blue");
+    ArrayList<Player> players = new ArrayList<>();
+    players.add(red);
+    players.add(blue);
+    f.addOwners(terrs, players);
+
+    Territory narnia = terrs.get(0);
+    Territory midkemia = terrs.get(1);
+    Territory oz = terrs.get(2);
+    Territory gondor = terrs.get(3);
+    Territory duke = terrs.get(23);
+    
+    assertEquals(2, red.findShortestPath(narnia, gondor));
+    assertEquals(2, red.findShortestPath(gondor, narnia));
+    assertEquals(3, red.findShortestPath(oz, narnia));
+    assertEquals(1, red.findShortestPath(midkemia, narnia));
+    assertEquals(-1, red.findShortestPath(narnia, duke));
   }
 
   @Test
@@ -61,6 +85,12 @@ public class MapFactoryTest {
     assertFalse(midkemia.isAdjacentTo("duke"));
     assertFalse(oz.isAdjacentTo("duke"));
     assertFalse(gondor.isAdjacentTo("duke"));
+
+    assertEquals(1, narnia.getDistToAdjacentTerr(midkemia));
+    assertEquals(1, midkemia.getDistToAdjacentTerr("neverland"));
+
+    assertEquals(null, narnia.getDistToAdjacentTerr(oz));
+    assertEquals(null, midkemia.getDistToAdjacentTerr("duke"));
   }
 
   @Test

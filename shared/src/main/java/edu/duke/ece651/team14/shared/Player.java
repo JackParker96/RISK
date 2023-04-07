@@ -2,6 +2,7 @@ package edu.duke.ece651.team14.shared;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 /**
@@ -88,6 +89,47 @@ public abstract class Player implements Serializable {
    */
   public String getName() {
     return name;
+  }
+
+  protected int mapDFS(ArrayList<Territory> visited, Territory origin, Territory curr,
+      Territory dest, int distTraveled) {
+    ArrayList<Integer> distances = new ArrayList<>();
+    //System.out.println(visited);
+    //System.out.println(curr);
+    if (curr.equals(dest)) {
+      //System.out.println(visited);
+      //System.out.println(distTraveled);
+      distances.add(distTraveled);
+    }
+    distTraveled++;
+    for (Territory t : curr.getAdjacentTerritories()) {
+      ArrayList<Territory> prevTerrs = new ArrayList<>();
+      for (Territory terrr : visited) {
+        prevTerrs.add(terrr);
+      }
+      if (t.getOwner().equals(origin.getOwner()) && !prevTerrs.contains(t)) {
+        prevTerrs.add(t);
+        //System.out.println(prevTerrs);
+        int result = mapDFS(prevTerrs, origin, t, dest, distTraveled);
+        if (result > -1) {
+          distances.add(result);
+        }
+      }
+    }
+    if (distances.size() > 0) {
+      return Collections.min(distances);
+    }
+    return -1;
+  }
+
+  // assume distances from one territory to each of its adjacent territories are
+  // equal -> set to 1
+  public int findShortestPath(Territory origin, Territory dest) {
+    int distTraveled = 0;
+    ArrayList<Territory> visited = new ArrayList<>();
+    visited.add(origin);
+    int result = mapDFS(visited, origin, origin, dest, distTraveled);
+    return result;
   }
 
   /**

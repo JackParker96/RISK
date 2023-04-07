@@ -39,6 +39,10 @@ public class ClientAttackOrderProcessor extends ClientOrderProcessor {
         continue;
       }
       UnitMover.moveUnits(origin, dest, numUnits, "basic");
+      int distance = origin.getDistToAdjacentTerr(dest);
+      int price = clientPlayer.myPlayer.getMaxTechLevel() * numUnits;
+      clientPlayer.myPlayer.useFoodResources(3 * distance * price);
+      // send information from client player to server
       return order;
     }
   }
