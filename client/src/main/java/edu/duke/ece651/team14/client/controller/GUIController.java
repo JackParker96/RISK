@@ -74,17 +74,6 @@ public class GUIController {
   @FXML
   private Label capitol_b;
 
-  @FXML
-  public void handleSubmitButtonAction(ActionEvent event) throws IOException {
-    actiontarget.setText("Sign in button pressed");
-    URL url = new File("src/main/resources/ui/game.xml").toURI().toURL();
-    Parent root = FXMLLoader.load(url);
-    stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    scene = new Scene(root);
-    stage.setScene(scene);
-    stage.show();
-  }
-
   protected Label getBackgroundID(String terr_id) {
     Label id;
     switch (terr_id) {

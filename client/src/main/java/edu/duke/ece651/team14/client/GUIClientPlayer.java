@@ -5,17 +5,28 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import edu.duke.ece651.team14.client.controller.ChooseGameController;
+import edu.duke.ece651.team14.client.controller.LoginController;
 import edu.duke.ece651.team14.shared.Account;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class GUIClientPlayer extends ClientPlayer {
- /**
+  private Stage window;
+  private HashMap<Class<?>, Object> controller_initializer;
+
+  /**
    * Constructor
    * 
    * @param clientSocket:   client socket
@@ -27,6 +38,56 @@ public class GUIClientPlayer extends ClientPlayer {
     super(clientSocket, communicator, inputSource, outPrintStream);
   }
 
+  public void setStage(Stage window) throws Exception{
+    this.window = window;
+    this.controller_initializer = new HashMap<>();
+    controller_initializer.put(LoginController.class, new LoginController(this));
+    controller_initializer.put(ChooseGameController.class, new ChooseGameController(this));
+  }
+
+  public HashMap<Class<?>, Object> getControllerInitializer(){
+    return controller_initializer;
+  }
+
+  public boolean login(String username, String password) throws IOException, ClassNotFoundException {
+    Account account = new Account(username, password);
+    this.communicator.sendObject(account);
+    String login_result = this.communicator.recvString();
+    sendMsg(login_result);// print to terminal
+    if (login_result.equals("Login Success")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public ArrayList<ArrayList<Integer>> getGameChoice() throws Exception{
+    ArrayList<Integer> unstarted_games = this.communicator.recvIDs();
+    ArrayList<Integer> rejoinable_games = this.communicator.recvIDs();
+    ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+    ans.add(unstarted_games);
+    ans.add(rejoinable_games);
+    return ans;
+  }
+
+  public void loginPhase() throws IOException, ClassNotFoundException {
+    out.println("login phase!");
+    window.setTitle("RISC player");
+    URL xmlResource = App.class.getResource("/ui/login.xml");// note App.class instead of getClass()
+    FXMLLoader loader = new FXMLLoader(xmlResource);
+    loader.setControllerFactory((c) -> {
+      return this.controller_initializer.get(c);
+    });
+    Parent root = loader.load();
+    Scene scene = new Scene(root, 500, 500);
+    window.setScene(scene);
+    window.show();
+  }
+
+
+
+
+  //**************************************below are the methods that text client uses*********************//
   /**
    * Ask a player if they want to disconnect from the game
    *
@@ -249,24 +310,6 @@ public class GUIClientPlayer extends ClientPlayer {
     }
   }
 
-  public void loginPhase() throws IOException, ClassNotFoundException {
-    while (true) {
-      sendMsg("Enter your username:");
-      String username = getInput();
-      sendMsg("Enter your password:");
-      String password = getInput();
-      Account account = new Account(username, password);
-      this.communicator.sendObject(account);
-      String result = this.communicator.recvString();
-      sendMsg(result);
-      if (result.equals("Login Success")) {
-        break;
-      } else {
-        sendMsg("Try Again");
-      }
-    }
-  }
-
   // Note: no error checking here.
   public String joinGamePhase() throws IOException, ClassNotFoundException {
     ArrayList<Integer> unstarted_games = this.communicator.recvIDs();
@@ -276,7 +319,7 @@ public class GUIClientPlayer extends ClientPlayer {
       conn_choice = getGameConnectionChoice();
       if (conn_choice.equals("1")) {// reconnect
         sendMsg("You can rejoin games:\n" + displayIDs(rejoinable_games));
-        if(rejoinable_games.size()==0){
+        if (rejoinable_games.size() == 0) {
           continue;
         }
         break;

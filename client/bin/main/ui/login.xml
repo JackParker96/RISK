@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<GridPane alignment="center" hgap="10" stylesheets="@game_frame.css" vgap="10" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team14.client.controller.GUIController">
+<GridPane alignment="center" hgap="10" stylesheets="@game_frame.css" vgap="10" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team14.client.controller.LoginController">
 <padding><Insets bottom="10" left="25" right="25" top="25" /></padding>
     <Text fill="WHITE" text="Welcome to RISC" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="0">
       <font>
@@ -21,17 +21,17 @@
  
     <Label text="User Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
  
-    <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+    <TextField fx:id="userName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
  
     <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
  
-    <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+    <PasswordField fx:id="password" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
     <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4">
         <Button onAction="#handleSubmitButtonAction" text="Sign In" />
     </HBox>
 
-    <Text fx:id="actiontarget" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+    <Text fx:id="loginResult" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
    <columnConstraints>
       <ColumnConstraints />
       <ColumnConstraints />

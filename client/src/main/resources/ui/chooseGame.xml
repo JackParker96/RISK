@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Button?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="edu.duke.ece651.team14.client.controller.ChooseGameController"
+      prefWidth="300"
+      prefHeight="250">
+   <children>
+      <Label text="Join Game"/>
+      <VBox fx:id="JoinBox">
+        <RadioButton fx:id="CreateNewGameButton" text="Create a new Game">
+          <toggleGroup>
+            <ToggleGroup fx:id="group"/>
+          </toggleGroup>
+        </RadioButton>
+      </VBox>
+      <Label text="Rejoin Game"/>
+      <VBox fx:id="ReJoinBox">
+      </VBox>
+      <Button onAction="#handleSubmitButtonAction" text="Confirm" />
+    </children>
+</VBox>
