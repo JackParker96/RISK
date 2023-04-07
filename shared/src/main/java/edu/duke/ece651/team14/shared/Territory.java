@@ -2,6 +2,7 @@ package edu.duke.ece651.team14.shared;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Abstract class to represent RISC territory
@@ -13,6 +14,7 @@ public abstract class Territory implements Serializable {
   private ArrayList<Territory> adjacentTerritories;
   private int foodProductionRate;
   private int techProductionRate;
+  private HashMap<Territory, Integer> distToAdjacentTerrs;
 
   /**
    * Creates a Territory from a given name
@@ -23,9 +25,10 @@ public abstract class Territory implements Serializable {
     this.name = name.toLowerCase();
     this.owner = null;
     this.units = new ArrayList<Unit>();
-    this.adjacentTerritories = new ArrayList<>();
+    this.adjacentTerritories = new ArrayList<Territory>();
     this.foodProductionRate = 0;
     this.techProductionRate = 0;
+    this.distToAdjacentTerrs = new HashMap<Territory, Integer>();
   }
 
   /**
@@ -49,7 +52,8 @@ public abstract class Territory implements Serializable {
   /**
    * Set the rate for food production for this territory
    *
-   * @param rate is the amount of food resources being produced by this territory per turn 
+   * @param rate is the amount of food resources being produced by this territory
+   *             per turn
    */
   public void setFoodProductionRate(int rate) {
     foodProductionRate = rate;
@@ -58,8 +62,9 @@ public abstract class Territory implements Serializable {
   /**
    * Set the rate for technology production for this territory
    * 
-   * @param rate is the amount of technology resources being produced by this territory per tern
-   */ 
+   * @param rate is the amount of technology resources being produced by this
+   *             territory per tern
+   */
   public void setTechProductionRate(int rate) {
     techProductionRate = rate;
   }
@@ -75,20 +80,58 @@ public abstract class Territory implements Serializable {
 
   /**
    * Add all territories in map to adjacentTerritories
+   * Update distToAdjacentTerrs hashmap
+   * A territory is 1 spot away from each of its adjacent territories
    *
    * @param allTerritories is an ArrayList of these territories
    */
   public void addAdjacentTerritories(ArrayList<Territory> allTerritories) {
     adjacentTerritories.addAll(allTerritories);
+    for (Territory t : allTerritories) {
+      distToAdjacentTerrs.put(t, 1);
+    }
   }
 
   /**
    * Add a single territory to adjacentTerritories
+   * Update distToAdjacentTerrs hashmap
+   * A territory is 1 spot away from each of its adjacent territories
    *
-   * @param terr is the Territory to add
+   * @param t is the Territory to add
    */
   public void addAdjacentTerritories(Territory t) {
     adjacentTerritories.add(t);
+    distToAdjacentTerrs.put(t, 1);
+  }
+
+  /**
+   * Get distance to an adjacent territory
+   *
+   * @param terr is the territory
+   * @return the distance to that territory
+   * @return null if territory is not adjacent
+   */
+  public Integer getDistToAdjacentTerr(Territory terr) {
+    if (distToAdjacentTerrs.containsKey(terr)) {
+      return distToAdjacentTerrs.get(terr);
+    }
+    return null;
+  }
+
+  /**
+   * Get distance to an adjacent territory
+   *
+   * @param terrName is the name of the territory
+   * @return the distance to that territory
+   * @return null if territory is not adjacent
+   */
+  public Integer getDistToAdjacentTerr(String terrName) {
+    for (Territory t : adjacentTerritories) {
+      if (t.getName().equals(terrName.toLowerCase())) {
+        return distToAdjacentTerrs.get(t);
+      }
+    }
+    return null;
   }
 
   /**
@@ -140,11 +183,12 @@ public abstract class Territory implements Serializable {
     this.units.addAll(units);
   }
 
-    /**
+  /**
    * Add a signle unit to territory
    *
    * @param units is a list of units to add to the territory
-   * @return true if units successfully added   * @throws IllegalArgumentException if the list of units is empty
+   * @return true if units successfully added * @throws IllegalArgumentException
+   *         if the list of units is empty
    */
   public void addUnits(Unit unit) throws IllegalArgumentException {
     this.units.add(unit);

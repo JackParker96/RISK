@@ -33,7 +33,7 @@ public class MapFactory implements AbstractMapFactory {
     return m;
   }
 
-   /**
+  /**
    * Makes a list of Territorires for testing
    */
   public ArrayList<Territory> makeTestTerritories(Player p1, Player p2) {
@@ -104,11 +104,12 @@ public class MapFactory implements AbstractMapFactory {
 
     return allTerritories;
   }
-  
+
   /**
    * Adds hard-coded resource production rates to given ArrayList of Territories
    *
-   * @param allTerritories is the ArrayList of Territories to which to add production rates
+   * @param allTerritories is the ArrayList of Territories to which to add
+   *                       production rates
    */
   public void initializeProductionRates(ArrayList<Territory> allTerritories) {
     // Narnia
@@ -336,7 +337,7 @@ public class MapFactory implements AbstractMapFactory {
       allTerritories.get(13).setOwner(players.get(2));
       allTerritories.get(16).setOwner(players.get(2));
     }
-    
+
     else {
       for (int i = 0; i < territoriesPerPlayer; i++) {
         for (int player = 0; player < numPlayers; player++) {
@@ -345,6 +346,5 @@ public class MapFactory implements AbstractMapFactory {
       }
     }
 
-  
   }
 }

@@ -39,6 +39,9 @@ public class ClientMoveOrderProcessor extends ClientOrderProcessor {
         continue;
       }
       UnitMover.moveUnits(origin, dest, numUnits, "basic");
+      int shortestDist = clientPlayer.myPlayer.findShortestPath(origin, dest);
+      clientPlayer.myPlayer.useFoodResources(3 * shortestDist);
+      // send information from client player to server
       return order;
     }
   }
