@@ -43,7 +43,7 @@ public class LoginController {
 
 
   private void switchScene(ActionEvent event) throws Exception{
-    URL url = App.class.getResource("/ui/chooseGame.xml");
+    URL url = App.class.getResource("/ui/chooseGame.fxml");
     FXMLLoader loader = new FXMLLoader(url);
     loader.setControllerFactory((c) -> {
         return client.getControllerInitializer().get(c);

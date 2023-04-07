@@ -20,6 +20,7 @@ public class ServerAdmin {
     accounts.add(new Account("Evan", "passw0rd"));
     accounts.add(new Account("Maya", "passw0rd"));
     accounts.add(new Account("Xincheng", "passw0rd"));
+    accounts.add(new Account("a", "a"));
   }
   /**
    * Constructor

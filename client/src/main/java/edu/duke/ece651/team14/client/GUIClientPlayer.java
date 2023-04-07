@@ -73,7 +73,7 @@ public class GUIClientPlayer extends ClientPlayer {
   public void loginPhase() throws IOException, ClassNotFoundException {
     out.println("login phase!");
     window.setTitle("RISC player");
-    URL xmlResource = App.class.getResource("/ui/login.xml");// note App.class instead of getClass()
+    URL xmlResource = App.class.getResource("/ui/login.fxml");// note App.class instead of getClass()
     FXMLLoader loader = new FXMLLoader(xmlResource);
     loader.setControllerFactory((c) -> {
       return this.controller_initializer.get(c);
