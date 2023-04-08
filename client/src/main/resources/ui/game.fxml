@@ -2,17 +2,19 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-
-<GridPane style="-fx-background-color: #2A3B57;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane style="-fx-background-color: #2A3B57;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team14.client.controller.GameController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -23,11 +25,6 @@
       <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <TitledPane animated="false" maxHeight="175.0" maxWidth="1100.0" minHeight="175.0" minWidth="1100.0" prefHeight="175.0" prefWidth="1100.0" text="command center" GridPane.rowIndex="2">
-         <font>
-            <Font name="Copperplate Gothic Light" size="12.0" />
-         </font>
-      </TitledPane>
       <BorderPane>
          <left>
             <AnchorPane prefHeight="100.0" BorderPane.alignment="CENTER">
@@ -52,7 +49,7 @@
                         <Insets right="60.0" />
                      </padding>
                   </Label>
-                  <Label text="how to play" textFill="WHITE">
+                  <Label fx:id="howToPlay" onMouseClicked="#onHowToPlay" text="how to play" textFill="WHITE">
                      <padding>
                         <Insets right="50.0" />
                      </padding>
@@ -61,28 +58,46 @@
             </HBox>
          </right>
       </BorderPane>
-      <GridPane alignment="CENTER" GridPane.rowIndex="2">
+      <GridPane alignment="CENTER" style="-fx-background-color: white;" GridPane.rowIndex="2">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" />
+          <ColumnConstraints hgrow="SOMETIMES" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <TitledPane animated="false" minHeight="510.0" minWidth="535.0" style="-fx-background-color: white;" text="world map">
-               <font>
-                  <Font name="Copperplate Gothic Light" size="12.0" />
-               </font>
+            <TitledPane animated="false" text="Map">
                <content>
                   <fx:include source="map.fxml" />
                </content>
             </TitledPane>
-            <TitledPane animated="false" minHeight="510.0" minWidth="535.0" text="game stats" GridPane.columnIndex="1">
-               <font>
-                  <Font name="Copperplate Gothic Light" size="12.0" />
-               </font>
-            </TitledPane>
+            <GridPane prefWidth="602.0" GridPane.columnIndex="1">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab text="Territory Stats">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </Tab>
+                      <Tab text="User Stats">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
+                  <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: black;" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
          </children>
       </GridPane>
       <fx:include source="turnButtons.fxml" GridPane.rowIndex="3" />
