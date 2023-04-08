@@ -111,6 +111,14 @@ public class InputButtonsController {
     return Optional.of(0);
   }
 
+  /**
+   * Gets a choice from the user among specified options
+   * 
+   * @param prompt  is the prompt to display to the user
+   * @param options is the list of options to diplay to the user
+   *
+   * @return the option the user chooses
+   */
   public <T> T getChoice(String prompt, List<T> options) {
     while (true) {
       Optional<T> o = tryGetChoice(prompt, options);
