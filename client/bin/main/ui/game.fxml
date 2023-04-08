@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+
+<GridPane style="-fx-background-color: #2A3B57;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+      <TitledPane animated="false" maxHeight="175.0" maxWidth="1100.0" minHeight="175.0" minWidth="1100.0" prefHeight="175.0" prefWidth="1100.0" text="command center" GridPane.rowIndex="2">
+         <font>
+            <Font name="Copperplate Gothic Light" size="12.0" />
+         </font>
+      </TitledPane>
+      <BorderPane>
+         <left>
+            <AnchorPane prefHeight="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label layoutX="29.0" text="RISC" textFill="WHITE">
+                     <font>
+                        <Font size="35.0" />
+                     </font>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </Label>
+                  <Label layoutX="29.0" layoutY="53.0" text="really interesting strategic conquest" textFill="WHITE" />
+               </children>
+            </AnchorPane>
+         </left>
+         <right>
+            <HBox alignment="CENTER" BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="exit the game" textAlignment="CENTER" textFill="WHITE">
+                     <padding>
+                        <Insets right="60.0" />
+                     </padding>
+                  </Label>
+                  <Label text="how to play" textFill="WHITE">
+                     <padding>
+                        <Insets right="50.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </HBox>
+         </right>
+      </BorderPane>
+      <GridPane alignment="CENTER" GridPane.rowIndex="2">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <TitledPane animated="false" minHeight="510.0" minWidth="535.0" style="-fx-background-color: white;" text="world map">
+               <font>
+                  <Font name="Copperplate Gothic Light" size="12.0" />
+               </font>
+               <content>
+                  <fx:include source="map.fxml" />
+               </content>
+            </TitledPane>
+            <TitledPane animated="false" minHeight="510.0" minWidth="535.0" text="game stats" GridPane.columnIndex="1">
+               <font>
+                  <Font name="Copperplate Gothic Light" size="12.0" />
+               </font>
+            </TitledPane>
+         </children>
+      </GridPane>
+      <fx:include source="turnButtons.fxml" GridPane.rowIndex="3" />
+   </children>
+</GridPane>
