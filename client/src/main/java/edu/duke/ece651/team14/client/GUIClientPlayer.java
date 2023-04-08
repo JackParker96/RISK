@@ -84,6 +84,14 @@ public class GUIClientPlayer extends ClientPlayer {
     window.show();
   }
 
+  public void sendGameChoice(String choice) throws Exception{
+    this.communicator.sendObject(choice);
+  }
+
+  //The server make a new communicator when player joins the game, so client need to reset here.
+  public void resetCommunicator() throws IOException{
+    this.communicator = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
+  }
 
 
 
