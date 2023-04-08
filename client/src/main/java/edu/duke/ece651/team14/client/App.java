@@ -5,14 +5,13 @@
 package edu.duke.ece651.team14.client;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 
-import edu.duke.ece651.team14.client.controller.LoginController;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.MyName;
 import javafx.application.Application;
@@ -68,8 +67,15 @@ public class App extends Application {
 
   @Override
   public void start(Stage stage) throws Exception {
-    this.client.setStage(stage);
-    this.client.loginPhase();
+    URL url = new File("src/main/resources/ui/game.fxml").toURI().toURL();
+    Parent root = FXMLLoader.load(url);
+    stage.setScene(new Scene(root));
+    stage.show();
+    
+    // this.client.setStage(stage);
+    // this.client.loginPhase();
+
+    
     // try {
     // this.client.PlayGame();
     // } catch (Exception e) {
