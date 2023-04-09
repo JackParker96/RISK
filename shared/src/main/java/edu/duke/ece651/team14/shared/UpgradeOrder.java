@@ -56,4 +56,12 @@ public class UpgradeOrder extends Order {
     return cost * getNumUnits();
   }
 
+  public int getCurrTechLevel() {
+    return currTechLevel;
+  }
+
+  public int getNewTechLevel() {
+    return newTechLevel;
+  }
+
 }
