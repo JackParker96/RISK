@@ -5,6 +5,7 @@ public class UpgradeOrderCostRuleChecker extends OrderRuleChecker {
     super(next);
   }
 
+  /**
   public String checkMyRule(Map map, Order order) {
     UpgradeOrder ugOrder = (UpgradeOrder) order;
     int cost = ugOrder.calculateCost();
@@ -16,4 +17,5 @@ public class UpgradeOrderCostRuleChecker extends OrderRuleChecker {
       return "Not enought tech resources to upgrade unit";
     }
   }
+  */
 }

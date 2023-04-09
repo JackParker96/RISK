@@ -5,9 +5,12 @@ public class ResearchOrderCostRuleChecker extends OrderRuleChecker {
     super(next);
   }
 
+  /**
+   * Check that player has enough tech resources to complete a research order
+   */
   public String checkMyRule(Map map, Order order) {
     ResearchOrder resOrder = (ResearchOrder) order;
-    int cost = resOrder.getCost();
+    int cost = resOrder.calculateCost();
     int resources = resOrder.getPlayer().getTechAmt();
     if (resources >= cost) {
       return null;

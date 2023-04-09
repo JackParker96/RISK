@@ -5,6 +5,9 @@ public class MaxTechLevelRuleChecker extends OrderRuleChecker {
     super(next);
   }
 
+  /**
+   * Check that the player hasn't already maxed out on tech levels
+   */
   public String checkMyRule(Map map, Order order) {
     if (order.getPlayer().getMaxTechLevel() < 6) {
       return null;
