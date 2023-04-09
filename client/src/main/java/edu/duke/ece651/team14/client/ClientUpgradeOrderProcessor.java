@@ -16,7 +16,7 @@ public class ClientUpgradeOrderProcessor extends ClientOrderProcessor {
 
   public ClientUpgradeOrderProcessor(ClientPlayer clientPlayer, Map map) {
     super(clientPlayer, map);
-    this.checker = new OriginOwnershipRuleChecker(new NumberOfUnitsRuleChecker(null)));
+    this.checker = new OriginOwnershipRuleChecker(new NumberOfUnitsRuleChecker(null));
   }
 
   protected Order processOrder() throws IOException {
