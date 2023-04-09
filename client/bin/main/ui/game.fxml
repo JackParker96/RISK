@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -84,9 +85,13 @@
                   <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                       <Tab text="Territory Stats">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
+                           <content>
+                              <Pane>
+                                 <children>
+                                    <TextArea fx:id="territoryStatsText" layoutY="-2.0" prefHeight="226.0" prefWidth="602.0" text="The Label component, on the other hand, is used to display user-readable text that can be styled with basic formatting such as bold or italic, but is not suitable for complex layouts or rich text. A Label has an explicit size and layout on its own, so it can be used as a standalone component or within a layout container." wrapText="true" />
+                                 </children>
+                              </Pane>
+                           </content>
                       </Tab>
                       <Tab text="User Stats">
                         <content>

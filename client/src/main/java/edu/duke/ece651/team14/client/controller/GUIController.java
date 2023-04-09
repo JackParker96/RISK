@@ -1,13 +1,11 @@
 package edu.duke.ece651.team14.client.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -17,8 +15,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class GUIController {
-  private Stage stage;
-  private Scene scene;
+  StringProperty terrText;
+
+  public GUIController(StringProperty s) {
+    this.terrText = s;
+  }
 
   @FXML
   private Text actiontarget;
@@ -158,6 +159,8 @@ public class GUIController {
     Label terr = (Label) event.getSource();
     String id = terr.getId();
     Label terr_back = getBackgroundID(id);
+
+    terrText.set(id + "\nUnits: 7\nOwner: Red\nPotato: Tomato");
     
     //for testing: turn territory to bright blue if clicked - CHANGE 
     terr_back.setStyle("-fx-background-color: #0096FF");

@@ -1,29 +1,40 @@
 package edu.duke.ece651.team14.client.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ResourceBundle;
 
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 
-public class GameController implements Initializable {
+public class GameController {
   @FXML
   Label howToPlay;
 
   @FXML
   Label exitGame;
 
-  public void initialize(URL location, ResourceBundle resources) {
+  @FXML
+  TextArea territoryStatsText;
 
+  StringProperty terrText;
+
+  public GameController(StringProperty s) {
+    this.terrText = s;
+  }
+
+  public void initialize() {
+    territoryStatsText.textProperty().bindBidirectional(terrText);
+  }
+
+  
+  public void setTerrText(String text) {
+    territoryStatsText.setText(text);
   }
 
   @FXML
