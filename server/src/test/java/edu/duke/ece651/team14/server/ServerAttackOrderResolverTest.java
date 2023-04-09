@@ -62,7 +62,7 @@ public class ServerAttackOrderResolverTest {
 
     // make a mock resolver that always make defender wins
     CombatResolver mockResolver = mock(CombatResolver.class);
-    Mockito.when(mockResolver.getCombatResult()).thenReturn(true);
+    Mockito.when(mockResolver.getCombatResult(new BasicUnit(),new BasicUnit())).thenReturn(true);
     ServerAttackOrderResolver saor = new ServerAttackOrderResolver(map, mockResolver);
     String results = saor.resolveAllAttackOrders(atkOrders);
     assertEquals(
