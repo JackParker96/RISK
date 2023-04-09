@@ -3,20 +3,24 @@ package edu.duke.ece651.team14.client;
 import java.io.IOException;
 
 import edu.duke.ece651.team14.shared.Map;
+import edu.duke.ece651.team14.shared.NumUnitsInTechLevelRuleChecker;
 import edu.duke.ece651.team14.shared.NumberOfUnitsRuleChecker;
 import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.OrderRuleChecker;
 import edu.duke.ece651.team14.shared.OriginOwnershipRuleChecker;
+import edu.duke.ece651.team14.shared.TechLevelRuleChecker;
 import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.UnitMover;
 import edu.duke.ece651.team14.shared.UpgradeOrder;
+import edu.duke.ece651.team14.shared.UpgradeOrderCostRuleChecker;
 
 public class ClientUpgradeOrderProcessor extends ClientOrderProcessor {
   private final OrderRuleChecker checker;
 
   public ClientUpgradeOrderProcessor(ClientPlayer clientPlayer, Map map) {
     super(clientPlayer, map);
-    this.checker = new OriginOwnershipRuleChecker(new NumberOfUnitsRuleChecker(null));
+    this.checker = new OriginOwnershipRuleChecker(new NumberOfUnitsRuleChecker(
+        new NumUnitsInTechLevelRuleChecker(new TechLevelRuleChecker(new UpgradeOrderCostRuleChecker(null)))));
   }
 
   protected Order processOrder() throws IOException {
@@ -30,7 +34,7 @@ public class ClientUpgradeOrderProcessor extends ClientOrderProcessor {
       int currTechLevel = 0;
       int newTechLevel = 1;
       Order order = new UpgradeOrder(terr, null, numUnits, clientPlayer.myPlayer,
-                                     currTechLevel, newTechLevel);
+          currTechLevel, newTechLevel);
       // checkResult will be null if all the rule checkers pass
       String checkResult = checker.checkOrder(map, order);
       if (checkResult != null) {
