@@ -1,5 +1,9 @@
 package edu.duke.ece651.team14.shared;
 
+/**
+ * Class for checking that player has enough tech resources to upgrade to next
+ * max tech level
+ */
 public class ResearchOrderCostRuleChecker extends OrderRuleChecker {
   public ResearchOrderCostRuleChecker(OrderRuleChecker next) {
     super(next);
