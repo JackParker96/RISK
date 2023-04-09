@@ -18,4 +18,9 @@ public class UpgradeOrderCostRuleChecker extends OrderRuleChecker {
     }
   }
   */
+
+  // Placeholder - delete when you uncomment the method above
+  public String checkMyRule(Map map, Order order) {
+    return "";
+  }
 }
