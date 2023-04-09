@@ -5,16 +5,21 @@
 package edu.duke.ece651.team14.client;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 
+import edu.duke.ece651.team14.client.controller.GUIController;
+import edu.duke.ece651.team14.client.controller.GameController;
+import edu.duke.ece651.team14.client.controller.InputButtonsController;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.MyName;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -31,8 +36,8 @@ public class App extends Application {
    * @throws IOException
    */
   // public App(Socket clientSocket, Communicator comm) throws IOException {
-  //   BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-  //   this.client = new TextClientPlayer(clientSocket, comm, input, System.out);
+  // BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+  // this.client = new TextClientPlayer(clientSocket, comm, input, System.out);
   // }
 
   /**
@@ -42,7 +47,7 @@ public class App extends Application {
    * @throws IOException
    */
   // public App(ClientPlayer mockPlayer) throws IOException {
-  //   this.client = mockPlayer;
+  // this.client = mockPlayer;
   // }
 
   /**
@@ -67,15 +72,27 @@ public class App extends Application {
 
   @Override
   public void start(Stage stage) throws Exception {
-    URL url = new File("src/main/resources/ui/game.fxml").toURI().toURL();
-    Parent root = FXMLLoader.load(url);
+    URL url = getClass().getResource("/ui/game.fxml");
+    FXMLLoader loader = new FXMLLoader(url);
+
+    StringProperty terrText = new SimpleStringProperty();
+    terrText.set("Hi");
+
+    HashMap<Class<?>, Object> controllers = new HashMap<>();
+    controllers.put(GameController.class, new GameController(terrText));
+    controllers.put(GUIController.class, new GUIController(terrText));
+    controllers.put(InputButtonsController.class, new InputButtonsController());
+    loader.setControllerFactory((c) -> {
+      return controllers.get(c);
+    });
+    Parent root = loader.load();
+
     stage.setScene(new Scene(root));
     stage.show();
-    
+
     // this.client.setStage(stage);
     // this.client.loginPhase();
 
-    
     // try {
     // this.client.PlayGame();
     // } catch (Exception e) {
