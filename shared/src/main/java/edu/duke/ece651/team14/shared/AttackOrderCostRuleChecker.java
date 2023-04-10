@@ -19,8 +19,7 @@ public class AttackOrderCostRuleChecker extends OrderRuleChecker {
    */
   public String checkMyRule(Map map, Order order) {
     AttackOrder attackOrder = (AttackOrder) order;
-    //int cost = attackOrder.calculateCost();
-    int cost = 1; //placeholder
+    int cost = attackOrder.calculateCost();
     int resources = attackOrder.getPlayer().getFoodAmt();
     if (resources >= cost) {
       return null;

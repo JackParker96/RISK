@@ -1,6 +1,7 @@
 package edu.duke.ece651.team14.client;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import edu.duke.ece651.team14.shared.AdjacentTerritoryRuleChecker;
 import edu.duke.ece651.team14.shared.AttackOrder;
@@ -11,8 +12,7 @@ import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.OrderRuleChecker;
 import edu.duke.ece651.team14.shared.OriginOwnershipRuleChecker;
 import edu.duke.ece651.team14.shared.Territory;
-import edu.duke.ece651.team14.shared.UnitMover;
-import edu.duke.ece651.team14.shared.UpgradeOrder;
+import edu.duke.ece651.team14.shared.Unit;
 
 public class ClientAttackOrderProcessor extends ClientOrderProcessor {
   private final OrderRuleChecker checker;
@@ -39,12 +39,12 @@ public class ClientAttackOrderProcessor extends ClientOrderProcessor {
         clientPlayer.sendMsg(checkResult);
         continue;
       }
-      UnitMover.moveUnits(origin, dest, numUnits, "basic");
-      //int distance = origin.getDistToAdjacentTerr(dest);
-      int distance = 1; // dist from origin to adjacent territory
       AttackOrder attackOrder = (AttackOrder) order;
-      //int cost = attackOrder.calculateCost();   - how do we calculate cost?
-      //clientPlayer.myPlayer.useFoodResources(cost);
+      int cost = attackOrder.calculateCost();
+      clientPlayer.myPlayer.useFoodResources(cost);
+      ArrayList<Unit> unitsToSend = attackOrder.getUnitsPicked();
+      // UnitMover.moveUnits(origin, dest, numUnits, "basic");
+      // maybe create a send units class that takes in unitsToSend
       // send information from client player to server
       return order;
     }
