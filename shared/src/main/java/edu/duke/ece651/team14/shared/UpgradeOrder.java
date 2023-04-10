@@ -49,8 +49,7 @@ public class UpgradeOrder extends Order {
 
   public int calculateCost() {
     int cost = 0;
-    int levelDiff = newTechLevel - currTechLevel;
-    for (int i = currTechLevel; i < levelDiff; i++) {
+    for (int i = currTechLevel; i < newTechLevel; i++) {
       cost += prices[i];
     }
     return cost * getNumUnits();

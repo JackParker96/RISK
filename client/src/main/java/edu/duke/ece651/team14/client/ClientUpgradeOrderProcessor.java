@@ -3,6 +3,7 @@ package edu.duke.ece651.team14.client;
 import java.io.IOException;
 
 import edu.duke.ece651.team14.shared.Map;
+import edu.duke.ece651.team14.shared.MaxTechLevelRuleChecker;
 import edu.duke.ece651.team14.shared.NumUnitsInTechLevelRuleChecker;
 import edu.duke.ece651.team14.shared.NumberOfUnitsRuleChecker;
 import edu.duke.ece651.team14.shared.Order;
@@ -20,7 +21,9 @@ public class ClientUpgradeOrderProcessor extends ClientOrderProcessor {
   public ClientUpgradeOrderProcessor(ClientPlayer clientPlayer, Map map) {
     super(clientPlayer, map);
     this.checker = new OriginOwnershipRuleChecker(new NumberOfUnitsRuleChecker(
-        new NumUnitsInTechLevelRuleChecker(new TechLevelRuleChecker(new UpgradeOrderCostRuleChecker(null)))));
+        new TechLevelRuleChecker(
+            new NumUnitsInTechLevelRuleChecker(
+                new UpgradeOrderCostRuleChecker(null)))));
   }
 
   protected Order processOrder() throws IOException {
