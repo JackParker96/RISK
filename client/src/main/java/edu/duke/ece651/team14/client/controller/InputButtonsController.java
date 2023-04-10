@@ -26,6 +26,15 @@ public class InputButtonsController {
 
   @FXML
   public void onMove(ActionEvent e) {
+    String origin = getChoice("Choose origin territory", terrs);
+    String destination = getChoice("Choose destination territory", terrs);
+    int numUnits = getInteger("Enter number of units to move");
+
+    // Check if move order is valid
+    // If not, redo above process
+    // If valid, then add the move order to wherever we save move orders before sending them
+    // Update resources
+    
     printSource(e);
     int a = getInteger("Enter something");
     System.out.println(a);

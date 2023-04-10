@@ -6,12 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import edu.duke.ece651.team14.client.GameModel;
-import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 
 public class GameController {
@@ -38,6 +37,7 @@ public class GameController {
 
   public void initialize() {
     model.selectedTerritory.addListener((obs, oldValue, newValue) -> {
+        
       territoryStatsText.setText(newValue);
     });
     model.gameLogText.addListener((obs, oldValue, newValue) -> {
@@ -51,8 +51,8 @@ public class GameController {
     });
   }
 
-  public void setTerrText(String text) {
-    territoryStatsText.setText(text);
+  public void setTerrText(ObservableValue<String> obs, String oldValue, String newValue) {
+    territoryStatsText.setText("");
   }
 
   @FXML
