@@ -1,15 +1,20 @@
 package edu.duke.ece651.team14.client.controller;
 
+import java.io.IOError;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
+import edu.duke.ece651.team14.client.App;
 import edu.duke.ece651.team14.client.GUIClientPlayer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
@@ -86,13 +91,26 @@ public class ChooseGameController implements Initializable {
     client.resetCommunicator();
     client.whoAmIPhase();
     if (game_id.equals("Create a new Game") || isJoinGame(game_id)) {
-      Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-      stage.close();
-      client.placeUnitsPhase();
+      switchScene(event);
       //TODO: switch to the scene that support initial placement phase
     }else if(isRejoinGame(game_id)){
       // TODO: add support for rejoin game
       // direct switch to the scene to play game, skip initial placements phase.
     }
   }
+
+  private void switchScene(ActionEvent event) throws IOException{
+    URL url = App.class.getResource("/ui/init_units.fxml");
+    FXMLLoader loader = new FXMLLoader(url);
+    loader.setControllerFactory((c) -> {
+        return client.getControllerInitializer().get(c);
+    });
+    Parent root = loader.load();
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    stage.show();
+  }
+
+  
 }

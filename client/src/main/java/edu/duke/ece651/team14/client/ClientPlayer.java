@@ -78,7 +78,7 @@ public abstract class ClientPlayer {
    *
    * @return the map
    */
-  protected Map recvMap() throws IOException, ClassNotFoundException {
+  public Map recvMap() throws IOException, ClassNotFoundException {
     return communicator.recvMap();
   }
 

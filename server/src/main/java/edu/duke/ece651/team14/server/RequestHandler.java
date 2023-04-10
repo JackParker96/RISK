@@ -72,7 +72,7 @@ public class RequestHandler implements Runnable {
         allGames.remove(newGame);
       }
     } else {
-      int game_id = choice.charAt(0) - '0';
+      int game_id = Integer.parseInt(choice);
       Game g = getGameByID(game_id);
       if (g == null) {
         throw new IllegalArgumentException("No game with id:" + game_id + " available");

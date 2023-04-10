@@ -67,13 +67,13 @@ public class App extends Application {
 
   @Override
   public void start(Stage stage) throws Exception {
-    URL url = new File("src/main/resources/ui/game.fxml").toURI().toURL();
-    Parent root = FXMLLoader.load(url);
-    stage.setScene(new Scene(root));
-    stage.show();
+    //URL url = new File("src/main/resources/ui/game.fxml").toURI().toURL();
+    //Parent root = FXMLLoader.load(url);
+    //stage.setScene(new Scene(root));
+    //stage.show();
     
-    // this.client.setStage(stage);
-    // this.client.loginPhase();
+    this.client.setStage(stage);
+    this.client.loginPhase();
 
     
     // try {

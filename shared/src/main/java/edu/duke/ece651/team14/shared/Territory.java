@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javafx.util.Pair;
+
 /**
  * Abstract class to represent RISC territory
  */
@@ -14,7 +16,7 @@ public abstract class Territory implements Serializable {
   private ArrayList<Territory> adjacentTerritories;
   private int foodProductionRate;
   private int techProductionRate;
-  private HashMap<Territory, Integer> distToAdjacentTerrs;
+  private ArrayList<Pair<Territory, Integer>> distToAdjacentTerrs;
 
   /**
    * Creates a Territory from a given name
@@ -28,7 +30,7 @@ public abstract class Territory implements Serializable {
     this.adjacentTerritories = new ArrayList<Territory>();
     this.foodProductionRate = 0;
     this.techProductionRate = 0;
-    this.distToAdjacentTerrs = new HashMap<Territory, Integer>();
+    this.distToAdjacentTerrs = new ArrayList<Pair<Territory,Integer>>();
   }
 
   /**
@@ -88,7 +90,7 @@ public abstract class Territory implements Serializable {
   public void addAdjacentTerritories(ArrayList<Territory> allTerritories) {
     adjacentTerritories.addAll(allTerritories);
     for (Territory t : allTerritories) {
-      distToAdjacentTerrs.put(t, 1);
+      distToAdjacentTerrs.add(new Pair<Territory,Integer>(t, 1));
     }
   }
 
@@ -101,7 +103,7 @@ public abstract class Territory implements Serializable {
    */
   public void addAdjacentTerritories(Territory t) {
     adjacentTerritories.add(t);
-    distToAdjacentTerrs.put(t, 1);
+    distToAdjacentTerrs.add(new Pair<Territory,Integer>(t, 1));
   }
 
   /**
@@ -112,8 +114,8 @@ public abstract class Territory implements Serializable {
    * @return null if territory is not adjacent
    */
   public Integer getDistToAdjacentTerr(Territory terr) {
-    if (distToAdjacentTerrs.containsKey(terr)) {
-      return distToAdjacentTerrs.get(terr);
+    if(adjacentTerritories.contains(terr)){
+      return 1;
     }
     return null;
   }
@@ -128,7 +130,7 @@ public abstract class Territory implements Serializable {
   public Integer getDistToAdjacentTerr(String terrName) {
     for (Territory t : adjacentTerritories) {
       if (t.getName().equals(terrName.toLowerCase())) {
-        return distToAdjacentTerrs.get(t);
+        return 1;
       }
     }
     return null;
