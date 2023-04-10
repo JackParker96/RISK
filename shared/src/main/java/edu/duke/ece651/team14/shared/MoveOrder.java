@@ -47,7 +47,7 @@ public class MoveOrder extends Order {
       Unit moveUnit = units.remove(0);
       unitsPicked.add(moveUnit);
       int distance = getPlayer().findShortestPath(getOrigin(), getDestination());
-      cost += 3 * distance; 
+      cost += 2 * distance; 
     }
     return cost;
   }

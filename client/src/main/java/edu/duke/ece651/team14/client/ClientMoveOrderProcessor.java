@@ -15,6 +15,7 @@ import edu.duke.ece651.team14.shared.OriginDestNotSameTerrRuleChecker;
 import edu.duke.ece651.team14.shared.OriginOwnershipRuleChecker;
 import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.Unit;
+import edu.duke.ece651.team14.shared.UnitMover;
 
 public class ClientMoveOrderProcessor extends ClientOrderProcessor {
   private final OrderRuleChecker checker;
@@ -47,7 +48,8 @@ public class ClientMoveOrderProcessor extends ClientOrderProcessor {
       clientPlayer.myPlayer.useFoodResources(cost);
       ArrayList<Unit> unitsToSend = moveOrder.getUnitsPicked();
       // UnitMover.moveUnits(origin, dest, numUnits, "basic");
-      // create SendUnits class that takes in unitsToSend
+      // instead create UnitMover.sendUnitArray which takes in unitsToSend
+      UnitMover.sendUnitArray(origin, dest, unitsToSend);
 
       // send information from client player to server
       return order;

@@ -25,4 +25,17 @@ public class UnitMover {
       }
     }
   }
+
+  public static void sendUnitArray(Territory origin, Territory destination, ArrayList<Unit> unitsToSend) {
+    Iterator<Unit> iterator = unitsToSend.iterator();
+    int count = unitsToSend.size();
+    while (iterator.hasNext() && count > 0) {
+      Unit u = iterator.next();
+      if (origin.removeUnit(u)) {
+        destination.addUnits(u);
+        count--;
+      }
+    }
+  }
+
 }

@@ -194,6 +194,19 @@ public abstract class Territory implements Serializable {
     this.units.add(unit);
   }
 
+  public boolean removeUnit(Unit unit) {
+    for (Unit u : units) {
+      if (u.getType() == "basic") {
+        BasicUnit b = (BasicUnit) u;
+        if (b.getTechLevel() == unit.getTechLevel()) {
+          units.remove(b);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   /**
    * Returns territory name
    *
