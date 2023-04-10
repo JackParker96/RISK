@@ -5,5 +5,5 @@ Interface to decide whether the defender unit defend successfully.
 e.g.,DiceResolver implements this interface.
 */
 public interface CombatResolver {
-  public boolean getCombatResult();
+  public boolean getCombatResult(Unit defender,Unit attacker);
 }

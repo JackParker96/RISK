@@ -58,6 +58,20 @@ public class BattleField {
     public void removeDeadUnit() {
       units.remove(units.size() - 1);
     }
+
+    /**
+     * Sort the unit by ascending order of level
+     */
+    public void ascSort() {
+      units.sort((u0, u1) -> u0.getTechLevel() - u1.getTechLevel());
+    } 
+
+    /**
+     * Sort the unit by descending order of level.
+     */
+    public void descSort() {
+      units.sort((u0, u1) -> u1.getTechLevel() - u0.getTechLevel());
+    }
   }
 
   private ArrayList<Army> combatList;
@@ -66,7 +80,7 @@ public class BattleField {
     this.resolver = resolver;
     this.location = location;
     this.combatList = new ArrayList<Army>();
-    this.result = "\nOn Territory "+this.location+": \n";
+    this.result = "\nOn Territory " + this.location + ": \n";
     addDefenderArmy();
   }
 
@@ -101,17 +115,20 @@ public class BattleField {
   }
 
   /**
-   * Resolve the combat, the army with the lower index are the defender, this
-   * gives advantages to the player who originally own the territory
+   * Resolve the combat, the army with index i is defender, and (i+i)%N is
+   * attacker.
+   * Note attacker and defender switches roles
    */
   public void resolve() {
     this.result += recordBattleInfo();
     while (!hasWinner()) {
       for (int i = 0; i < combatList.size(); i++) {
         int another_index = (i + 1) % combatList.size();
-        int defender_index = Math.min(i, another_index);
-        int attacker_index = Math.max(i, another_index);
-        resolveOneFight(combatList.get(defender_index), combatList.get(attacker_index));
+        Army defender = combatList.get(i);
+        Army attacker = combatList.get(another_index);
+        defender.descSort();// defender has last unit with lowest bonus to fight
+        attacker.ascSort();// attacker has last unit with highest bonus to fight
+        resolveOneFight(defender, attacker);
         if (hasWinner()) {
           break;
         }
@@ -151,15 +168,17 @@ public class BattleField {
     } else if (defender.isDefeated()) {
       combatList.remove(defender);
     } else {// both has left unit to fight
-      boolean defenderWins = resolver.getCombatResult();
+      Unit defenderUnit = defender.getUnitToFight();
+      Unit attackerUnit = attacker.getUnitToFight();
+      boolean defenderWins = resolver.getCombatResult(defenderUnit, attackerUnit);
       if (defenderWins) {
-        attacker.getUnitToFight().tryToKill();// defender wins and the attacker's unit dies
+        attackerUnit.tryToKill();// defender wins and the attacker's unit dies
         attacker.removeDeadUnit();
         if (attacker.isDefeated()) {
           combatList.remove(attacker);
         }
       } else {// defender Loses
-        defender.getUnitToFight().tryToKill();// attacker wins and the defender's unit dies
+        defenderUnit.tryToKill();// attacker wins and the defender's unit dies
         defender.removeDeadUnit();
         if (defender.isDefeated()) {
           combatList.remove(defender);

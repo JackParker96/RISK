@@ -1,13 +1,23 @@
 package edu.duke.ece651.team14.shared;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.mock;
 
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 public class BattleFieldTest {
+  Unit defender;
+  Unit attacker;
+
+  @BeforeEach
+  public void init() {
+    this.defender = new BasicUnit();
+    this.attacker = new BasicUnit();
+  }
 
   public static BattleField oneResolve(Territory duke, Player blue_devil, Player attcker1, Player attacker2,
       CombatResolver cr) {
@@ -42,15 +52,15 @@ public class BattleFieldTest {
     duke.addUnits(uf.makeUnits(5, "basic"));
     // make a mock resolver that always make defender wins
     CombatResolver mockResolver = mock(CombatResolver.class);
-    Mockito.when(mockResolver.getCombatResult()).thenReturn(true);
+    Mockito.when(mockResolver.getCombatResult(defender, attacker)).thenReturn(true);
     Player attcker1 = new BasicPlayer(new Color("yellow"), "attcker1");
     Player attacker2 = new BasicPlayer(new Color("green"), "Celtics");
     BattleField bf = oneResolve(duke, blue_devil, attcker1, attacker2, mockResolver);
     // test resolve
     bf.resolve();
     assertEquals(1, bf.getNumArmies());
-    assertEquals(blue_devil, duke.getOwner());
-    assertEquals(5, duke.getNumUnits());
+    assertEquals(attcker1, duke.getOwner());
+    assertEquals(2, duke.getNumUnits());
   }
 
   @Test
@@ -60,7 +70,7 @@ public class BattleFieldTest {
     duke.setOwner(blue_devil);
     // make a mock resolver that always make defender wins
     CombatResolver mockResolver = mock(CombatResolver.class);
-    Mockito.when(mockResolver.getCombatResult()).thenReturn(true);
+    Mockito.when(mockResolver.getCombatResult(defender, attacker)).thenReturn(true);
     Player attcker1 = new BasicPlayer(new Color("yellow"), "attcker1");
     Player attacker2 = new BasicPlayer(new Color("green"), "Celtics");
     BattleField bf = new BattleField(mockResolver, duke);
@@ -88,7 +98,7 @@ public class BattleFieldTest {
     duke.addUnits(uf.makeUnits(5, "basic"));
     // make a mock resolver that always make defender wins
     CombatResolver mockResolver = mock(CombatResolver.class);
-    Mockito.when(mockResolver.getCombatResult()).thenReturn(true);
+    Mockito.when(mockResolver.getCombatResult(defender, attacker)).thenReturn(true);
     Player attcker1 = new BasicPlayer(new Color("yellow"), "attcker1");
     Player attacker2 = new BasicPlayer(new Color("green"), "Celtics");
     BattleField bf = new BattleField(mockResolver, duke);
@@ -102,7 +112,7 @@ public class BattleFieldTest {
     bf.addAttackerArmy(aktOrder4);
     // test resolve
     bf.resolve();
-    assertEquals(blue_devil, duke.getOwner());
+    assertEquals(attacker2, duke.getOwner());
   }
 
   @Test
@@ -114,15 +124,15 @@ public class BattleFieldTest {
     duke.addUnits(uf.makeUnits(5, "basic"));
     // make a mock resolver that always make attacker wins
     CombatResolver mockResolver = mock(CombatResolver.class);
-    Mockito.when(mockResolver.getCombatResult()).thenReturn(false);
+    Mockito.when(mockResolver.getCombatResult(defender, attacker)).thenReturn(false);
     Player attcker1 = new BasicPlayer(new Color("yellow"), "attcker1");
     Player attacker2 = new BasicPlayer(new Color("green"), "Celtics");
     BattleField bf = oneResolve(duke, blue_devil, attcker1, attacker2, mockResolver);
     // test resolve
     bf.resolve();
     assertEquals(1, bf.getNumArmies());
-    assertEquals(attacker2, duke.getOwner());
-    assertEquals(7, duke.getNumUnits());
+    assertEquals(attcker1, duke.getOwner());
+    assertEquals(2, duke.getNumUnits());
   }
 
   @Test
@@ -139,6 +149,23 @@ public class BattleFieldTest {
     bf.resolve();
     assertEquals(1, bf.getNumArmies());
     System.out.println(duke.getOwner());
+  }
+
+  @Test
+  public void test_sort() throws MaxTechLevelException {
+    UnitsFactory uf = new UnitsFactory();
+    ArrayList<Unit> units = uf.makeUnits(5, "basic");
+    for (int i = 0; i < units.size(); i++) {
+      units.get(i).increaseTechLevel(i);
+    }
+    units.sort((u0, u1) -> u1.getTechLevel() - u0.getTechLevel());
+    for(int i=0;i<units.size();i++){
+      assertEquals(units.size()-1-i, units.get(i).getTechLevel());
+    }
+    units.sort((u0, u1) -> u0.getTechLevel() - u1.getTechLevel());
+    for(int i=0;i<units.size();i++){
+      assertEquals(i, units.get(i).getTechLevel());
+    }
   }
 
 }
