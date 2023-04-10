@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import edu.duke.ece651.team14.shared.AdjacentTerritoryRuleChecker;
 import edu.duke.ece651.team14.shared.AttackOrder;
+import edu.duke.ece651.team14.shared.AttackOrderCostRuleChecker;
 import edu.duke.ece651.team14.shared.DestinationNotOwnedRuleChecker;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.NumberOfUnitsRuleChecker;
@@ -19,8 +20,9 @@ public class ClientAttackOrderProcessor extends ClientOrderProcessor {
 
   public ClientAttackOrderProcessor(ClientPlayer clientPlayer, Map map) {
     super(clientPlayer, map);
-    this.checker = new OriginOwnershipRuleChecker(
-        new DestinationNotOwnedRuleChecker(new NumberOfUnitsRuleChecker(new AdjacentTerritoryRuleChecker(null))));
+    this.checker = new OriginOwnershipRuleChecker(new DestinationNotOwnedRuleChecker(
+        new NumberOfUnitsRuleChecker(new AdjacentTerritoryRuleChecker(
+            new AttackOrderCostRuleChecker(null)))));
   }
 
   protected Order processOrder() throws IOException {
@@ -44,7 +46,8 @@ public class ClientAttackOrderProcessor extends ClientOrderProcessor {
       clientPlayer.myPlayer.useFoodResources(cost);
       ArrayList<Unit> unitsToSend = attackOrder.getUnitsPicked();
       // UnitMover.moveUnits(origin, dest, numUnits, "basic");
-      // maybe create a send units class that takes in unitsToSend
+      // create SendUnits class that takes in unitsToSend
+
       // send information from client player to server
       return order;
     }

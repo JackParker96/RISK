@@ -36,6 +36,7 @@ public class AttackOrder extends Order {
   }
 
   public int calculateCost() {
+    unitsPicked.clear();
     int cost = 0;
     ArrayList<Unit> units = new ArrayList<Unit>();
     for (Unit u : getOrigin().getUnits()) {
