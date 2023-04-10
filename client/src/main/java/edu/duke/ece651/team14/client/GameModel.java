@@ -11,6 +11,8 @@ import javafx.beans.property.StringProperty;
 public class GameModel {
 
   Map map;
+  // Code needs to change this in whoamiphase
+  public String playerName;
   public IntegerProperty mapCount;
   public IntegerProperty foodResources;
   public IntegerProperty techResources;
