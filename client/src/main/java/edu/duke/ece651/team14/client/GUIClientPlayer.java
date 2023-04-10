@@ -10,12 +10,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.duke.ece651.team14.client.controller.ChooseGameController;
+import edu.duke.ece651.team14.client.controller.InitUnitsController;
 import edu.duke.ece651.team14.client.controller.LoginController;
 import edu.duke.ece651.team14.shared.Account;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.Order;
+import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -45,6 +47,7 @@ public class GUIClientPlayer extends ClientPlayer {
     this.controller_initializer = new HashMap<>();
     controller_initializer.put(LoginController.class, new LoginController(this));
     controller_initializer.put(ChooseGameController.class, new ChooseGameController(this));
+    controller_initializer.put(InitUnitsController.class, new InitUnitsController(this));
   }
 
   @Override
@@ -104,6 +107,26 @@ public class GUIClientPlayer extends ClientPlayer {
   public void resetCommunicator() throws IOException{
     this.communicator = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
   }
+
+  public Player getPlayer(){
+    return myPlayer;
+  }
+
+  public Communicator getCommunicator(){
+    return communicator;
+  }
+
+  // public void placeUnitsPhase() throws IOException, ClassNotFoundException {
+  //   Map m = recvMap();
+  //   displayMap(m);
+  //   out.println("You are the " + myPlayer.toString().toUpperCase()
+  //       + " player. Please add units to your territories. You can add 0 or more units to each territory, as long as you do not exceed the total number allowed.");
+  //   UnitPlacementOrder upo = m.getUnitsPlacementOrder(myPlayer);
+  //   placeUnits(upo, 30);
+  //   communicator.sendObject(upo);
+  //   // wait for other to finish
+  //   out.println("Wait for other players to finish placing units...\n");
+  // }
 
 
 
