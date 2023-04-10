@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import edu.duke.ece651.team14.client.GameModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceDialog;
@@ -13,11 +14,14 @@ public class InputButtonsController {
 
   ArrayList<String> terrs;
 
-  public InputButtonsController() {
+  GameModel model;
+
+  public InputButtonsController(GameModel model) {
     terrs = new ArrayList<>();
     for (int i = 0; i < 10; i++) {
       terrs.add("Territory" + i);
     }
+    this.model = model;
   }
 
   @FXML

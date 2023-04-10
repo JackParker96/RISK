@@ -5,11 +5,13 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import javafx.beans.property.StringProperty;
+import edu.duke.ece651.team14.client.GameModel;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 
 public class GameController {
@@ -22,24 +24,41 @@ public class GameController {
   @FXML
   TextArea territoryStatsText;
 
-  StringProperty terrText;
+  @FXML
+  TextArea gameLogText;
 
-  public GameController(StringProperty s) {
-    this.terrText = s;
+  // @FXML
+  // ListView<String> gameLogList;
+
+  GameModel model;
+
+  public GameController(GameModel model) {
+    this.model = model;
   }
 
   public void initialize() {
-    territoryStatsText.textProperty().bindBidirectional(terrText);
+    model.selectedTerritory.addListener((obs, oldValue, newValue) -> {
+      territoryStatsText.setText(newValue);
+    });
+    model.gameLogText.addListener((obs, oldValue, newValue) -> {
+      gameLogText.setText(newValue);
+      // Platform.runLater(() -> gameLogText.scrollTopProperty().set(Double.MAX_VALUE));
+      // gameLogList.getItems().add(newValue);
+      // gameLogList.scrollTo(gameLogList.getItems().size() - 1);
+      // gameLogList.getSelectionModel().select(gameLogList.getItems().size() - 1);
+      // gameLogList.getFocusModel().focus(gameLogList.getItems().size() - 1);
+      // System.out.println(gameLogText.getScrollTop());
+    });
   }
 
-  
   public void setTerrText(String text) {
     territoryStatsText.setText(text);
   }
 
   @FXML
   /**
-   * Displays Alert Box with information on how to play game. Gets text from howToPlay.txt file
+   * Displays Alert Box with information on how to play game. Gets text from
+   * howToPlay.txt file
    *
    * @throws IOException
    * @throws URISyntaxException

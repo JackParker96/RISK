@@ -28,6 +28,8 @@ import javafx.stage.Stage;
 public class App extends Application {
   GUIClientPlayer client;
 
+  GameModel model;
+
   /**
    * Constructor - can now be tested in unit tests!
    *
@@ -67,7 +69,9 @@ public class App extends Application {
     Socket clientSocket = new Socket(hostName, port);
     Communicator comm = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    this.client = new GUIClientPlayer(clientSocket, comm, input, System.out);
+
+    model = new GameModel(null, 0, 1, 1, 1);
+    this.client = new GUIClientPlayer(model, clientSocket, comm, input, System.out);
   }
 
   @Override
@@ -79,9 +83,9 @@ public class App extends Application {
     terrText.set("Hi");
 
     HashMap<Class<?>, Object> controllers = new HashMap<>();
-    controllers.put(GameController.class, new GameController(terrText));
-    controllers.put(GUIController.class, new GUIController(terrText));
-    controllers.put(InputButtonsController.class, new InputButtonsController());
+    controllers.put(GameController.class, new GameController(model));
+    controllers.put(GUIController.class, new GUIController(model));
+    controllers.put(InputButtonsController.class, new InputButtonsController(model));
     loader.setControllerFactory((c) -> {
       return controllers.get(c);
     });
@@ -90,6 +94,8 @@ public class App extends Application {
     stage.setScene(new Scene(root));
     stage.show();
 
+    this.client.sendMsg("Test Message 1\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    this.client.sendMsg("Test Message 2");
     // this.client.setStage(stage);
     // this.client.loginPhase();
 
