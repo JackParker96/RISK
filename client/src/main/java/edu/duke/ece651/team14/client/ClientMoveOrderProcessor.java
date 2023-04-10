@@ -1,17 +1,20 @@
 package edu.duke.ece651.team14.client;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import edu.duke.ece651.team14.shared.DestinationOwnershipRuleChecker;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MoveOrder;
+import edu.duke.ece651.team14.shared.MoveOrderCostRuleChecker;
 import edu.duke.ece651.team14.shared.MoveOrderPathExistsRuleChecker;
 import edu.duke.ece651.team14.shared.NumberOfUnitsRuleChecker;
 import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.OrderRuleChecker;
-import edu.duke.ece651.team14.shared.OriginOwnershipRuleChecker;
 import edu.duke.ece651.team14.shared.OriginDestNotSameTerrRuleChecker;
+import edu.duke.ece651.team14.shared.OriginOwnershipRuleChecker;
 import edu.duke.ece651.team14.shared.Territory;
+import edu.duke.ece651.team14.shared.Unit;
 import edu.duke.ece651.team14.shared.UnitMover;
 
 public class ClientMoveOrderProcessor extends ClientOrderProcessor {
@@ -19,7 +22,9 @@ public class ClientMoveOrderProcessor extends ClientOrderProcessor {
 
   public ClientMoveOrderProcessor(ClientPlayer clientPlayer, Map map) {
     super(clientPlayer, map);
-    this.checker = new OriginDestNotSameTerrRuleChecker(new OriginOwnershipRuleChecker(new DestinationOwnershipRuleChecker(new MoveOrderPathExistsRuleChecker(new NumberOfUnitsRuleChecker(null)))));
+    this.checker = new OriginDestNotSameTerrRuleChecker(new OriginOwnershipRuleChecker(
+        new DestinationOwnershipRuleChecker(new MoveOrderPathExistsRuleChecker(
+            new NumberOfUnitsRuleChecker(new MoveOrderCostRuleChecker(null))))));
   }
 
   protected Order processOrder() throws IOException {
@@ -38,9 +43,14 @@ public class ClientMoveOrderProcessor extends ClientOrderProcessor {
         clientPlayer.sendMsg(checkResult);
         continue;
       }
-      UnitMover.moveUnits(origin, dest, numUnits, "basic");
-      int shortestDist = clientPlayer.myPlayer.findShortestPath(origin, dest);
-      clientPlayer.myPlayer.useFoodResources(3 * shortestDist);//not enough food, will throw
+      MoveOrder moveOrder = (MoveOrder) order;
+      int cost = moveOrder.calculateCost();
+      clientPlayer.myPlayer.useFoodResources(cost);
+      ArrayList<Unit> unitsToSend = moveOrder.getUnitsPicked();
+      // UnitMover.moveUnits(origin, dest, numUnits, "basic");
+      // instead create UnitMover.sendUnitArray which takes in unitsToSend
+      UnitMover.sendUnitArray(origin, dest, unitsToSend);
+
       // send information from client player to server
       return order;
     }

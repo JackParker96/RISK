@@ -31,7 +31,7 @@ public class UpgradeOrder extends Order {
   }
 
   /**
-   * Creates an UpgradeOrder with unitType
+   * Creates an UpgradeOrder
    *
    * @param origin        is the origin Territory
    * @param destination   is the destination Territory
