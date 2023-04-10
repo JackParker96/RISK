@@ -5,16 +5,21 @@
 package edu.duke.ece651.team14.client;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 
+import edu.duke.ece651.team14.client.controller.GUIController;
+import edu.duke.ece651.team14.client.controller.GameController;
+import edu.duke.ece651.team14.client.controller.InputButtonsController;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.MyName;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,6 +27,8 @@ import javafx.stage.Stage;
 
 public class App extends Application {
   GUIClientPlayer client;
+
+  GameModel model;
 
   /**
    * Constructor - can now be tested in unit tests!
@@ -31,8 +38,8 @@ public class App extends Application {
    * @throws IOException
    */
   // public App(Socket clientSocket, Communicator comm) throws IOException {
-  //   BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-  //   this.client = new TextClientPlayer(clientSocket, comm, input, System.out);
+  // BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+  // this.client = new TextClientPlayer(clientSocket, comm, input, System.out);
   // }
 
   /**
@@ -42,7 +49,7 @@ public class App extends Application {
    * @throws IOException
    */
   // public App(ClientPlayer mockPlayer) throws IOException {
-  //   this.client = mockPlayer;
+  // this.client = mockPlayer;
   // }
 
   /**
@@ -62,20 +69,36 @@ public class App extends Application {
     Socket clientSocket = new Socket(hostName, port);
     Communicator comm = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    this.client = new GUIClientPlayer(clientSocket, comm, input, System.out);
+
+    model = new GameModel(null, 0, 1, 1, 1);
+    this.client = new GUIClientPlayer(model, clientSocket, comm, input, System.out);
   }
 
   @Override
   public void start(Stage stage) throws Exception {
-    //URL url = new File("src/main/resources/ui/game.fxml").toURI().toURL();
-    //Parent root = FXMLLoader.load(url);
-    //stage.setScene(new Scene(root));
-    //stage.show();
-    
-    this.client.setStage(stage);
-    this.client.loginPhase();
+    URL url = getClass().getResource("/ui/game.fxml");
+    FXMLLoader loader = new FXMLLoader(url);
 
-    
+    StringProperty terrText = new SimpleStringProperty();
+    terrText.set("Hi");
+
+    HashMap<Class<?>, Object> controllers = new HashMap<>();
+    controllers.put(GameController.class, new GameController(model));
+    controllers.put(GUIController.class, new GUIController(model));
+    controllers.put(InputButtonsController.class, new InputButtonsController(model));
+    loader.setControllerFactory((c) -> {
+      return controllers.get(c);
+    });
+    Parent root = loader.load();
+
+    stage.setScene(new Scene(root));
+    stage.show();
+
+    this.client.sendMsg("Test Message 1\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    this.client.sendMsg("Test Message 2");
+    // this.client.setStage(stage);
+    // this.client.loginPhase();
+
     // try {
     // this.client.PlayGame();
     // } catch (Exception e) {

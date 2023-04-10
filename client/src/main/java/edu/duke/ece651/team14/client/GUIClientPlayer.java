@@ -27,6 +27,7 @@ import javafx.stage.Stage;
 public class GUIClientPlayer extends ClientPlayer {
   private Stage window;
   private HashMap<Class<?>, Object> controller_initializer;
+  GameModel model;
 
   /**
    * Constructor
@@ -35,9 +36,10 @@ public class GUIClientPlayer extends ClientPlayer {
    * @param inputSource:    the source to read interactive input, e.g. System.in.
    * @param outPrintStream: e.g. System.out
    */
-  public GUIClientPlayer(Socket clientSocket, Communicator communicator, BufferedReader inputSource,
+  public GUIClientPlayer(GameModel model, Socket clientSocket, Communicator communicator, BufferedReader inputSource,
       PrintStream outPrintStream) {
     super(clientSocket, communicator, inputSource, outPrintStream);
+    this.model = model;
   }
 
   public void setStage(Stage window) throws Exception{
@@ -46,6 +48,16 @@ public class GUIClientPlayer extends ClientPlayer {
     controller_initializer.put(LoginController.class, new LoginController(this));
     controller_initializer.put(ChooseGameController.class, new ChooseGameController(this));
     controller_initializer.put(InitUnitsController.class, new InitUnitsController(this));
+  }
+
+  @Override
+  /**
+   * Sends messages to GUI Game Log
+   *
+   * @param msg is the message to send
+   */
+  public void sendMsg(String msg) {
+    model.gameLogText.set(msg + "\n");
   }
 
   public HashMap<Class<?>, Object> getControllerInitializer(){

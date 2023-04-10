@@ -1,25 +1,27 @@
 package edu.duke.ece651.team14.client.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ResourceBundle;
 
+import edu.duke.ece651.team14.client.GameModel;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
-public class GUIController {
-  private Stage stage;
-  private Scene scene;
+public class GUIController implements Initializable {
+  StringProperty terrText;
 
+  GameModel model;
+  
   @FXML
   private Text actiontarget;
   @FXML
@@ -73,6 +75,26 @@ public class GUIController {
   private Label atlantis_b;
   @FXML
   private Label capitol_b;
+
+  public GUIController(GameModel model) {
+    this.model = model;
+  }
+
+  @Override
+  public void initialize(URL url, ResourceBundle r) {
+    model.selectedTerritory.addListener((obs, oldValue, newValue) -> {
+        Label newLabel = getBackgroundID(newValue);
+        BackgroundFill oldBackground = newLabel.getBackground().getFills().get(0);
+        Color oc = (Color) oldBackground.getFill();
+        newLabel.setBackground(new Background(new BackgroundFill(new Color(Math.min(1.0, oc.getRed() * 0.8), Math.min(1.0, oc.getGreen() * 0.8), Math.min(1.0, oc.getBlue() * 0.8), 1), oldBackground.getRadii(), oldBackground.getInsets())));
+        if (!oldValue.equals("")) {
+          Label oldLabel = getBackgroundID(oldValue);
+          BackgroundFill ob = oldLabel.getBackground().getFills().get(0);
+          Color c = (Color) ob.getFill();
+          oldLabel.setBackground(new Background(new BackgroundFill(new Color(Math.min(1.0,c.getRed() * 1.25), Math.min(1.0,c.getGreen() * 1.25), Math.min(255,c.getBlue() * 1.25), 1), ob.getRadii(), ob.getInsets())));
+        }
+      });
+  }
 
   protected Label getBackgroundID(String terr_id) {
     Label id;
@@ -158,9 +180,12 @@ public class GUIController {
     Label terr = (Label) event.getSource();
     String id = terr.getId();
     Label terr_back = getBackgroundID(id);
+
+    model.selectedTerritory.set(id);
+    //terrText.set(id + "\nUnits: 7\nOwner: Red\nPotato: Tomato");
     
     //for testing: turn territory to bright blue if clicked - CHANGE 
-    terr_back.setStyle("-fx-background-color: #0096FF");
+    //terr_back.setStyle("-fx-background-color: #0096FF");
   }
 
   @FXML
