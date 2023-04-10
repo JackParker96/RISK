@@ -48,7 +48,7 @@ public class AttackOrder extends Order {
       unitsPicked.add(attackUnit);
       // int distance = origin.getDistToAdjacentTerr(dest);
       int distance = 1;
-      cost += 3 * distance * attackUnit.getTechLevel(); 
+      cost += 3 * distance * attackUnit.getTechLevel() + 1; 
     }
     return cost;
   }
