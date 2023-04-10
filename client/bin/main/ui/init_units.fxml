@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Button?>
+
+<GridPane style="-fx-background-color: #2A3B57;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="edu.duke.ece651.team14.client.controller.InitUnitsController">
+  <columnConstraints>
+        <ColumnConstraints percentWidth="50" />
+        <ColumnConstraints percentWidth="50" />
+  </columnConstraints>
+  <children>
+    <GridPane GridPane.columnIndex="0"
+              GridPane.rowIndex="0"
+              GridPane.rowSpan="1">
+         <Label text="Map Example" textFill="WHITE"/>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="477.0" prefWidth="600.0" stylesheets="@map-extras.css">
+   <children>
+      <Label fx:id="midkemia_b" contentDisplay="GRAPHIC_ONLY" layoutX="144.0" layoutY="59.0" prefHeight="80.0" prefWidth="96.0" styleClass="red-territory" stylesheets="@map-extras.css" text="Midkemia b" />
+      <Label fx:id="midkemia_l" layoutX="163.0" layoutY="88.0"  text="Midkemia" textAlignment="RIGHT" />
+      <Label fx:id="gondor_b" contentDisplay="GRAPHIC_ONLY" layoutX="215.0" layoutY="99.0" prefHeight="80.0" prefWidth="96.0" styleClass="red-territory" stylesheets="@map-extras.css" text="Gondor b" />
+      <Label fx:id="gondor_l" layoutX="241.0" layoutY="129.0"  text="Gondor" />
+      <Label fx:id="oz_b" contentDisplay="GRAPHIC_ONLY" layoutX="286.0" layoutY="60.0" prefHeight="80.0" prefWidth="96.0" styleClass="red-territory" stylesheets="@map-extras.css" text="Oz b" />
+      <Label fx:id="oz_l" layoutX="324.0" layoutY="88.0"  text="Oz " />
+      <Label fx:id="neverland_b" contentDisplay="GRAPHIC_ONLY" layoutX="215.0" layoutY="20.0" prefHeight="80.0" prefWidth="96.0" styleClass="red-territory" stylesheets="@map-extras.css" text="Neverland b" />
+      <Label fx:id="neverland_l" layoutX="232.0" layoutY="50.0"  text="Neverland" />
+      <Label fx:id="narnia_b" contentDisplay="GRAPHIC_ONLY" layoutX="73.0" layoutY="98.0" prefHeight="80.0" prefWidth="96.0" styleClass="red-territory" stylesheets="@map-extras.css" text="Narnia b" />
+      <Label fx:id="narnia_l" layoutX="102.0" layoutY="128.0"  text="Narnia" />
+      <Label fx:id="mordor_b" contentDisplay="GRAPHIC_ONLY" layoutX="144.0" layoutY="138.0" prefHeight="80.0" prefWidth="96.0" styleClass="red-territory" stylesheets="@map-extras.css" text=" Mordor b" />
+      <Label fx:id="mordor_l" layoutX="169.0" layoutY="167.0"  text="Mordor" />
+      <Label fx:id="scadrial_b" contentDisplay="GRAPHIC_ONLY" layoutX="357.0" layoutY="99.0" prefHeight="80.0" prefWidth="96.0" styleClass="green-territory" stylesheets="@map-extras.css" text="Scadrial b" />
+      <Label fx:id="scadrial_l" layoutX="382.0" layoutY="128.0"  text="Scadrial" />
+      <Label fx:id="elantris_b" contentDisplay="GRAPHIC_ONLY" layoutX="286.0" layoutY="138.0" prefHeight="80.0" prefWidth="96.0" styleClass="green-territory" stylesheets="@map-extras.css" text="Elantris b" />
+      <Label fx:id="elantris_l" layoutX="313.0" layoutY="167.0"  text="Elantris" />
+      <Label fx:id="olympus_b" contentDisplay="GRAPHIC_ONLY" layoutX="357.0" layoutY="178.0" prefHeight="80.0" prefWidth="96.0" styleClass="green-territory" text="Mt Olympus b" />
+      <Label fx:id="olympus_l" layoutX="369.0" layoutY="207.0"  text="Mt Olympus" />
+      <Label fx:id="roshar_b" contentDisplay="GRAPHIC_ONLY" layoutX="428.0" layoutY="138.0" prefHeight="80.0" prefWidth="96.0" styleClass="green-territory" text="Roshar b" />
+      <Label fx:id="roshar_l" layoutX="456.0" layoutY="167.0"  text="Roshar" />
+      <Label fx:id="othrys_b" contentDisplay="GRAPHIC_ONLY" layoutX="286.0" layoutY="217.0" prefHeight="80.0" prefWidth="96.0" styleClass="green-territory" text="Mt Othrys b" />
+      <Label id="othrys_l" layoutX="305.0" layoutY="246.0"  text="Mt Othrys" />
+      <Label fx:id="camp_half_blood_b" contentDisplay="GRAPHIC_ONLY" layoutX="428.0" layoutY="217.0" prefHeight="80.0" prefWidth="96.0" styleClass="green-territory" text="Camp Half-Blood b" wrapText="true" />
+      <Label fx:id="camp_half_blood_l" layoutX="440.0" layoutY="231.0"  prefHeight="47.0" prefWidth="73.0" text="Camp Half-Blood" textAlignment="CENTER" wrapText="true" />
+      <Label fx:id="gotham_city_b" contentDisplay="GRAPHIC_ONLY" layoutX="144.0" layoutY="296.0" prefHeight="80.0" prefWidth="96.0" styleClass="blue-territory" text="Gotham City b" />
+      <Label fx:id="gotham_city_l" layoutX="154.0" layoutY="326.0"  text="Gotham City " />
+      <Label fx:id="diagon_alley_b" contentDisplay="GRAPHIC_ONLY" layoutX="73.0" layoutY="256.0" prefHeight="80.0" prefWidth="96.0" styleClass="blue-territory" text="Diagon Alley b" />
+      <Label fx:id="diagon_alley_l" layoutX="84.0" layoutY="287.0"  text="Diagon Alley" />
+      <Label fx:id="hogwarts_b" contentDisplay="GRAPHIC_ONLY" layoutX="73.0" layoutY="177.0" prefHeight="80.0" prefWidth="96.0" styleClass="blue-territory" text="Hogwarts b" />
+      <Label fx:id="hogwarts_l" layoutX="93.0" layoutY="207.0"  text="Hogwarts" />
+      <Label fx:id="platform_b" contentDisplay="GRAPHIC_ONLY" layoutX="144.0" layoutY="217.0" prefHeight="80.0" prefWidth="96.0" styleClass="blue-territory" text="Platform 9 and 3/4 b" />
+      <Label fx:id="platform_l" layoutX="163.0" layoutY="229.0"  prefHeight="55.0" prefWidth="57.0" text="Platform 9 and 3/4" textAlignment="CENTER" wrapText="true" />
+      <Label fx:id="jurassic_park_b" contentDisplay="GRAPHIC_ONLY" layoutX="215.0" layoutY="257.0" prefHeight="80.0" prefWidth="96.0" styleClass="blue-territory" text="Jurassic Park b" />
+      <Label fx:id="jurassic_park_l" layoutX="226.0" layoutY="287.0"  text="Jurassic Park" />
+      <Label fx:id="wakanda_b" contentDisplay="GRAPHIC_ONLY" layoutX="215.0" layoutY="178.0" prefHeight="80.0" prefWidth="96.0" styleClass="blue-territory" text="Wakanda b" />
+      <Label fx:id="wakanda_l" layoutX="235.0" layoutY="207.0"  text="Wakanda" />
+      <Label fx:id="district12_b" contentDisplay="GRAPHIC_ONLY" layoutX="286.0" layoutY="375.0" prefHeight="80.0" prefWidth="96.0" styleClass="yellow-territory" text="District Twelve b" />
+      <Label fx:id="district12_l" layoutX="307.0" layoutY="393.0"  prefHeight="47.0" prefWidth="55.0" text="District Twelve" textAlignment="CENTER" wrapText="true" />
+      <Label fx:id="duke_b" contentDisplay="GRAPHIC_ONLY" layoutX="357.0" layoutY="336.0" prefHeight="80.0" prefWidth="96.0" styleClass="yellow-territory" text="Duke b" />
+      <Label fx:id="duke_l" layoutX="389.0" layoutY="366.0"  text="Duke" />
+      <Label fx:id="north_pole_b" contentDisplay="GRAPHIC_ONLY" layoutX="428.0" layoutY="296.0" prefHeight="80.0" prefWidth="96.0" styleClass="yellow-territory" text="North Pole b" />
+      <Label fx:id="north_pole_l" layoutX="444.0" layoutY="326.0"  text="North Pole" />
+      <Label fx:id="wonka_b" contentDisplay="GRAPHIC_ONLY" layoutX="215.0" layoutY="336.0" prefHeight="80.0" prefWidth="96.0" styleClass="yellow-territory" text="Wonka Chocolate Factory b" />
+      <Label fx:id="wonka_l" layoutX="215.0" layoutY="342.0"  prefHeight="69.0" prefWidth="96.0" text="Wonka Chocolate Factory" textAlignment="CENTER" wrapText="true" />
+      <Label fx:id="atlantis_b" contentDisplay="GRAPHIC_ONLY" layoutX="286.0" layoutY="296.0" prefHeight="80.0" prefWidth="96.0" styleClass="yellow-territory" text="Atlantis b" />
+      <Label fx:id="atlantis_l" layoutX="312.0" layoutY="326.0"  text="Atlantis" />
+      <Label fx:id="capitol_b" contentDisplay="GRAPHIC_ONLY" layoutX="357.0" layoutY="257.0" prefHeight="80.0" prefWidth="96.0" styleClass="yellow-territory" text="The Capitol b" />
+      <Label fx:id="capitol_l" layoutX="371.0" layoutY="287.0"  text="The Capitol" />
+   </children>
+</AnchorPane>
+</GridPane>
+<VBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+ <Label text="Please input your initial 30 units number to each territory" textFill="WHITE"/>
+ <VBox fx:id="Terr_list">
+ </VBox>
+ <VBox GridPane.columnIndex="1">
+       <Button onAction="#handleSubmitButtonAction" text="Confirm" />
+   </VBox>
+   <Text fx:id="Result" GridPane.columnIndex="1"/>
+   </VBox>
+  </children>
+</GridPane>
