@@ -21,7 +21,7 @@ public class TechLevelRuleChecker extends OrderRuleChecker {
    */
   public String checkMyRule(Map map, Order order) {
     UpgradeOrder upgradeOrder = (UpgradeOrder) order;
-    if ((upgradeOrder.getNewTechLevel() > upgradeOrder.getCurrTechLevel()) && (upgradeOrder.getNewTechLevel() > -1) && (upgradeOrder.getNewTechLevel()) < 7) && (upgradeOrder.getCurrTechLevel() > -1) && (upgradeOrder.getCurrTechLevel() < 7)){
+    if ((upgradeOrder.getNewTechLevel() > upgradeOrder.getCurrTechLevel()) && (upgradeOrder.getNewTechLevel() > -1) && (upgradeOrder.getNewTechLevel() < 7) && (upgradeOrder.getCurrTechLevel() > -1) && (upgradeOrder.getCurrTechLevel() < 7)) {
       return null;
     } else {
       return "Tech levels are not valid";
