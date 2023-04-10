@@ -1,7 +1,7 @@
+
 package edu.duke.ece651.team14.shared;
 
 import java.util.ArrayList;
-
 /**
  * Class to represent an upgrade order
  */
@@ -45,6 +45,7 @@ public class UpgradeOrder extends Order {
     super(origin, destination, numUnits, player, "upgrade");
     this.currTechLevel = currTechLevel;
     this.newTechLevel = newTechLevel;
+    this.prices = new int[]{3, 8, 19, 25, 35, 50};
   }
 
   public int calculateCost() {

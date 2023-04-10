@@ -3,7 +3,7 @@ package edu.duke.ece651.team14.shared;
 public class ResearchOrder extends Order {
 
   public ResearchOrder(Player player) {
-    super(new BasicTerritory(null), new BasicTerritory(null), 0, player, "research");
+    super(new BasicTerritory("test"), new BasicTerritory("test"), 0, player, "research");
   }
 
   public int calculateCost() {
