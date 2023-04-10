@@ -12,6 +12,7 @@ import edu.duke.ece651.team14.shared.OrderRuleChecker;
 import edu.duke.ece651.team14.shared.OriginOwnershipRuleChecker;
 import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.UnitMover;
+import edu.duke.ece651.team14.shared.UpgradeOrder;
 
 public class ClientAttackOrderProcessor extends ClientOrderProcessor {
   private final OrderRuleChecker checker;
@@ -39,9 +40,11 @@ public class ClientAttackOrderProcessor extends ClientOrderProcessor {
         continue;
       }
       UnitMover.moveUnits(origin, dest, numUnits, "basic");
-      int distance = origin.getDistToAdjacentTerr(dest);
-      int price = clientPlayer.myPlayer.getMaxTechLevel() * numUnits;
-      clientPlayer.myPlayer.useFoodResources(3 * distance * price);
+      //int distance = origin.getDistToAdjacentTerr(dest);
+      int distance = 1; // dist from origin to adjacent territory
+      AttackOrder attackOrder = (AttackOrder) order;
+      //int cost = attackOrder.calculateCost();   - how do we calculate cost?
+      //clientPlayer.myPlayer.useFoodResources(cost);
       // send information from client player to server
       return order;
     }
