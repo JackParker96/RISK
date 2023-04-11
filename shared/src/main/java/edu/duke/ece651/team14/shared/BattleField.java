@@ -6,7 +6,7 @@ public class BattleField {
   private final CombatResolver resolver;
   private final Territory location;
   private String result;
-
+  private Map map;
   /**
    * An Army identifies a player with all of its Units which are ready to fight.
    */
@@ -76,11 +76,12 @@ public class BattleField {
 
   private ArrayList<Army> combatList;
 
-  public BattleField(CombatResolver resolver, Territory location) {
+  public BattleField(CombatResolver resolver, Territory location, Map map) {
     this.resolver = resolver;
     this.location = location;
     this.combatList = new ArrayList<Army>();
     this.result = "\nOn Territory " + this.location + ": \n";
+    this.map = map;
     addDefenderArmy();
   }
 
@@ -104,14 +105,29 @@ public class BattleField {
    */
   public void addAttackerArmy(AttackOrder atkOrder) {
     Army attackerArmy = getArmy(atkOrder.getPlayer());
-    AbstractUnitsFactory uf = new UnitsFactory();
     if (attackerArmy == null) {
       attackerArmy = new Army(atkOrder.getPlayer());
-      attackerArmy.addUnits(uf.makeUnits(atkOrder.getNumUnits(), atkOrder.getUnitType()));
+      transferUnits(attackerArmy, atkOrder);
       combatList.add(attackerArmy);
     } else {
-      attackerArmy.addUnits(uf.makeUnits(atkOrder.getNumUnits(), atkOrder.getUnitType()));
+      transferUnits(attackerArmy, atkOrder);
     }
+  }
+
+
+  /**
+   * Transfer units from territory to the battle field.
+   */
+  private void transferUnits(Army attackerArmy,AttackOrder atkOrder){
+    Territory attack_origin = map.getTerritoryByName(atkOrder.getOrigin().getName());
+    ArrayList<Unit> units = attack_origin.getUnits();
+    units.sort((u0, u1) -> u0.getTechLevel() - u1.getTechLevel());
+    ArrayList<Unit> temp = new ArrayList<>();
+    for(int i=0;i<atkOrder.getNumUnits();i++){
+      Unit atkUnit = units.remove(0);
+      temp.add(atkUnit);
+    }
+    attackerArmy.addUnits(temp);
   }
 
   /**

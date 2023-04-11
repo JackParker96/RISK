@@ -37,7 +37,8 @@ public class ServerAttackOrderResolver {
   public String resolveAllAttackOrders(ArrayList<Order> orders) {
     // run attack order checker again
     ArrayList<Order> badOrders = new ArrayList<Order>();
-    OrderRuleChecker checker = new OriginOwnershipRuleChecker(new DestinationNotOwnedRuleChecker(new AdjacentTerritoryRuleChecker(new NumberOfUnitsRuleChecker(null))));
+    OrderRuleChecker checker = new OriginOwnershipRuleChecker(
+        new DestinationNotOwnedRuleChecker(new AdjacentTerritoryRuleChecker(new NumberOfUnitsRuleChecker(null))));
     for (Order o : orders) {
       String checkerResult = checker.checkOrder(this.map, o);
       if (checkerResult != null) {
@@ -54,24 +55,26 @@ public class ServerAttackOrderResolver {
       String locationName = o.getDestination().getName();
       if (!battleFields.containsKey(locationName)) {// battle field not created yet
         Territory combatLocation = map.getTerritoryByName(locationName);
-        BattleField field = new BattleField(resolver, combatLocation);
+        BattleField field = new BattleField(resolver, combatLocation, this.map);
         battleFields.put(locationName, field);
       }
     }
     // process attackers
     for (Order o : orders) {
       String locationName = o.getDestination().getName();
-      String attackerTerrName = o.getOrigin().getName();
-      Territory attackerTerritory = map.getTerritoryByName(attackerTerrName);
-      Territory blackHole = new BasicTerritory("black hole");
-      //this territory is used to receive removed units, acts like an adapter for moveUnits
-      //units are actually "moved" to battlefield
-      UnitMover.moveUnits(attackerTerritory,blackHole, o.getNumUnits(), o.getUnitType());
+      // String attackerTerrName = o.getOrigin().getName();
+      // Territory attackerTerritory = map.getTerritoryByName(attackerTerrName);
+      // Territory blackHole = new BasicTerritory("black hole");
+      // this territory is used to receive removed units, acts like an adapter for
+      // moveUnits
+      // units are actually "moved" to battlefield
+      // UnitMover.moveUnits(attackerTerritory,blackHole, o.getNumUnits(),
+      // o.getUnitType());
       battleFields.get(locationName).addAttackerArmy((AttackOrder) o);
     }
     // combat start
     StringBuilder sb = new StringBuilder();
-    for(BattleField field:battleFields.values()){
+    for (BattleField field : battleFields.values()) {
       field.resolve();
       sb.append(field.getResult());
       sb.append("\n");
