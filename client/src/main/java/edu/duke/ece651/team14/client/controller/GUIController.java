@@ -2,9 +2,13 @@ package edu.duke.ece651.team14.client.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import edu.duke.ece651.team14.client.GameModel;
+import edu.duke.ece651.team14.shared.Territory;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,12 +25,17 @@ public class GUIController implements Initializable {
   StringProperty terrText;
 
   GameModel model;
-  
+
+  HashMap<String, String> playerColors = new HashMap<String, String>();
+
+  HashMap<String, String> terrNames = new HashMap<String, String>();
+
+  ArrayList<Label> labels;
+
   @FXML
   private Text actiontarget;
   @FXML
   public TextArea txtBox;
-
   @FXML
   private Label midkemia_b;
   @FXML
@@ -78,22 +87,93 @@ public class GUIController implements Initializable {
 
   public GUIController(GameModel model) {
     this.model = model;
+    terrNames.put("midkemia_b", "midkemia");
+    terrNames.put("gondor_b", "gondor");
+    terrNames.put("oz_b", "oz");
+    terrNames.put("neverland_b", "neverland");
+    terrNames.put("narnia_b", "narnia");
+    terrNames.put("mordor_b", "mordor");
+    terrNames.put("scadrial_b", "scadrial");
+    terrNames.put("elantris_b", "elantris");
+    terrNames.put("olympus_b", "mt olympus");
+    terrNames.put("roshar_b", "roshar");
+    terrNames.put("othrys_b", "mt othrys");
+    terrNames.put("camp_half_blood_b", "camp half-blood");
+    terrNames.put("gotham_city_b", "gotham city");
+    terrNames.put("diagon_alley_b", "diagon alley");
+    terrNames.put("hogwarts_b", "hogwarts");
+    terrNames.put("platform_b", "platform 9 and 3/4");
+    terrNames.put("jurassic_park_b", "jurassic park");
+    terrNames.put("wakanda_b", "wakanda");
+    terrNames.put("district12_b", "district twelve");
+    terrNames.put("duke_b", "duke");
+    terrNames.put("north_pole_b", "north pole");
+    terrNames.put("wonka_b", "wonka chocolate factory");
+    terrNames.put("atlantis_b", "atlantis");
+    terrNames.put("capitol_b", "the capitol");
+
+    playerColors.put("red", "#F4CCCC");
+    playerColors.put("green", "#D9EAD3");
+    playerColors.put("blue", "#CFE2F3");
+    playerColors.put("yellow", "#FFF2CC");
+
+    labels.addAll(Arrays.asList(midkemia_b, gondor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b,
+        roshar_b, othrys_b, camp_half_blood_b, gotham_city_b, diagon_alley_b, hogwarts_b, platform_b, jurassic_park_b,
+        wakanda_b, district12_b, duke_b, north_pole_b, wonka_b, atlantis_b, capitol_b));
   }
 
   @Override
   public void initialize(URL url, ResourceBundle r) {
+    addSelectedListener();
+    addMapUpdateListener();
+
+  }
+
+  /**
+   * Updates the territory colors on map updates
+   */
+  public void addMapUpdateListener() {
+    model.mapCount.addListener((obs, oldValue, newValue) -> {
+      for (Label territoryBackground : labels) {
+        String terrName = terrNames.get(territoryBackground.getId());
+        Territory terr = model.getMap().getTerritoryByName(terrName);
+        String newColorHex = playerColors.get(terr.getOwner().getName());
+        Color newColor = Color.web(newColorHex);
+        changeTerritoryColor(territoryBackground, newColor);
+      }
+    });
+  }
+
+  /**
+   * Changes given territoiry background color to newColor
+   * 
+   * @param territory is the Label representing the territory
+   * @param newColor  is the new color
+   */
+  public void changeTerritoryColor(Label territory, Color newColor) {
+    BackgroundFill obf = territory.getBackground().getFills().get(0);
+    territory.setBackground(new Background(new BackgroundFill(newColor, obf.getRadii(), obf.getInsets())));
+  }
+
+  /**
+   * Adds a listener which darkens the territory color when selected
+   */
+  public void addSelectedListener() {
     model.selectedTerritory.addListener((obs, oldValue, newValue) -> {
-        Label newLabel = getBackgroundID(newValue);
-        BackgroundFill oldBackground = newLabel.getBackground().getFills().get(0);
-        Color oc = (Color) oldBackground.getFill();
-        newLabel.setBackground(new Background(new BackgroundFill(new Color(Math.min(1.0, oc.getRed() * 0.8), Math.min(1.0, oc.getGreen() * 0.8), Math.min(1.0, oc.getBlue() * 0.8), 1), oldBackground.getRadii(), oldBackground.getInsets())));
-        if (!oldValue.equals("")) {
-          Label oldLabel = getBackgroundID(oldValue);
-          BackgroundFill ob = oldLabel.getBackground().getFills().get(0);
-          Color c = (Color) ob.getFill();
-          oldLabel.setBackground(new Background(new BackgroundFill(new Color(Math.min(1.0,c.getRed() * 1.25), Math.min(1.0,c.getGreen() * 1.25), Math.min(255,c.getBlue() * 1.25), 1), ob.getRadii(), ob.getInsets())));
-        }
-      });
+      Label newLabel = getBackgroundID(newValue);
+      BackgroundFill oldBackground = newLabel.getBackground().getFills().get(0);
+      Color oc = (Color) oldBackground.getFill();
+      newLabel.setBackground(new Background(
+          new BackgroundFill(new Color(Math.min(1.0, oc.getRed() * 0.8), Math.min(1.0, oc.getGreen() * 0.8),
+              Math.min(1.0, oc.getBlue() * 0.8), 1), oldBackground.getRadii(), oldBackground.getInsets())));
+      if (!oldValue.equals("")) {
+        Label oldLabel = getBackgroundID(oldValue);
+        BackgroundFill ob = oldLabel.getBackground().getFills().get(0);
+        Color c = (Color) ob.getFill();
+        oldLabel.setBackground(new Background(new BackgroundFill(new Color(Math.min(1.0, c.getRed() * 1.25),
+            Math.min(1.0, c.getGreen() * 1.25), Math.min(1.0, c.getBlue() * 1.25), 1), ob.getRadii(), ob.getInsets())));
+      }
+    });
   }
 
   protected Label getBackgroundID(String terr_id) {
@@ -182,10 +262,10 @@ public class GUIController implements Initializable {
     Label terr_back = getBackgroundID(id);
 
     model.selectedTerritory.set(id);
-    //terrText.set(id + "\nUnits: 7\nOwner: Red\nPotato: Tomato");
-    
-    //for testing: turn territory to bright blue if clicked - CHANGE 
-    //terr_back.setStyle("-fx-background-color: #0096FF");
+    // terrText.set(id + "\nUnits: 7\nOwner: Red\nPotato: Tomato");
+
+    // for testing: turn territory to bright blue if clicked - CHANGE
+    // terr_back.setStyle("-fx-background-color: #0096FF");
   }
 
   @FXML
