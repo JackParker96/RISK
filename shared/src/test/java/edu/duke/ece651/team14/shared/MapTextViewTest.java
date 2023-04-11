@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class MapTextViewTest {
 
   @Test
-  public void test_MapTextView() {
+  public void test_MapTextView() throws MaxTechLevelException {
     // Create two players
     Player p1 = new BasicPlayer(new Color("blue"), "Maya");
     Player p2 = new BasicPlayer(new Color("red"), "Evan");
@@ -29,6 +29,9 @@ public class MapTextViewTest {
     Unit u4 = new BasicUnit();
     Unit u5 = new BasicUnit();
     Unit u6 = new BasicUnit();
+    u1.increaseTechLevel(1);
+    u2.increaseTechLevel(2);
+    u6.increaseTechLevel(6);
     ArrayList<Unit> gondorUnits = new ArrayList<Unit>();
     ArrayList<Unit> mordorUnits = new ArrayList<Unit>();
     ArrayList<Unit> dukeUnits = new ArrayList<Unit>();
@@ -69,11 +72,16 @@ public class MapTextViewTest {
     String expected1 = "MAYA Player:\n" +
         "------------\n" +
         "3 units in gondor (next to: mordor)\n" +
-        "2 units in mordor (next to: gondor, duke)\n";
+        "     1 units of level 0\n" +
+        "     1 units of level 1\n" +
+        "     1 units of level 2\n" +
+        "2 units in mordor (next to: gondor, duke)\n" +
+        "     2 units of level 0\n";
     assertEquals(expected1, view.displayPlayerInfo(p1, ownershipInfo.get(p1)));
     String expected2 = "EVAN Player:\n" +
         "------------\n" +
-        "1 units in duke (next to: mordor)\n";
+        "1 units in duke (next to: mordor)\n" +
+        "     1 units of level 6\n";
     assertEquals(expected2, view.displayPlayerInfo(p2, ownershipInfo.get(p2)));
     // Test displayMap method
     String expected3 = expected1 + "\n" + expected2 + "\n";
