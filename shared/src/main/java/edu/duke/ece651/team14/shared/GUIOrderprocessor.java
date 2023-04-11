@@ -30,6 +30,7 @@ public class GUIOrderprocessor {
       int cost = researchOrder.calculateCost();
       p.useTechResources(cost);
       this.verifiedOrders.add(researchOrder);
+      p.addTechResources(1);
     } else {
       throw new IllegalArgumentException("Order type not supported");
     }
