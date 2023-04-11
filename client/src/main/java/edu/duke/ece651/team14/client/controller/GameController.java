@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import edu.duke.ece651.team14.client.GameModel;
+import edu.duke.ece651.team14.shared.BasicUnit;
+import edu.duke.ece651.team14.shared.Unit;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -36,8 +40,7 @@ public class GameController {
   }
 
   public void initialize() {
-    model.selectedTerritory.addListener((obs, oldValue, newValue) -> {
-        
+    model.selectedTerritory.addListener((obs, oldValue, newValue) -> {        
       territoryStatsText.setText(newValue);
     });
     model.gameLogText.addListener((obs, oldValue, newValue) -> {
@@ -53,6 +56,50 @@ public class GameController {
 
   public void setTerrText(ObservableValue<String> obs, String oldValue, String newValue) {
     territoryStatsText.setText("");
+  }
+
+  public void setTerrText(String newValue) {
+    String pl = "placeholder";
+    StringBuilder sb = new StringBuilder();
+    sb.append("Territory: " + newValue + "\n");
+    sb.append("Owner: " + pl + "\n");
+    sb.append("Food Production Rate: " + pl + "\n");
+    sb.append("Technology Production Rate: " + pl + "\n");
+    HashMap<Integer, Integer> unitInfo = unitTechLevels(null); // change null to units array list
+    for (int i = 0; i < 7; i++) {
+      if (unitInfo.get(i) > 0) {
+        sb.append("Level " + i + " Units: " + unitInfo.get(i) + "\n");
+      }
+    }
+    sb.append("Unit Level 0: " + pl + "\n");
+    sb.append("Unit Level 1: " + pl + "\n");   // only list if unit number for type greater than 0
+    sb.append("\nNOTE: adjacent territories are each 1 distance away"); 
+    territoryStatsText.setText(sb.toString());
+  }
+
+  protected HashMap<Integer, Integer> unitTechLevels(ArrayList<Unit> units) {
+    HashMap<Integer, Integer> unitInfo = new HashMap<Integer, Integer>();
+    for (int i = 0; i < 7; i++) {
+      unitInfo.put(i, 0);
+    }
+    for (Unit u : units) {
+      if (u.getType() == "basic") {
+        BasicUnit b = (BasicUnit) u;
+        int techLevel = b.getTechLevel();
+        unitInfo.put(techLevel, unitInfo.get(techLevel) + 1);
+      }
+    }
+    return unitInfo;
+  }
+
+  public void setPlayerText() {
+    String pl = "placeholder";
+    StringBuilder sb = new StringBuilder();
+    sb.append("Player: " + pl + "\n");
+    sb.append("Maximum Technology Level: " + model.getMaxTechLevel() + "\n");
+    sb.append("Total Food Resources: " + model.getFoodResources() + "\n");
+    sb.append("Total Technology Resources: " + model.getTechResources() + "\n");
+    territoryStatsText.setText(sb.toString());
   }
 
   @FXML
