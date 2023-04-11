@@ -50,7 +50,6 @@ public class ClientMoveOrderProcessor extends ClientOrderProcessor {
       // UnitMover.moveUnits(origin, dest, numUnits, "basic");
       // instead create UnitMover.sendUnitArray which takes in unitsToSend
       UnitMover.sendUnitArray(origin, dest, unitsToSend);
-
       // send information from client player to server
       return order;
     }

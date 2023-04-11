@@ -1,31 +1,6 @@
-package edu.duke.ece651.team14.client;
+package edu.duke.ece651.team14.shared;
 
 import java.util.ArrayList;
-
-import edu.duke.ece651.team14.shared.AdjacentTerritoryRuleChecker;
-import edu.duke.ece651.team14.shared.AttackOrder;
-import edu.duke.ece651.team14.shared.AttackOrderCostRuleChecker;
-import edu.duke.ece651.team14.shared.DestinationNotOwnedRuleChecker;
-import edu.duke.ece651.team14.shared.DestinationOwnershipRuleChecker;
-import edu.duke.ece651.team14.shared.Map;
-import edu.duke.ece651.team14.shared.MaxTechLevelRuleChecker;
-import edu.duke.ece651.team14.shared.MoveOrder;
-import edu.duke.ece651.team14.shared.MoveOrderCostRuleChecker;
-import edu.duke.ece651.team14.shared.MoveOrderPathExistsRuleChecker;
-import edu.duke.ece651.team14.shared.NumUnitsInTechLevelRuleChecker;
-import edu.duke.ece651.team14.shared.NumberOfUnitsRuleChecker;
-import edu.duke.ece651.team14.shared.Order;
-import edu.duke.ece651.team14.shared.OrderRuleChecker;
-import edu.duke.ece651.team14.shared.OriginDestNotSameTerrRuleChecker;
-import edu.duke.ece651.team14.shared.OriginOwnershipRuleChecker;
-import edu.duke.ece651.team14.shared.Player;
-import edu.duke.ece651.team14.shared.ResearchOrder;
-import edu.duke.ece651.team14.shared.ResearchOrderCostRuleChecker;
-import edu.duke.ece651.team14.shared.TechLevelRuleChecker;
-import edu.duke.ece651.team14.shared.Unit;
-import edu.duke.ece651.team14.shared.UnitMover;
-import edu.duke.ece651.team14.shared.UpgradeOrder;
-import edu.duke.ece651.team14.shared.UpgradeOrderCostRuleChecker;
 
 public class GUIOrderprocessor {
   private ArrayList<Order> verifiedOrders;
@@ -60,14 +35,19 @@ public class GUIOrderprocessor {
     }
   }
 
-  public void processUpgrade(Map map, Order o, Player p){
+  public void processUpgrade(Map map, Order o, Player p) throws MaxTechLevelException{
     if(o instanceof UpgradeOrder){
       String checkResult = upgradeChecker.checkOrder(map, o);
       if(checkResult != null){
         throw new IllegalArgumentException(checkResult);
       }
       UpgradeOrder upgradeOrder = (UpgradeOrder)o;
-      //TODO:take effects
+      Territory t = upgradeOrder.getOrigin();
+      for(Unit u:t.getUnits()){
+        if(u.getTechLevel()==upgradeOrder.getCurrTechLevel()){
+          u.increaseTechLevel(upgradeOrder.getNewTechLevel()-upgradeOrder.getCurrTechLevel());
+        }
+      }
       verifiedOrders.add(upgradeOrder);
     }else{
       throw new IllegalArgumentException("Order type not supported");

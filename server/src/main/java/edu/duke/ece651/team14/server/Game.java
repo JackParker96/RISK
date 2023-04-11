@@ -12,11 +12,15 @@ import edu.duke.ece651.team14.shared.BasicPlayer;
 import edu.duke.ece651.team14.shared.Color;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.DiceResolver;
+import edu.duke.ece651.team14.shared.GUIOrderprocessor;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapFactory;
+import edu.duke.ece651.team14.shared.MoveOrder;
 import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.Player;
+import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
+import edu.duke.ece651.team14.shared.UpgradeOrder;
 import javafx.util.Pair;
 
 public class Game {
@@ -161,14 +165,53 @@ public class Game {
       throws IOException, ClassNotFoundException {
     sendInfo(this.map);
     HashMap<String, ArrayList<Order>> orders = receiveAllOrders();
+    //resolve upgrade
+    GUIOrderprocessor processor = new GUIOrderprocessor(this.map);
+    serverResolveUpgrade(processor, orders.get("upgrade"));
     // resolve move
-    ServerMoveResolver smr = new ServerMoveResolver(map);
-    smr.resolveAllMoveOrders(orders.get("move"));
+    //ServerMoveResolver smr = new ServerMoveResolver(map);
+    //smr.resolveAllMoveOrders(orders.get("move"));
+    serverResolveMove(processor, orders.get("move"));
     // resolve attack
     ServerAttackOrderResolver sar = new ServerAttackOrderResolver(map, new DiceResolver());
     String results = sar.resolveAllAttackOrders(orders.get("attack"));// the attcking information
     sendInfo(results);
     this.map.allAddOneUnit();
+  }
+
+
+  /** 
+   * Make use of the GUIprocessor, it makes new order and resolve locally. To get rid of pointer problems.
+   * @param processor
+   * @param orders
+   */
+  private void serverResolveUpgrade(GUIOrderprocessor processor,ArrayList<Order> orders){
+    try{
+      for(Order o:orders){
+        UpgradeOrder uo = (UpgradeOrder)o;
+        Order serverOrder = new UpgradeOrder(map.getTerritoryByName(uo.getOrigin().getName()), null, uo.getNumUnits(), uo.getPlayer(),uo.getCurrTechLevel(), uo.getNewTechLevel());
+        processor.processUpgrade(map, serverOrder, uo.getPlayer());
+      }
+    }
+    catch(Exception e){
+      System.out.println(e.getMessage());
+    }
+  }
+
+
+  private void serverResolveMove(GUIOrderprocessor processor, ArrayList<Order> moveOrders){
+    try{
+      for(Order o:moveOrders){
+        MoveOrder mo = (MoveOrder)o;
+        Territory origin = map.getTerritoryByName(mo.getOrigin().getName());
+        Territory dest = map.getTerritoryByName(mo.getDestination().getName());
+        Order serverOrder = new MoveOrder(origin, dest, mo.getNumUnits(), mo.getPlayer());
+        processor.processMove(map, serverOrder, mo.getPlayer());
+      }
+    }
+    catch(Exception e){
+      System.out.println();
+    }
   }
 
   /**
@@ -244,8 +287,10 @@ public class Game {
    */
   protected HashMap<String, ArrayList<Order>> sortOrders(ArrayList<Order> orders) {
     HashMap<String, ArrayList<Order>> sortedOrders = new HashMap<>();
+    sortedOrders.put("upgrade", new ArrayList<Order>());
     sortedOrders.put("move", new ArrayList<Order>());
     sortedOrders.put("attack", new ArrayList<Order>());
+    sortedOrders.put("research", new ArrayList<Order>());
     for (Order o : orders) {
       sortedOrders.get(o.getOrderType()).add(o);
     }

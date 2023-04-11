@@ -76,28 +76,28 @@ public class App extends Application {
 
   @Override
   public void start(Stage stage) throws Exception {
-    URL url = getClass().getResource("/ui/game.fxml");
-    FXMLLoader loader = new FXMLLoader(url);
+    // URL url = getClass().getResource("/ui/game.fxml");
+    // FXMLLoader loader = new FXMLLoader(url);
 
-    StringProperty terrText = new SimpleStringProperty();
-    terrText.set("Hi");
+    // StringProperty terrText = new SimpleStringProperty();
+    // terrText.set("Hi");
 
-    HashMap<Class<?>, Object> controllers = new HashMap<>();
-    controllers.put(GameController.class, new GameController(model));
-    controllers.put(GUIController.class, new GUIController(model));
-    controllers.put(InputButtonsController.class, new InputButtonsController(model));
-    loader.setControllerFactory((c) -> {
-      return controllers.get(c);
-    });
-    Parent root = loader.load();
+    // HashMap<Class<?>, Object> controllers = new HashMap<>();
+    // controllers.put(GameController.class, new GameController(model));
+    // controllers.put(GUIController.class, new GUIController(model));
+    // controllers.put(InputButtonsController.class, new InputButtonsController(model));
+    // loader.setControllerFactory((c) -> {
+    //   return controllers.get(c);
+    // });
+    // Parent root = loader.load();
 
-    stage.setScene(new Scene(root));
-    stage.show();
+    //stage.setScene(new Scene(root));
+    // stage.show();
 
-    this.client.sendMsg("Test Message 1\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    this.client.sendMsg("Test Message 2");
-    // this.client.setStage(stage);
-    // this.client.loginPhase();
+    // this.client.sendMsg("Test Message 1\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    // this.client.sendMsg("Test Message 2");
+    this.client.setStage(stage);
+    this.client.loginPhase();
 
     // try {
     // this.client.PlayGame();
