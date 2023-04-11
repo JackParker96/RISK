@@ -29,6 +29,15 @@ public class MapTextView {
     return sb.toString();
   }
 
+  public String unitLevelInfo(HashMap<Integer, Integer> levelMap) {
+    StringBuilder sb = new StringBuilder();
+    for (int lv : levelMap.keySet()) {
+      int numUnits = levelMap.get(lv);
+      sb.append("     " + numUnits + " units of level " + lv + "\n");
+    }
+    return sb.toString();
+  }
+
   /**
    * For each territory a player controls, display how many units are in that
    * territory and adjacency information for that territory
@@ -48,8 +57,26 @@ public class MapTextView {
     for (Territory terr : terrArr) {
       String name = terr.getName();
       int numUnits = terr.getNumUnits();
+      // Figure out the levels of the units contained in this territory
+      ArrayList<Unit> units = terr.getUnits();
+      ArrayList<Integer> levels = new ArrayList<>();
+      for (Unit u : units) {
+        int level = u.getTechLevel();
+        levels.add(level);
+      }
+      // Create a hashmap with information about the levels of the units
+      HashMap<Integer, Integer> levelMap = new HashMap<>();
+      for (int level : levels) {
+        if (levelMap.containsKey(level)) {
+          levelMap.put(level, levelMap.get(level) + 1);
+        } else {
+          levelMap.put(level, 1);
+        }
+      }
       ArrayList<Territory> adjTerrs = terr.getAdjacentTerritories();
+      String unitInfo = unitLevelInfo(levelMap);
       sb.append(numUnits + " units in " + name + " (next to: " + territoriesAsListOfStrings(adjTerrs) + ")\n");
+      sb.append(unitInfo);
     }
     return sb.toString();
   }
