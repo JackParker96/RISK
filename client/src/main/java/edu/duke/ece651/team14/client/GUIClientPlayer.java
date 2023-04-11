@@ -215,7 +215,8 @@ public class GUIClientPlayer extends ClientPlayer {
    */
   protected void displayMap(Map m) throws IOException, ClassNotFoundException {
     MapTextView view = new MapTextView(m);
-    out.print(view.displayMap());
+    //out.print(view.displayMap());
+    sendMsg(view.displayMap());
   }
 
   /**
