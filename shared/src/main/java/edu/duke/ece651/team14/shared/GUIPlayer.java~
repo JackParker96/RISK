@@ -9,30 +9,26 @@ import java.util.HashSet;
 /**
  * A class to represent a player in the RISC game
  */
-public abstract class Player implements Serializable {
+public class GUIPlayer extends Player {
   // Player color
-  public final Color color;
+  private final Color color;
 
   // Player name;color name
-  public final String name;
+  private final String name;
   // Number of food resources the player currently has
-  public int foodAmt;
+  private int foodAmt;
   // Number of tech resources the player currently has
-  public int techAmt;
+  private int techAmt;
   // Current max tech level of the player
-  public int maxTechLevel;
+  private int maxTechLevel;
 
   /**
    * Creates a Player object from given color
    *
    * @param color is the player's color
    */
-  public Player(Color color, String name) {
-    this.color = color;
-    this.name = name;
-    this.foodAmt = 0;
-    this.techAmt = 0;
-    this.maxTechLevel = 1;
+  public GUIPlayer(Color color, String name) {
+    super(color, name);
   }
 
   /**
