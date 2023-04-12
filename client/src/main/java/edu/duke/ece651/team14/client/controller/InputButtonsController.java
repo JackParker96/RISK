@@ -26,23 +26,32 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
 
 public class InputButtonsController implements Initializable {
-
   ArrayList<String> terrs;
+
   GameModel model;
+
   GUIClientPlayer client;
+
   GUIOrderprocessor processor;
+
   @FXML
   TextArea gameLogText;
+  
   @FXML
   Button upgrade;
+
   @FXML
   Button move;
+
   @FXML
   Button attack;
+
   @FXML
   Button research;
+
   @FXML
   Button confirm;
+
   /**
    * state to indicate which button should be disabled
    */
@@ -97,7 +106,7 @@ public class InputButtonsController implements Initializable {
         break;
       case 4:
         upgrade.setDisable(true);
-        confirm.setText("Skip Research");
+        confirm.setText("Finish Research");
         move.setDisable(true);
         attack.setDisable(true);
         research.setDisable(false);
