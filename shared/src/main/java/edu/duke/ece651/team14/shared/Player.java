@@ -95,11 +95,11 @@ public abstract class Player implements Serializable {
   protected int mapDFS(ArrayList<Territory> visited, Territory origin, Territory curr,
       Territory dest, int distTraveled) {
     ArrayList<Integer> distances = new ArrayList<>();
-    //System.out.println(visited);
-    //System.out.println(curr);
+    // System.out.println(visited);
+    // System.out.println(curr);
     if (curr.equals(dest)) {
-      //System.out.println(visited);
-      //System.out.println(distTraveled);
+      // System.out.println(visited);
+      // System.out.println(distTraveled);
       distances.add(distTraveled);
     }
     distTraveled++;
@@ -110,7 +110,7 @@ public abstract class Player implements Serializable {
       }
       if (t.getOwner().equals(origin.getOwner()) && !prevTerrs.contains(t)) {
         prevTerrs.add(t);
-        //System.out.println(prevTerrs);
+        // System.out.println(prevTerrs);
         int result = mapDFS(prevTerrs, origin, t, dest, distTraveled);
         if (result > -1) {
           distances.add(result);

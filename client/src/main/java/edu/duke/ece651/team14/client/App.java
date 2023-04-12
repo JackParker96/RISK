@@ -10,6 +10,10 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.List;
 
+import edu.duke.ece651.team14.client.controller.GUIController;
+import edu.duke.ece651.team14.client.controller.GameController;
+import edu.duke.ece651.team14.client.controller.InputButtonsController;
+import edu.duke.ece651.team14.shared.GameModel;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.MyName;
 import javafx.application.Application;
@@ -92,24 +96,5 @@ public class App extends Application {
   // ./gradlew :client:run --args "vcm-xxxxx.vm.duke.edu [port_num]"
   public static void main(String[] args) {
     launch(args[0], args[1]);
-
-    /*
-     * CODE TO SUPPORT TEXT CLIENT PLAYER
-     * String hostName = args[0];
-     * int port = Integer.parseInt(args[1]);
-     * Socket clientSocket = new Socket(hostName, port);
-     * Communicator comm = new Communicator(clientSocket.getOutputStream(),
-     * clientSocket.getInputStream());
-     * App a = new App(clientSocket, comm);
-     * System.out.
-     * println("Welcome to the RISC player terminal\n\nInitializing game setup...\n"
-     * );
-     * try{
-     * a.client.PlayGame();
-     * System.out.println("\nGame Over!");
-     * } finally{
-     * a.client.release();
-     * }
-     */
   }
 }

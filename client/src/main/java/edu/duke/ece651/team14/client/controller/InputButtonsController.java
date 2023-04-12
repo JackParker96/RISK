@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import edu.duke.ece651.team14.shared.GameModel;
 import edu.duke.ece651.team14.client.GUIClientPlayer;
-import edu.duke.ece651.team14.client.GameModel;
 import edu.duke.ece651.team14.shared.AttackOrder;
 import edu.duke.ece651.team14.shared.GUIOrderprocessor;
 import edu.duke.ece651.team14.shared.MapTextView;
@@ -27,23 +27,32 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 
 public class InputButtonsController implements Initializable {
-
   ArrayList<String> terrs;
+
   GameModel model;
+
   GUIClientPlayer client;
+
   GUIOrderprocessor processor;
+
   @FXML
   TextArea gameLogText;
+  
   @FXML
   Button upgrade;
+
   @FXML
   Button move;
+
   @FXML
   Button attack;
+
   @FXML
   Button research;
+
   @FXML
   Button confirm;
+
   /**
    * state to indicate which button should be disabled
    */
@@ -98,7 +107,7 @@ public class InputButtonsController implements Initializable {
         break;
       case 4:
         upgrade.setDisable(true);
-        confirm.setText("Skip Research");
+        confirm.setText("Finish Research");
         move.setDisable(true);
         attack.setDisable(true);
         research.setDisable(false);
