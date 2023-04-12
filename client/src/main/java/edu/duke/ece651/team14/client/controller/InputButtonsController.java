@@ -24,6 +24,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextInputDialog;
+import javafx.stage.Stage;
 
 public class InputButtonsController implements Initializable {
   ArrayList<String> terrs;
@@ -214,15 +215,18 @@ public class InputButtonsController implements Initializable {
 
   private void finishOneTurn() {
     try {
+      gameLogText.appendText("Wait for other players...\n");
       this.client.getCommunicator().sendObject(processor.getVerifiedOrders());
       processor.clearVerified();
-      gameLogText.appendText("Wait for other players...\n");
       String result = this.client.getCommunicator().recvString();
       gameLogText.appendText(result);
       String gameresult = this.client.getCommunicator().recvString();
       if (gameresult.equals("Gameover")) {// one global winner occurs, exit game.
         this.model.setMap(client.recvMap());
-        // TODO: indicates end of game.
+        String wininfo = this.client.displayWinInfo(this.model.getMap());
+        ConfirmBox.display(gameresult, wininfo, "Good game well played", "bad game");
+        Stage window = (Stage) gameLogText.getScene().getWindow();
+        window.close();
       } else {
         startAnotherTurn();
       }
@@ -234,11 +238,22 @@ public class InputButtonsController implements Initializable {
   private void startAnotherTurn() {
     try {
       this.model.setMap(client.recvMap());
-      this.client.getPlayer().updateResourcesInTurn(this.model.getMap());
-      resetOwnedTerrs();
-      gameLogShowMap();
-      gameLogshowPlayer();
-      switchState(1);
+      if (this.client.getPlayer().hasLost(this.model.getMap())) {// has lost
+        boolean disconnect = ConfirmBox.display("You lose!", "Do you want to disconnect?", "Disconnect", "Watch Game");
+        if (disconnect) {
+          Stage window = (Stage) gameLogText.getScene().getWindow();
+          window.close();
+        } else {
+          processor.clearVerified();
+          switchState(5);
+        }
+      } else {// not lost yet
+        this.client.getPlayer().updateResourcesInTurn(this.model.getMap());
+        resetOwnedTerrs();
+        gameLogShowMap();
+        gameLogshowPlayer();
+        switchState(1);
+      }
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }

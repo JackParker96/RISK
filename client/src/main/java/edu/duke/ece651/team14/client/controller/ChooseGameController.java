@@ -1,6 +1,5 @@
 package edu.duke.ece651.team14.client.controller;
 
-import java.io.IOError;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -19,6 +18,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class ChooseGameController implements Initializable {
@@ -32,6 +32,8 @@ public class ChooseGameController implements Initializable {
   ToggleGroup group;
   @FXML
   ChoiceBox<String> ChoiceBox;
+  @FXML
+  Text Result;
 
   GUIClientPlayer client;
   ArrayList<ArrayList<Integer>> gamechoices;
@@ -91,14 +93,18 @@ public class ChooseGameController implements Initializable {
     client.resetCommunicator();
     client.whoAmIPhase();
     if (game_id.equals("Create a new Game") || isJoinGame(game_id)) {
-      switchScene(event);
+      Result.setText("Wait for other players to join the game");//doesn't work
+      switchSceneInit(event);
     }else if(isRejoinGame(game_id)){
-      // TODO: add support for rejoin game
-      // direct switch to the scene to play game, skip initial placements phase.
+      Result.setText("You can rejoin when all other players finish this turn");//doesn't work
+      switchScenePlay(event);
     }
   }
 
-  private void switchScene(ActionEvent event) throws IOException{
+  /**
+   * Switch to Init
+   */
+  private void switchSceneInit(ActionEvent event) throws IOException{
     URL url = App.class.getResource("/ui/init_units.fxml");
     FXMLLoader loader = new FXMLLoader(url);
     loader.setControllerFactory((c) -> {
@@ -111,5 +117,21 @@ public class ChooseGameController implements Initializable {
     stage.show();
   }
 
-  
+
+    /** 
+   * Switch to play game view.
+   * @param event
+   * @throws IOException
+   */
+  private void switchScenePlay(ActionEvent event) throws IOException{
+    URL url = App.class.getResource("/ui/game.fxml");
+    FXMLLoader loader = new FXMLLoader(url);
+    loader.setControllerFactory((c) -> {
+        return client.getControllerInitializer().get(c);
+    });
+    Parent root = loader.load();
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    stage.setScene(new Scene(root));
+    stage.show();
+  }  
 }
