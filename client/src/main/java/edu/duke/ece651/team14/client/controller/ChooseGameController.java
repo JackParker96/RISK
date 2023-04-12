@@ -92,7 +92,6 @@ public class ChooseGameController implements Initializable {
     client.whoAmIPhase();
     if (game_id.equals("Create a new Game") || isJoinGame(game_id)) {
       switchScene(event);
-      //TODO: switch to the scene that support initial placement phase
     }else if(isRejoinGame(game_id)){
       // TODO: add support for rejoin game
       // direct switch to the scene to play game, skip initial placements phase.

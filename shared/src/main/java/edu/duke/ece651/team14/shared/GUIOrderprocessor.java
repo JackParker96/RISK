@@ -20,7 +20,7 @@ public class GUIOrderprocessor {
     this.verifiedOrders = new ArrayList<>();
   }
 
-  public void processResearch(Map map, Order o, Player p) {
+  public int processResearch(Map map, Order o, Player p) {
     if (o instanceof ResearchOrder) {
       String checkResult = researchChecker.checkOrder(map, o);
       if (checkResult != null) {
@@ -31,12 +31,13 @@ public class GUIOrderprocessor {
       p.useTechResources(cost);
       this.verifiedOrders.add(researchOrder);
       p.addTechResources(1);
+      return cost;
     } else {
       throw new IllegalArgumentException("Order type not supported");
     }
   }
 
-  public void processUpgrade(Map map, Order o, Player p) throws MaxTechLevelException{
+  public int processUpgrade(Map map, Order o, Player p) throws MaxTechLevelException{
     if(o instanceof UpgradeOrder){
       String checkResult = upgradeChecker.checkOrder(map, o);
       if(checkResult != null){
@@ -49,13 +50,16 @@ public class GUIOrderprocessor {
           u.increaseTechLevel(upgradeOrder.getNewTechLevel()-upgradeOrder.getCurrTechLevel());
         }
       }
+      int cost = upgradeOrder.calculateCost();
+      p.useTechResources(cost);
       verifiedOrders.add(upgradeOrder);
+      return cost;
     }else{
       throw new IllegalArgumentException("Order type not supported");
     }
   }
 
-  public void processAttack(Map map,Order o,Player p){
+  public int processAttack(Map map,Order o,Player p){
     if(o instanceof AttackOrder){
       String checkResult = attackChecker.checkOrder(map, o);
       if(checkResult!=null){
@@ -67,12 +71,13 @@ public class GUIOrderprocessor {
       ArrayList<Unit> unitsToSend = attackOrder.getUnitsPicked();
       UnitMover.sendUnitArray(o.getOrigin(), o.getDestination(), unitsToSend);
       verifiedOrders.add(attackOrder);
+      return cost;
     }else{
       throw new IllegalArgumentException("Order type not supported");
     }
   }
 
-  public void processMove(Map map, Order o, Player p){
+  public int processMove(Map map, Order o, Player p){
     if(o instanceof MoveOrder){
       String checkResult = moveChecker.checkOrder(map, o);
       if(checkResult !=null){
@@ -84,6 +89,7 @@ public class GUIOrderprocessor {
       ArrayList<Unit> unitsToSend = moveOrder.getUnitsPicked();
       UnitMover.sendUnitArray(o.getOrigin(), o.getDestination(), unitsToSend);
       verifiedOrders.add(moveOrder);
+      return cost;
     }else{
       throw new IllegalArgumentException("Order type not supported");
     }
@@ -91,5 +97,9 @@ public class GUIOrderprocessor {
 
   public ArrayList<Order> getVerifiedOrders(){
     return this.verifiedOrders;
+  }
+
+  public void clearVerified(){
+    this.verifiedOrders.clear();
   }
 }

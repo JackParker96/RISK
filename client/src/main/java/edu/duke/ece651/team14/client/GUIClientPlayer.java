@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import edu.duke.ece651.team14.client.controller.ChooseGameController;
+import edu.duke.ece651.team14.client.controller.GUIController;
+import edu.duke.ece651.team14.client.controller.GameController;
 import edu.duke.ece651.team14.client.controller.InitUnitsController;
+import edu.duke.ece651.team14.client.controller.InputButtonsController;
 import edu.duke.ece651.team14.client.controller.LoginController;
 import edu.duke.ece651.team14.shared.Account;
 import edu.duke.ece651.team14.shared.Communicator;
@@ -42,12 +45,15 @@ public class GUIClientPlayer extends ClientPlayer {
     this.model = model;
   }
 
-  public void setStage(Stage window) throws Exception{
+  public void setStage(Stage window) throws Exception {
     this.window = window;
     this.controller_initializer = new HashMap<>();
     controller_initializer.put(LoginController.class, new LoginController(this));
     controller_initializer.put(ChooseGameController.class, new ChooseGameController(this));
     controller_initializer.put(InitUnitsController.class, new InitUnitsController(this));
+    controller_initializer.put(GameController.class, new GameController(model, this));
+    controller_initializer.put(GUIController.class, new GUIController(model, this));
+    controller_initializer.put(InputButtonsController.class, new InputButtonsController(model, this));
   }
 
   @Override
@@ -60,7 +66,7 @@ public class GUIClientPlayer extends ClientPlayer {
     model.gameLogText.set(msg + "\n");
   }
 
-  public HashMap<Class<?>, Object> getControllerInitializer(){
+  public HashMap<Class<?>, Object> getControllerInitializer() {
     return controller_initializer;
   }
 
@@ -76,7 +82,7 @@ public class GUIClientPlayer extends ClientPlayer {
     }
   }
 
-  public ArrayList<ArrayList<Integer>> getGameChoice() throws Exception{
+  public ArrayList<ArrayList<Integer>> getGameChoice() throws Exception {
     ArrayList<Integer> unstarted_games = this.communicator.recvIDs();
     ArrayList<Integer> rejoinable_games = this.communicator.recvIDs();
     ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
@@ -97,40 +103,38 @@ public class GUIClientPlayer extends ClientPlayer {
     Scene scene = new Scene(root, 500, 500);
     window.setScene(scene);
     window.show();
+    // URL url = App.class.getResource("/ui/game.fxml");
+    // FXMLLoader loader = new FXMLLoader(url);
+    // loader.setControllerFactory((c) -> {
+    //     return getControllerInitializer().get(c);
+    // });
+    // Parent root = loader.load();
+    // //Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    // window.setScene(new Scene(root));
+    // window.show();
   }
 
-  public void sendGameChoice(String choice) throws Exception{
+  public void sendGameChoice(String choice) throws Exception {
     this.communicator.sendObject(choice);
   }
 
-  //The server make a new communicator when player joins the game, so client need to reset here.
-  public void resetCommunicator() throws IOException{
+  // The server make a new communicator when player joins the game, so client need
+  // to reset here.
+  public void resetCommunicator() throws IOException {
     this.communicator = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
   }
 
-  public Player getPlayer(){
+  public Player getPlayer() {
     return myPlayer;
   }
 
-  public Communicator getCommunicator(){
+  public Communicator getCommunicator() {
     return communicator;
   }
 
-  // public void placeUnitsPhase() throws IOException, ClassNotFoundException {
-  //   Map m = recvMap();
-  //   displayMap(m);
-  //   out.println("You are the " + myPlayer.toString().toUpperCase()
-  //       + " player. Please add units to your territories. You can add 0 or more units to each territory, as long as you do not exceed the total number allowed.");
-  //   UnitPlacementOrder upo = m.getUnitsPlacementOrder(myPlayer);
-  //   placeUnits(upo, 30);
-  //   communicator.sendObject(upo);
-  //   // wait for other to finish
-  //   out.println("Wait for other players to finish placing units...\n");
-  // }
 
-
-
-  //**************************************below are the methods that text client uses*********************//
+  // **************************************below are the methods that text client
+  // uses*********************//
   /**
    * Ask a player if they want to disconnect from the game
    *
@@ -184,26 +188,6 @@ public class GUIClientPlayer extends ClientPlayer {
     myPlayer = communicator.recvBasicPlayer();
   }
 
-  /**
-   * Unit placement phase, receive the empty placement order from server, fill it,
-   * and send back to the server.
-   * And then it receives the server acknowledge (the updated map state), which
-   * indicates this phase finishes.
-   * 
-   * @throws IOException
-   * @throws ClassNotFoundException
-   */
-  public void placeUnitsPhase() throws IOException, ClassNotFoundException {
-    Map m = recvMap();
-    displayMap(m);
-    out.println("You are the " + myPlayer.toString().toUpperCase()
-        + " player. Please add units to your territories. You can add 0 or more units to each territory, as long as you do not exceed the total number allowed.");
-    UnitPlacementOrder upo = m.getUnitsPlacementOrder(myPlayer);
-    placeUnits(upo, 30);
-    communicator.sendObject(upo);
-    // wait for other to finish
-    out.println("Wait for other players to finish placing units...\n");
-  }
 
   /**
    * Displays given map to client output
@@ -215,96 +199,8 @@ public class GUIClientPlayer extends ClientPlayer {
    */
   protected void displayMap(Map m) throws IOException, ClassNotFoundException {
     MapTextView view = new MapTextView(m);
-    //out.print(view.displayMap());
+    // out.print(view.displayMap());
     sendMsg(view.displayMap());
-  }
-
-  /**
-   * Place units on all territory belongs to this player. If exception happens
-   * (did not place it correctly)
-   * it resets all the placements and starts again.
-   * 
-   * @param upo
-   * @param totalUnits
-   * @throws IOException
-   */
-  protected void placeUnits(UnitPlacementOrder upo, int totalUnits) throws IOException {
-    while (true) {
-      try {
-        int remainingUnits = totalUnits;
-        upo.resetUnits();
-        for (int i = 0; i < upo.size(); i++) {
-          int num_placed = placeOneTerr(upo, remainingUnits, i);
-          remainingUnits -= num_placed;
-        }
-        return;
-      } catch (IllegalArgumentException ex) {
-        out.println(ex.getMessage());
-      }
-    }
-  }
-
-  /**
-   * Read an int, check the num of units is valid or not, if valid, add this to
-   * order.
-   * 
-   * @param upo
-   * @param remainingUnits
-   * @param index:         the index at
-   * @return the unit placed
-   * @throws IOException
-   */
-  protected int placeOneTerr(UnitPlacementOrder upo, int remainingUnits, int index) throws IOException {
-    out.println("You have " + remainingUnits + " Units left");
-    int inputInt = readInt("Please enter the number of units you want to put in " + upo.getName(index)
-        + GetProgressStr(index + 1, upo.size()));
-    if (inputInt > remainingUnits) {
-      throw new IllegalArgumentException("You are placing more units than you were allotted!");
-    }
-    if (index == upo.size() - 1 && inputInt != remainingUnits) {
-      throw new IllegalArgumentException("You need to place all units!");
-    }
-    upo.setNumUnits(index, inputInt);
-    return inputInt;
-  }
-
-  /**
-   * Return string of format (cur/total)
-   * 
-   * @param cur
-   * @param total
-   * @return
-   */
-  protected String GetProgressStr(int cur, int total) {
-    return " (" + Integer.toString(cur) + "/" + Integer.toString(total) + ")";
-  }
-
-  /**
-   * Read an int from the input source
-   * 
-   * @param prompt
-   * @return the read int
-   * @throws IOException
-   */
-  protected int readInt(String prompt) throws IOException {
-    while (true) {
-      try {
-        out.println(prompt);
-        String s = inputReader.readLine();
-        if (s == null) {
-          throw new EOFException("reach end of file");
-        }
-        int ans = Integer.parseInt(s);
-        if (ans < 0) {
-          throw new IllegalArgumentException("Unit number cannot be less than 0");
-        }
-        return ans;
-      } catch (NumberFormatException ex) {
-        out.println("Wrong int format, try again");
-      } catch (IllegalArgumentException ex) {
-        out.println(ex.getMessage());
-      }
-    }
   }
 
   /**
@@ -354,49 +250,6 @@ public class GUIClientPlayer extends ClientPlayer {
     }
   }
 
-  // Note: no error checking here.
-  public String joinGamePhase() throws IOException, ClassNotFoundException {
-    ArrayList<Integer> unstarted_games = this.communicator.recvIDs();
-    ArrayList<Integer> rejoinable_games = this.communicator.recvIDs();
-    String conn_choice = "";
-    while (true) {
-      conn_choice = getGameConnectionChoice();
-      if (conn_choice.equals("1")) {// reconnect
-        sendMsg("You can rejoin games:\n" + displayIDs(rejoinable_games));
-        if (rejoinable_games.size() == 0) {
-          continue;
-        }
-        break;
-      } else if (conn_choice.equals("2")) {
-        sendMsg("You can create a new game by input 0[x], x is the number of players of this game");
-        sendMsg("You can join games:\n" + displayIDs(unstarted_games));
-        break;
-      }
-    }
-    String game_choice = getInput();
-    this.communicator.sendObject(game_choice);
-    return conn_choice;
-  }
-
-  protected String displayIDs(ArrayList<Integer> ids) {
-    StringBuilder sb = new StringBuilder();
-    if (ids.size() == 0) {
-      sb.append("Not Available");
-    } else {
-      for (int i : ids) {
-        sb.append(i + "\n");
-      }
-    }
-    return sb.toString();
-  }
-
-  // Note: no error checking here.
-  protected String getGameConnectionChoice() throws IOException {
-    sendMsg("Type 1 to reconnect to a game or Type 2 to join/create a game");
-    String choice = getInput();
-    return choice;
-  }
-
   public void PlayGame() throws IOException, ClassNotFoundException {
     loginPhase();
     String choice = joinGamePhase();
@@ -410,5 +263,34 @@ public class GUIClientPlayer extends ClientPlayer {
       whoAmIPhase();
       playGamePhase();
     }
+  }
+
+  @Override
+  public void placeUnitsPhase() throws IOException, ClassNotFoundException {
+    //not necessary
+  }
+
+  @Override
+  protected void placeUnits(UnitPlacementOrder upo, int totalUnits) throws IOException {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  protected int placeOneTerr(UnitPlacementOrder upo, int remainingUnits, int index) throws IOException {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  protected int readInt(String prompt) throws IOException {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public String joinGamePhase() throws IOException, ClassNotFoundException {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

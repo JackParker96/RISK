@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
+import edu.duke.ece651.team14.client.GUIClientPlayer;
 import edu.duke.ece651.team14.client.GameModel;
 import edu.duke.ece651.team14.shared.Territory;
 import javafx.beans.property.StringProperty;
@@ -32,6 +33,9 @@ public class GUIController implements Initializable {
 
   ArrayList<Label> labels;
 
+  @FXML
+  TextArea gameLogText;
+  
   @FXML
   private Text actiontarget;
   @FXML
@@ -85,8 +89,10 @@ public class GUIController implements Initializable {
   @FXML
   private Label capitol_b;
 
-  public GUIController(GameModel model) {
+  GUIClientPlayer client;
+  public GUIController(GameModel model, GUIClientPlayer client) {
     this.model = model;
+    this.client = client;
     terrNames.put("midkemia_b", "midkemia");
     terrNames.put("gondor_b", "gondor");
     terrNames.put("oz_b", "oz");
@@ -116,7 +122,7 @@ public class GUIController implements Initializable {
     playerColors.put("green", "#D9EAD3");
     playerColors.put("blue", "#CFE2F3");
     playerColors.put("yellow", "#FFF2CC");
-
+    labels = new ArrayList<>();
     labels.addAll(Arrays.asList(midkemia_b, gondor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b,
         roshar_b, othrys_b, camp_half_blood_b, gotham_city_b, diagon_alley_b, hogwarts_b, platform_b, jurassic_park_b,
         wakanda_b, district12_b, duke_b, north_pole_b, wonka_b, atlantis_b, capitol_b));
@@ -126,7 +132,6 @@ public class GUIController implements Initializable {
   public void initialize(URL url, ResourceBundle r) {
     addSelectedListener();
     addMapUpdateListener();
-
   }
 
   /**

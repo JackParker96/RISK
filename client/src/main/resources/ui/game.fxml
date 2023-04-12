@@ -70,7 +70,7 @@
          <children>
             <TitledPane animated="false" text="Map">
                <content>
-                  <fx:include source="map.fxml" />
+                  <fx:include fx:id = "gui" source="map.fxml" />
                </content>
             </TitledPane>
             <GridPane prefWidth="602.0" GridPane.columnIndex="1">
@@ -106,7 +106,7 @@
                            <content>
                               <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: black;">
                                  <children>
-                                    <TextArea fx:id="gameLogText" editable="false" prefHeight="224.0" prefWidth="602.0" styleClass="text-area" stylesheets="@gameLog.css" text="The Label component, on the other hand, is used to display user-readable text that can be styled with basic formatting such as bold or italic, but is not suitable for complex layouts or rich text. A Label has an explicit size and layout on its own, so it can be used as a standalone component or within a layout container." wrapText="true">
+                                    <TextArea fx:id="gameLogText" editable="true" prefHeight="224.0" prefWidth="602.0" styleClass="text-area" stylesheets="@gameLog.css" text="The Label component, on the other hand, is used to display user-readable text that can be styled with basic formatting such as bold or italic, but is not suitable for complex layouts or rich text. A Label has an explicit size and layout on its own, so it can be used as a standalone component or within a layout container." wrapText="true">
                                        <font>
                                           <Font name="Courier New" size="19.0" />
                                        </font>
@@ -121,6 +121,6 @@
             </GridPane>
          </children>
       </GridPane>
-      <fx:include source="turnButtons.fxml" GridPane.rowIndex="3" />
+      <fx:include fx:id = "inputButtons" source="turnButtons.fxml" GridPane.rowIndex="3" />
    </children>
 </GridPane>
