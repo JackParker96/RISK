@@ -229,11 +229,22 @@ public class InputButtonsController implements Initializable {
   private void startAnotherTurn() {
     try {
       this.model.setMap(client.recvMap());
-      this.client.getPlayer().updateResourcesInTurn(this.model.getMap());
-      resetOwnedTerrs();
-      gameLogShowMap();
-      gameLogshowPlayer();
-      switchState(1);
+      if (this.client.getPlayer().hasLost(this.model.getMap())) {// has lost
+        boolean disconnect = ConfirmBox.display("You lose!", "Do you want to disconnect?", "Disconnect", "Watch Game");
+        if (disconnect) {
+          Stage window = (Stage) gameLogText.getScene().getWindow();
+          window.close();
+        } else {
+          processor.clearVerified();
+          switchState(5);
+        }
+      } else {// not lost yet
+        this.client.getPlayer().updateResourcesInTurn(this.model.getMap());
+        resetOwnedTerrs();
+        gameLogShowMap();
+        gameLogshowPlayer();
+        switchState(1);
+      }
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
