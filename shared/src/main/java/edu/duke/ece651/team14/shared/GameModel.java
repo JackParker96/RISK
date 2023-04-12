@@ -46,6 +46,14 @@ public class GameModel {
     mapCount.set(getMapCount() + 1);
   }
 
+  public String getSelectedTerritory() {
+    return selectedTerritory.get();
+  }
+
+  public String getPlayerName() {
+    return playerName;
+  }
+
   public int getFoodResources() {
     return foodResources.get();
   }

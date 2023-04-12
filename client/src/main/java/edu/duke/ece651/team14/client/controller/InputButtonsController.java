@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import edu.duke.ece651.team14.client.GameModel;
+import edu.duke.ece651.team14.shared.GameModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceDialog;
