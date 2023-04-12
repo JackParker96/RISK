@@ -2,11 +2,6 @@ package edu.duke.ece651.team14.shared;
 
 import java.util.ArrayList;
 
-import edu.duke.ece651.team14.shared.BasicTerritory;
-import edu.duke.ece651.team14.shared.Map;
-import edu.duke.ece651.team14.shared.Player;
-import edu.duke.ece651.team14.shared.Territory;
-
 /**
  * Class to make a hard-coded map with 24 Territories
  */
@@ -42,8 +37,12 @@ public class MapFactory implements AbstractMapFactory {
       terrs.add(new BasicTerritory(Integer.toString(i)));
       if (i < 4) {
         terrs.get(i).setOwner(p1);
+        terrs.get(i).setFoodProductionRate(10);
+        terrs.get(i).setTechProductionRate(10);
       } else {
         terrs.get(i).setOwner(p2);
+        terrs.get(i).setFoodProductionRate(10);
+        terrs.get(i).setTechProductionRate(10);
       }
     }
 

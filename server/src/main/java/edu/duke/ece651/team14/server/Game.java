@@ -18,6 +18,7 @@ import edu.duke.ece651.team14.shared.MapFactory;
 import edu.duke.ece651.team14.shared.MoveOrder;
 import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.Player;
+import edu.duke.ece651.team14.shared.ServerOrderProcessor;
 import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 import edu.duke.ece651.team14.shared.UpgradeOrder;
@@ -166,11 +167,8 @@ public class Game {
     sendInfo(this.map);
     HashMap<String, ArrayList<Order>> orders = receiveAllOrders();
     //resolve upgrade
-    GUIOrderprocessor processor = new GUIOrderprocessor(this.map);
+    ServerOrderProcessor processor = new ServerOrderProcessor(this.map);
     serverResolveUpgrade(processor, orders.get("upgrade"));
-    // resolve move
-    //ServerMoveResolver smr = new ServerMoveResolver(map);
-    //smr.resolveAllMoveOrders(orders.get("move"));
     serverResolveMove(processor, orders.get("move"));
     // resolve attack
     ServerAttackOrderResolver sar = new ServerAttackOrderResolver(map, new DiceResolver());
@@ -185,7 +183,7 @@ public class Game {
    * @param processor
    * @param orders
    */
-  private void serverResolveUpgrade(GUIOrderprocessor processor,ArrayList<Order> orders){
+  private void serverResolveUpgrade(ServerOrderProcessor processor,ArrayList<Order> orders){
     try{
       for(Order o:orders){
         UpgradeOrder uo = (UpgradeOrder)o;
@@ -199,7 +197,7 @@ public class Game {
   }
 
 
-  private void serverResolveMove(GUIOrderprocessor processor, ArrayList<Order> moveOrders){
+  private void serverResolveMove(ServerOrderProcessor processor, ArrayList<Order> moveOrders){
     try{
       for(Order o:moveOrders){
         MoveOrder mo = (MoveOrder)o;

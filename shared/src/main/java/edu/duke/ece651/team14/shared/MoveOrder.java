@@ -42,12 +42,12 @@ public class MoveOrder extends Order {
     for (Unit u : getOrigin().getUnits()) {
       units.add(u);
     }
-    units.sort((u0, u1) -> u0.getTechLevel() - u1.getTechLevel());  // sort units by ascending order
+    int distance = getPlayer().findShortestPath(getOrigin(), getDestination());
+    units.sort((u0, u1) -> u0.getTechLevel() - u1.getTechLevel()); // sort units by ascending order
     for (int i = 0; i < getNumUnits(); i++) {
       Unit moveUnit = units.remove(0);
       unitsPicked.add(moveUnit);
-      int distance = getPlayer().findShortestPath(getOrigin(), getDestination());
-      cost += 2 * distance; 
+      cost += 2 * distance;
     }
     return cost;
   }

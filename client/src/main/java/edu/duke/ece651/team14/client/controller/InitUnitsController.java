@@ -1,22 +1,29 @@
 package edu.duke.ece651.team14.client.controller;
 
+import java.io.IOError;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import edu.duke.ece651.team14.client.App;
 import edu.duke.ece651.team14.client.GUIClientPlayer;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 public class InitUnitsController implements Initializable {
 
@@ -60,17 +67,35 @@ public class InitUnitsController implements Initializable {
 
   @FXML
   public void handleSubmitButtonAction(ActionEvent event) throws Exception {
-      try {
-        checkInput();
-        this.client.getCommunicator().sendObject(upo);
-        this.client.playGamePhase();//for testing
-      } catch (IllegalArgumentException e) {
-        Result.setText(e.getMessage());
-        Result.setFill(Color.RED);
-      } catch(Exception ee){
-        Result.setText(ee.getMessage());
-        Result.setFill(Color.RED);
-      }
+    try {
+      checkInput();
+      this.client.getCommunicator().sendObject(upo);
+      System.out.println("Switch Scene called");
+      switchScene(event);
+    } catch (IllegalArgumentException e) {
+      Result.setText(e.getMessage());
+      Result.setFill(Color.RED);
+    } catch (Exception ee) {
+      Result.setText(ee.getMessage());
+      Result.setFill(Color.RED);
+    }
+  }
+
+  /** 
+   * Switch to play game view.
+   * @param event
+   * @throws IOException
+   */
+  private void switchScene(ActionEvent event) throws IOException{
+    URL url = App.class.getResource("/ui/game.fxml");
+    FXMLLoader loader = new FXMLLoader(url);
+    loader.setControllerFactory((c) -> {
+        return client.getControllerInitializer().get(c);
+    });
+    Parent root = loader.load();
+    Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    stage.setScene(new Scene(root));
+    stage.show();
   }
 
   private void checkInput() {
