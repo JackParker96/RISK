@@ -15,12 +15,16 @@ import edu.duke.ece651.team14.shared.BasicUnit;
 import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.Unit;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 
 public class GameController implements Initializable {
   @FXML
@@ -40,7 +44,7 @@ public class GameController implements Initializable {
 
   @FXML
   InputButtonsController inputButtonsController;
-  
+
   // @FXML
   // ListView<String> gameLogList;
 
@@ -146,5 +150,14 @@ public class GameController implements Initializable {
     howToPlayAlert.setHeaderText("How to Play");
     howToPlayAlert.setTitle("How To Play");
     howToPlayAlert.show();
+  }
+
+  @FXML
+  private void OnExit() {
+    Stage stage = (Stage) exitGame.getScene().getWindow();
+    boolean exit = ConfirmBox.display("Exit the game", "Are you sure you want to exit?", "Yes, I want to exit", "No");
+    if(exit){
+      stage.close();
+    }
   }
 }

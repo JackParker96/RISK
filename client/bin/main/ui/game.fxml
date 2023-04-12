@@ -45,7 +45,7 @@
          <right>
             <HBox alignment="CENTER" BorderPane.alignment="CENTER">
                <children>
-                  <Label text="exit the game" textAlignment="CENTER" textFill="WHITE">
+                  <Label fx:id="exitGame" onMouseClicked = "#OnExit" text="exit the game" textAlignment="CENTER" textFill="WHITE">
                      <padding>
                         <Insets right="60.0" />
                      </padding>

@@ -69,6 +69,7 @@ public class InitUnitsController implements Initializable {
   public void handleSubmitButtonAction(ActionEvent event) throws Exception {
     try {
       checkInput();
+      Result.setText("Wait for other players to finish...");
       this.client.getCommunicator().sendObject(upo);
       System.out.println("Switch Scene called");
       switchScene(event);

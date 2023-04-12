@@ -156,11 +156,11 @@ public class GUIClientPlayer extends ClientPlayer {
    * @param m is the Map of the game
    * @throw IllegalArgumentException if Map m doesn't have a winner
    */
-  public void displayWinInfo(Map m) throws IllegalArgumentException {
+  public String displayWinInfo(Map m) throws IllegalArgumentException {
     if (m.getWinner() == null) {
       throw new IllegalArgumentException("Error: Nobody has won the game yet");
     }
-    sendMsg(m.getWinner() + " has won the game!");
+    return new String(m.getWinner() + " has won the game!");
   }
 
   /**
@@ -271,25 +271,21 @@ public class GUIClientPlayer extends ClientPlayer {
 
   @Override
   protected void placeUnits(UnitPlacementOrder upo, int totalUnits) throws IOException {
-    // TODO Auto-generated method stub
     
   }
 
   @Override
   protected int placeOneTerr(UnitPlacementOrder upo, int remainingUnits, int index) throws IOException {
-    // TODO Auto-generated method stub
     return 0;
   }
 
   @Override
   protected int readInt(String prompt) throws IOException {
-    // TODO Auto-generated method stub
     return 0;
   }
 
   @Override
   public String joinGamePhase() throws IOException, ClassNotFoundException {
-    // TODO Auto-generated method stub
     return null;
   }
 }
