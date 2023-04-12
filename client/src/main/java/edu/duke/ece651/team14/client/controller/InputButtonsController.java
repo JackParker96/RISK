@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import edu.duke.ece651.team14.shared.GameModel;
 import edu.duke.ece651.team14.client.GUIClientPlayer;
 import edu.duke.ece651.team14.client.GameModel;
 import edu.duke.ece651.team14.shared.AttackOrder;

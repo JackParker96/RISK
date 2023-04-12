@@ -10,11 +10,15 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import edu.duke.ece651.team14.client.GUIClientPlayer;
-import edu.duke.ece651.team14.client.GameModel;
 import edu.duke.ece651.team14.shared.BasicUnit;
 import edu.duke.ece651.team14.shared.MapTextView;
+import edu.duke.ece651.team14.shared.GameModel;
+import edu.duke.ece651.team14.shared.BasicUnit;
+import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.Unit;
+
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -33,6 +37,9 @@ public class GameController implements Initializable {
   TextArea territoryStatsText;
 
   @FXML
+  TextArea userStatsText;
+
+  @FXML
   TextArea gameLogText;
 
   @FXML
@@ -47,6 +54,7 @@ public class GameController implements Initializable {
   GameModel model;
   GUIClientPlayer client;
 
+<<<<<<< client/src/main/java/edu/duke/ece651/team14/client/controller/GameController.java
   public GameController(GameModel model, GUIClientPlayer client) {
     this.model = model;
     this.client = client;
@@ -70,6 +78,42 @@ public class GameController implements Initializable {
   public void initialize() {
     model.selectedTerritory.addListener((obs, oldValue, newValue) -> {
       territoryStatsText.setText(newValue);
+=======
+  HashMap<String, String> terrNames = new HashMap<String, String>();
+
+  public GameController(GameModel model) {
+    this.model = model;
+    terrNames.put("midkemia_l", "midkemia");
+    terrNames.put("gondor_l", "gondor");
+    terrNames.put("oz_l", "oz");
+    terrNames.put("neverland_l", "neverland");
+    terrNames.put("narnia_l", "narnia");
+    terrNames.put("mordor_l", "mordor");
+    terrNames.put("scadrial_l", "scadrial");
+    terrNames.put("elantris_l", "elantris");
+    terrNames.put("olympus_l", "mt olympus");
+    terrNames.put("roshar_l", "roshar");
+    terrNames.put("othrys_l", "mt othrys");
+    terrNames.put("camp_half_blood_l", "camp half-blood");
+    terrNames.put("gotham_city_l", "gotham city");
+    terrNames.put("diagon_alley_l", "diagon alley");
+    terrNames.put("hogwarts_l", "hogwarts");
+    terrNames.put("platform_l", "platform 9 and 3/4");
+    terrNames.put("jurassic_park_l", "jurassic park");
+    terrNames.put("wakanda_l", "wakanda");
+    terrNames.put("district12_l", "district twelve");
+    terrNames.put("duke_l", "duke");
+    terrNames.put("north_pole_l", "north pole");
+    terrNames.put("wonka_l", "wonka chocolate factory");
+    terrNames.put("atlantis_l", "atlantis");
+    terrNames.put("capitol_l", "the capitol");
+  }
+
+  public void initialize() {
+    setPlayerText();
+    model.selectedTerritory.addListener((obs, oldValue, newValue) -> {        
+        setTerrText(newValue);
+>>>>>>> client/src/main/java/edu/duke/ece651/team14/client/controller/GameController.java
     });
     model.gameLogText.addListener((obs, oldValue, newValue) -> {
       gameLogText.setText(newValue);
@@ -83,26 +127,26 @@ public class GameController implements Initializable {
     });
   }
 
-  public void setTerrText(ObservableValue<String> obs, String oldValue, String newValue) {
-    territoryStatsText.setText("");
-  }
-
   public void setTerrText(String newValue) {
-    String pl = "placeholder";
     StringBuilder sb = new StringBuilder();
-    sb.append("Territory: " + newValue + "\n");
-    sb.append("Owner: " + pl + "\n");
-    sb.append("Food Production Rate: " + pl + "\n");
-    sb.append("Technology Production Rate: " + pl + "\n");
-    HashMap<Integer, Integer> unitInfo = unitTechLevels(null); // change null to units array list
+    Territory t = model.getMap().getTerritoryByName(terrNames.get(model.getSelectedTerritory()));
+    sb.append("Territory: " + t.getName() + "\n");
+    sb.append("Owner: " + t.getOwner() + "\n");
+    sb.append("Food Production Rate: " + t.getFoodProductionRate() + "\n");
+    sb.append("Technology Production Rate: " + t.getTechProductionRate() + "\n");
+    HashMap<Integer, Integer> unitInfo = unitTechLevels(t.getUnits());
     for (int i = 0; i < 7; i++) {
       if (unitInfo.get(i) > 0) {
         sb.append("Level " + i + " Units: " + unitInfo.get(i) + "\n");
       }
     }
+<<<<<<< client/src/main/java/edu/duke/ece651/team14/client/controller/GameController.java
     sb.append("Unit Level 0: " + pl + "\n");
     sb.append("Unit Level 1: " + pl + "\n"); // only list if unit number for type greater than 0
     sb.append("\nNOTE: adjacent territories are each 1 distance away");
+=======
+    sb.append("\nNOTE: adjacent territories are each 1 distance away"); 
+>>>>>>> client/src/main/java/edu/duke/ece651/team14/client/controller/GameController.java
     territoryStatsText.setText(sb.toString());
   }
 
@@ -122,13 +166,12 @@ public class GameController implements Initializable {
   }
 
   public void setPlayerText() {
-    String pl = "placeholder";
     StringBuilder sb = new StringBuilder();
-    sb.append("Player: " + pl + "\n");
+    sb.append("Player: " + model.getPlayerName() + "\n");
     sb.append("Maximum Technology Level: " + model.getMaxTechLevel() + "\n");
     sb.append("Total Food Resources: " + model.getFoodResources() + "\n");
     sb.append("Total Technology Resources: " + model.getTechResources() + "\n");
-    territoryStatsText.setText(sb.toString());
+    userStatsText.setText(sb.toString());
   }
 
   @FXML
@@ -147,4 +190,5 @@ public class GameController implements Initializable {
     howToPlayAlert.setTitle("How To Play");
     howToPlayAlert.show();
   }
+
 }

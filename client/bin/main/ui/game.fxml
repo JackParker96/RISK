@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane style="-fx-background-color: #2A3B57;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team14.client.controller.GameController">
+<GridPane style="-fx-background-color: #2A3B57;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team14.client.controller.GameController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
    </columnConstraints>
@@ -94,9 +94,12 @@
                            </content>
                       </Tab>
                       <Tab text="User Stats">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
+                           <content>
+                              <Pane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <TextArea fx:id="userStatsText" prefHeight="222.0" prefWidth="602.0" text="The Label component, on the other hand, is used to display user-readable text that can be styled with basic formatting such as bold or italic, but is not suitable for complex layouts or rich text. A Label has an explicit size and layout on its own, so it can be used as a standalone component or within a layout container." wrapText="true" />
+                                 </children></Pane>
+                           </content>
                       </Tab>
                     </tabs>
                   </TabPane>
