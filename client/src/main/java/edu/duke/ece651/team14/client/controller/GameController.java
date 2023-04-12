@@ -47,14 +47,16 @@ public class GameController implements Initializable {
 
   @FXML
   InputButtonsController inputButtonsController;
-  
+
+  HashMap<String, String> terrNames = new HashMap<String, String>();
+
   // @FXML
   // ListView<String> gameLogList;
 
   GameModel model;
+
   GUIClientPlayer client;
 
-<<<<<<< client/src/main/java/edu/duke/ece651/team14/client/controller/GameController.java
   public GameController(GameModel model, GUIClientPlayer client) {
     this.model = model;
     this.client = client;
@@ -74,12 +76,6 @@ public class GameController implements Initializable {
       System.out.println(e.getMessage());
     }
   }
-
-  public void initialize() {
-    model.selectedTerritory.addListener((obs, oldValue, newValue) -> {
-      territoryStatsText.setText(newValue);
-=======
-  HashMap<String, String> terrNames = new HashMap<String, String>();
 
   public GameController(GameModel model) {
     this.model = model;
@@ -113,7 +109,6 @@ public class GameController implements Initializable {
     setPlayerText();
     model.selectedTerritory.addListener((obs, oldValue, newValue) -> {        
         setTerrText(newValue);
->>>>>>> client/src/main/java/edu/duke/ece651/team14/client/controller/GameController.java
     });
     model.gameLogText.addListener((obs, oldValue, newValue) -> {
       gameLogText.setText(newValue);
@@ -140,13 +135,7 @@ public class GameController implements Initializable {
         sb.append("Level " + i + " Units: " + unitInfo.get(i) + "\n");
       }
     }
-<<<<<<< client/src/main/java/edu/duke/ece651/team14/client/controller/GameController.java
-    sb.append("Unit Level 0: " + pl + "\n");
-    sb.append("Unit Level 1: " + pl + "\n"); // only list if unit number for type greater than 0
     sb.append("\nNOTE: adjacent territories are each 1 distance away");
-=======
-    sb.append("\nNOTE: adjacent territories are each 1 distance away"); 
->>>>>>> client/src/main/java/edu/duke/ece651/team14/client/controller/GameController.java
     territoryStatsText.setText(sb.toString());
   }
 
