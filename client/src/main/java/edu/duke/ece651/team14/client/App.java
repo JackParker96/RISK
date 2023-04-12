@@ -15,6 +15,7 @@ import java.util.List;
 import edu.duke.ece651.team14.client.controller.GUIController;
 import edu.duke.ece651.team14.client.controller.GameController;
 import edu.duke.ece651.team14.client.controller.InputButtonsController;
+import edu.duke.ece651.team14.shared.GameModel;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.MyName;
 import javafx.application.Application;

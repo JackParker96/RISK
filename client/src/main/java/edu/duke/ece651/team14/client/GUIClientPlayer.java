@@ -19,6 +19,7 @@ import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
+import edu.duke.ece651.team14.shared.GameModel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -182,6 +183,7 @@ public class GUIClientPlayer extends ClientPlayer {
    */
   public void whoAmIPhase() throws IOException, ClassNotFoundException {
     myPlayer = communicator.recvBasicPlayer();
+    model.playerName = myPlayer.getName();
   }
 
   /**
