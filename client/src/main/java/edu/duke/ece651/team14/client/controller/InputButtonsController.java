@@ -1,13 +1,11 @@
 package edu.duke.ece651.team14.client.controller;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import edu.duke.ece651.team14.client.ClientPlayer;
 import edu.duke.ece651.team14.client.GUIClientPlayer;
 import edu.duke.ece651.team14.client.GameModel;
 import edu.duke.ece651.team14.shared.AttackOrder;
@@ -15,6 +13,7 @@ import edu.duke.ece651.team14.shared.GUIOrderprocessor;
 import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.MoveOrder;
 import edu.duke.ece651.team14.shared.Order;
+import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.ResearchOrder;
 import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.UpgradeOrder;
@@ -124,7 +123,9 @@ public class InputButtonsController implements Initializable {
     Order move = new MoveOrder(origin_terr, dest_terr, numUnits, this.client.getPlayer());
     try {
       int food = processor.processMove(this.model.getMap(), move, this.client.getPlayer());
-      gameLogText.appendText("Valid move order with food cost: " + food);
+      gameLogText.appendText("Valid move order with food cost: " + food + "\n");
+      gameLogShowMap();
+      gameLogshowPlayer();
     } catch (Exception ee) {
       gameLogText.appendText(ee.getMessage());
     }
@@ -141,7 +142,9 @@ public class InputButtonsController implements Initializable {
     Order attackOrder = new AttackOrder(origin_terr, dest_terr, numUnits, this.client.getPlayer());
     try {
       int food = processor.processAttack(this.model.getMap(), attackOrder, this.client.getPlayer());
-      gameLogText.appendText("Valid attack order with food cost: " + food);
+      gameLogText.appendText("Valid attack order with food cost: " + food + "\n");
+      gameLogShowMap();
+      gameLogshowPlayer();
     } catch (Exception ee) {
       gameLogText.appendText(ee.getMessage());
     }
@@ -149,13 +152,14 @@ public class InputButtonsController implements Initializable {
 
   @FXML
   public void onResearch(ActionEvent e) {
-    ResearchOrder ro = new ResearchOrder(this.client.getPlayer());
+    Order ro = new ResearchOrder(this.client.getPlayer());
     try {
       int tech = processor.processResearch(this.model.getMap(), ro, this.client.getPlayer());
-      gameLogText.appendText("Valid research order with tech cost: " + tech);
+      gameLogText.appendText("Valid research order with tech cost: " + tech + "\n");
     } catch (Exception ee) {
       gameLogText.appendText(ee.getMessage());
     }
+    switchState(5);
   }
 
   @FXML
@@ -170,10 +174,12 @@ public class InputButtonsController implements Initializable {
     try {
       int tech = processor.processUpgrade(model.getMap(), o, client.getPlayer());
       // model.gameLogText.set("Valid upgrade order with cost:");
-      gameLogText.setText("Valid upgrade order with tech cost: " + tech);
+      gameLogText.appendText("Valid upgrade order with tech cost: " + tech + "\n");
+      gameLogShowMap();
+      gameLogshowPlayer();
     } catch (Exception exp) {
       // model.gameLogText.set(exp.getMessage());
-      gameLogText.setText(exp.getMessage());
+      gameLogText.appendText(exp.getMessage());
     }
   }
 
@@ -191,6 +197,7 @@ public class InputButtonsController implements Initializable {
         break;
       case 4:
         switchState(5);
+        break;
       case 5:// send to server, recv results,
         finishOneTurn();
     }
@@ -200,7 +207,7 @@ public class InputButtonsController implements Initializable {
     try {
       this.client.getCommunicator().sendObject(processor.getVerifiedOrders());
       processor.clearVerified();
-      gameLogText.appendText("Wait for other players...");
+      gameLogText.appendText("Wait for other players...\n");
       String result = this.client.getCommunicator().recvString();
       gameLogText.appendText(result);
       String gameresult = this.client.getCommunicator().recvString();
@@ -218,10 +225,10 @@ public class InputButtonsController implements Initializable {
   private void startAnotherTurn() {
     try {
       this.model.setMap(client.recvMap());
-      // TODO: gain resources on the map and display
+      this.client.getPlayer().updateResourcesInTurn(this.model.getMap());
       resetOwnedTerrs();
-      MapTextView view = new MapTextView(this.model.getMap());
-      gameLogText.appendText(view.displayMap());
+      gameLogShowMap();
+      gameLogshowPlayer();
       switchState(1);
     } catch (Exception e) {
       System.out.println(e.getMessage());
@@ -244,6 +251,21 @@ public class InputButtonsController implements Initializable {
     for (String t : model.getMap().getMap().keySet()) {
       terrs.add(t);
     }
+  }
+
+  public void gameLogshowPlayer() {
+    StringBuilder sb = new StringBuilder();
+    Player p = this.client.getPlayer();
+    sb.append("Player: " + p.getName() + "\n");
+    sb.append("Maximum Technology Level: " + p.getMaxTechLevel() + "\n");
+    sb.append("Total Food Resources: " + p.getFoodAmt() + "\n");
+    sb.append("Total Technology Resources: " + p.getTechAmt() + "\n");
+    gameLogText.appendText(sb.toString());
+  }
+
+  private void gameLogShowMap() {
+    MapTextView view = new MapTextView(this.model.getMap());
+    gameLogText.appendText(view.displayMap());
   }
 
   /**

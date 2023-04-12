@@ -60,6 +60,8 @@ public class GameController implements Initializable {
       model.setMap(client.recvMap());
       MapTextView view = new MapTextView(model.getMap());
       gameLogText.setText(view.displayMap());
+      this.client.getPlayer().updateResourcesInTurn(model.getMap());
+      inputButtonsController.gameLogshowPlayer();
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }

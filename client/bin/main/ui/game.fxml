@@ -106,9 +106,9 @@
                            <content>
                               <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: black;">
                                  <children>
-                                    <TextArea fx:id="gameLogText" editable="true" prefHeight="224.0" prefWidth="602.0" styleClass="text-area" stylesheets="@gameLog.css" text="The Label component, on the other hand, is used to display user-readable text that can be styled with basic formatting such as bold or italic, but is not suitable for complex layouts or rich text. A Label has an explicit size and layout on its own, so it can be used as a standalone component or within a layout container." wrapText="true">
+                                    <TextArea fx:id="gameLogText" editable="false" prefHeight="224.0" prefWidth="602.0" styleClass="text-area" stylesheets="@gameLog.css" text="The Label component, on the other hand, is used to display user-readable text that can be styled with basic formatting such as bold or italic, but is not suitable for complex layouts or rich text. A Label has an explicit size and layout on its own, so it can be used as a standalone component or within a layout container." wrapText="true">
                                        <font>
-                                          <Font name="Courier New" size="19.0" />
+                                          <Font name="Courier New" size="15.0" />
                                        </font>
                                     </TextArea>
                                  </children>

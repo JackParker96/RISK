@@ -15,6 +15,7 @@ public class UnitMover {
    */
   public static void moveUnits(Territory origin, Territory destination, int numUnits, String unitType) {
     ArrayList<Unit> originUnits = origin.getUnits();
+    originUnits.sort((u0, u1) -> u0.getTechLevel() - u1.getTechLevel());
     Iterator<Unit> iterator = originUnits.iterator();
     while (iterator.hasNext() && numUnits > 0) {
       Unit u = iterator.next();

@@ -8,21 +8,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
 
-import edu.duke.ece651.team14.client.controller.GUIController;
-import edu.duke.ece651.team14.client.controller.GameController;
-import edu.duke.ece651.team14.client.controller.InputButtonsController;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.MyName;
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class App extends Application {
