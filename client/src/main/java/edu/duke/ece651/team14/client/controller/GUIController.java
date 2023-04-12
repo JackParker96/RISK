@@ -35,7 +35,7 @@ public class GUIController implements Initializable {
 
   @FXML
   TextArea gameLogText;
-  
+
   @FXML
   private Text actiontarget;
   @FXML
@@ -90,6 +90,7 @@ public class GUIController implements Initializable {
   private Label capitol_b;
 
   GUIClientPlayer client;
+
   public GUIController(GameModel model, GUIClientPlayer client) {
     this.model = model;
     this.client = client;
@@ -123,13 +124,13 @@ public class GUIController implements Initializable {
     playerColors.put("blue", "#CFE2F3");
     playerColors.put("yellow", "#FFF2CC");
     labels = new ArrayList<>();
-    labels.addAll(Arrays.asList(midkemia_b, gondor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b,
-        roshar_b, othrys_b, camp_half_blood_b, gotham_city_b, diagon_alley_b, hogwarts_b, platform_b, jurassic_park_b,
-        wakanda_b, district12_b, duke_b, north_pole_b, wonka_b, atlantis_b, capitol_b));
   }
 
   @Override
   public void initialize(URL url, ResourceBundle r) {
+    labels.addAll(Arrays.asList(midkemia_b, gondor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b,
+        roshar_b, othrys_b, camp_half_blood_b, gotham_city_b, diagon_alley_b, hogwarts_b, platform_b, jurassic_park_b,
+        wakanda_b, district12_b, duke_b, north_pole_b, wonka_b, atlantis_b, capitol_b));
     addSelectedListener();
     addMapUpdateListener();
   }
@@ -138,9 +139,12 @@ public class GUIController implements Initializable {
    * Updates the territory colors on map updates
    */
   public void addMapUpdateListener() {
+    System.out.println(labels);
     model.mapCount.addListener((obs, oldValue, newValue) -> {
       for (Label territoryBackground : labels) {
+        System.out.println(territoryBackground);
         String terrName = terrNames.get(territoryBackground.getId());
+        System.out.println(terrName);
         Territory terr = model.getMap().getTerritoryByName(terrName);
         String newColorHex = playerColors.get(terr.getOwner().getName());
         Color newColor = Color.web(newColorHex);

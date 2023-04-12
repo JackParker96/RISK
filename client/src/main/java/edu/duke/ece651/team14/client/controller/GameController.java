@@ -64,6 +64,13 @@ public class GameController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    setPlayerText();
+    model.selectedTerritory.addListener((obs, oldValue, newValue) -> {
+      setTerrText(newValue);
+    });
+    model.gameLogText.addListener((obs, oldValue, newValue) -> {
+      gameLogText.setText(newValue);
+    });
     inputButtonsController.gameLogText = gameLogText;
     guiController.gameLogText = gameLogText;
     try {
@@ -105,22 +112,24 @@ public class GameController implements Initializable {
     terrNames.put("capitol_l", "the capitol");
   }
 
-  public void initialize() {
-    setPlayerText();
-    model.selectedTerritory.addListener((obs, oldValue, newValue) -> {        
-        setTerrText(newValue);
-    });
-    model.gameLogText.addListener((obs, oldValue, newValue) -> {
-      gameLogText.setText(newValue);
-      // Platform.runLater(() ->
-      // gameLogText.scrollTopProperty().set(Double.MAX_VALUE));
-      // gameLogList.getItems().add(newValue);
-      // gameLogList.scrollTo(gameLogList.getItems().size() - 1);
-      // gameLogList.getSelectionModel().select(gameLogList.getItems().size() - 1);
-      // gameLogList.getFocusModel().focus(gameLogList.getItems().size() - 1);
-      // System.out.println(gameLogText.getScrollTop());
-    });
-  }
+  /*
+   * public void initialize() {
+   * setPlayerText();
+   * model.selectedTerritory.addListener((obs, oldValue, newValue) -> {
+   * setTerrText(newValue);
+   * });
+   * model.gameLogText.addListener((obs, oldValue, newValue) -> {
+   * gameLogText.setText(newValue);
+   * // Platform.runLater(() ->
+   * // gameLogText.scrollTopProperty().set(Double.MAX_VALUE));
+   * // gameLogList.getItems().add(newValue);
+   * // gameLogList.scrollTo(gameLogList.getItems().size() - 1);
+   * // gameLogList.getSelectionModel().select(gameLogList.getItems().size() - 1);
+   * // gameLogList.getFocusModel().focus(gameLogList.getItems().size() - 1);
+   * // System.out.println(gameLogText.getScrollTop());
+   * });
+   * }
+   */
 
   public void setTerrText(String newValue) {
     StringBuilder sb = new StringBuilder();
