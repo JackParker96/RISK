@@ -93,21 +93,21 @@ public class GameController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     setPlayerText();
     model.selectedTerritory.addListener((obs, oldValue, newValue) -> {
-        System.out.println("In GameModel printing newValue: " + newValue);
-        setTerrText(newValue);
+      System.out.println("In GameModel printing newValue: " + newValue);
+      setTerrText(newValue);
     });
-    //model.gameLogText.addListener((obs, oldValue, newValue) -> {
-    //  gameLogText.setText(newValue);
-    //});
-    model.foodResources.addListener((obs,oldValue, newValue)->{
-        setPlayerText();
-      });
-    model.techResources.addListener((obs, oldValue, newValue)->{
-        setPlayerText();
-      });
-    model.maxTechLevel.addListener((obs,oldValue ,newValue)->{
-        setPlayerText();
-      });
+    // model.gameLogText.addListener((obs, oldValue, newValue) -> {
+    // gameLogText.setText(newValue);
+    // });
+    model.foodResources.addListener((obs, oldValue, newValue) -> {
+      setPlayerText();
+    });
+    model.techResources.addListener((obs, oldValue, newValue) -> {
+      setPlayerText();
+    });
+    model.maxTechLevel.addListener((obs, oldValue, newValue) -> {
+      setPlayerText();
+    });
     inputButtonsController.gameLogText = gameLogText;
     guiController.gameLogText = gameLogText;
     try {
@@ -120,8 +120,6 @@ public class GameController implements Initializable {
       System.out.println(e.getMessage());
     }
   }
-
-
 
   /*
    * public void initialize() {
@@ -151,6 +149,7 @@ public class GameController implements Initializable {
     sb.append("Food Production Rate: " + t.getFoodProductionRate() + "\n");
     sb.append("Technology Production Rate: " + t.getTechProductionRate() + "\n");
     HashMap<Integer, Integer> unitInfo = unitTechLevels(t.getUnits());
+    System.out.println(unitInfo.size());
     for (int i = 0; i < 7; i++) {
       if (unitInfo.get(i) > 0) {
         sb.append("Level " + i + " Units: " + unitInfo.get(i) + "\n");
@@ -166,11 +165,8 @@ public class GameController implements Initializable {
       unitInfo.put(i, 0);
     }
     for (Unit u : units) {
-      if (u.getType() == "basic") {
-        BasicUnit b = (BasicUnit) u;
-        int techLevel = b.getTechLevel();
-        unitInfo.put(techLevel, unitInfo.get(techLevel) + 1);
-      }
+      int techLevel = u.getTechLevel();
+      unitInfo.put(techLevel, unitInfo.get(techLevel) + 1);
     }
     return unitInfo;
   }
@@ -205,7 +201,7 @@ public class GameController implements Initializable {
   private void OnExit() {
     Stage stage = (Stage) exitGame.getScene().getWindow();
     boolean exit = ConfirmBox.display("Exit the game", "Are you sure you want to exit?", "Yes, I want to exit", "No");
-    if(exit){
+    if (exit) {
       stage.close();
     }
   }
