@@ -16,12 +16,13 @@ import edu.duke.ece651.team14.client.controller.InputButtonsController;
 import edu.duke.ece651.team14.client.controller.LoginController;
 import edu.duke.ece651.team14.shared.Account;
 import edu.duke.ece651.team14.shared.Communicator;
+import edu.duke.ece651.team14.shared.GUIPlayer;
+import edu.duke.ece651.team14.shared.GameModel;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
-import edu.duke.ece651.team14.shared.GameModel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -186,6 +187,11 @@ public class GUIClientPlayer extends ClientPlayer {
   public void whoAmIPhase() throws IOException, ClassNotFoundException {
     myPlayer = communicator.recvBasicPlayer();
     model.playerName = myPlayer.getName();
+
+    //Player p = communicator.recvBasicPlayer();
+    //GUIPlayer guiPlayer = new GUIPlayer(p.getColor(), p.getName(), model);
+    //myPlayer = guiPlayer;
+    //model.playerName = myPlayer.getName();  
   }
 
   /**

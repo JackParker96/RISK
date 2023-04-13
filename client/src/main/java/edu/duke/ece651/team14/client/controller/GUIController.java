@@ -89,6 +89,8 @@ public class GUIController implements Initializable {
   @FXML
   private Label capitol_b;
 
+  Label[] labels2;
+
   GUIClientPlayer client;
 
   public GUIController(GameModel model, GUIClientPlayer client) {
@@ -131,6 +133,9 @@ public class GUIController implements Initializable {
     labels.addAll(Arrays.asList(midkemia_b, gondor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b,
         roshar_b, othrys_b, camp_half_blood_b, gotham_city_b, diagon_alley_b, hogwarts_b, platform_b, jurassic_park_b,
         wakanda_b, district12_b, duke_b, north_pole_b, wonka_b, atlantis_b, capitol_b));
+    labels2 = new Label[]{ midkemia_b, gondor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b, roshar_b,
+        othrys_b, camp_half_blood_b, gotham_city_b, diagon_alley_b, hogwarts_b, platform_b, jurassic_park_b, wakanda_b,
+        district12_b, duke_b, north_pole_b, wonka_b, atlantis_b, capitol_b };
     addSelectedListener();
     addMapUpdateListener();
   }
@@ -139,22 +144,22 @@ public class GUIController implements Initializable {
    * Updates the territory colors on map updates
    */
   public void addMapUpdateListener() {
-    System.out.println(labels);
+    // System.out.println(labels);
     model.mapCount.addListener((obs, oldValue, newValue) -> {
-        //for (Label territoryBackground : labels) {
-        System.out.println("Map Count" + newValue);
-        // for (int i = 0; i < labels.size(); i++) {
-        //   // System.out.println(territoryBackground);
-        //   Label bg = labels.get(i);
-        //   // String terrName = terrNames.get(territoryBackground.getId());
-        //   String terrName = terrNames.get(bg.getId());
-        //   System.out.println(terrName);
-        // Territory terr = model.getMap().getTerritoryByName(terrName);
-        // String newColorHex = playerColors.get(terr.getOwner().getName());
-        // Color newColor = Color.web(newColorHex);
-        // // changeTerritoryColor(territoryBackground, newColor);
-        // changeTerritoryColor(bg, newColor);
-        // }
+      // for (Label territoryBackground : labels) {
+      System.out.println("Map Count" + newValue);
+      // for (int i = 0; i < labels2.length; i++) {
+      //   // System.out.println(territoryBackground);
+      //   Label bg = labels2[i];
+      //   // String terrName = terrNames.get(territoryBackground.getId());
+      //   String terrName = terrNames.get(bg.getId());
+      //   System.out.println(terrName);
+      //   Territory terr = model.getMap().getTerritoryByName(terrName);
+      //   String newColorHex = playerColors.get(terr.getOwner().getName());
+      //   Color newColor = Color.web(newColorHex);
+      //   // changeTerritoryColor(territoryBackground, newColor);
+      //   changeTerritoryColor(bg, newColor);
+      // }
     });
   }
 
