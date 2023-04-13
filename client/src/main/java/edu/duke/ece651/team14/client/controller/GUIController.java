@@ -141,15 +141,20 @@ public class GUIController implements Initializable {
   public void addMapUpdateListener() {
     System.out.println(labels);
     model.mapCount.addListener((obs, oldValue, newValue) -> {
-      for (Label territoryBackground : labels) {
-        System.out.println(territoryBackground);
-        String terrName = terrNames.get(territoryBackground.getId());
-        System.out.println(terrName);
-        Territory terr = model.getMap().getTerritoryByName(terrName);
-        String newColorHex = playerColors.get(terr.getOwner().getName());
-        Color newColor = Color.web(newColorHex);
-        changeTerritoryColor(territoryBackground, newColor);
-      }
+        //for (Label territoryBackground : labels) {
+        System.out.println("Map Count" + newValue);
+        // for (int i = 0; i < labels.size(); i++) {
+        //   // System.out.println(territoryBackground);
+        //   Label bg = labels.get(i);
+        //   // String terrName = terrNames.get(territoryBackground.getId());
+        //   String terrName = terrNames.get(bg.getId());
+        //   System.out.println(terrName);
+        // Territory terr = model.getMap().getTerritoryByName(terrName);
+        // String newColorHex = playerColors.get(terr.getOwner().getName());
+        // Color newColor = Color.web(newColorHex);
+        // // changeTerritoryColor(territoryBackground, newColor);
+        // changeTerritoryColor(bg, newColor);
+        // }
     });
   }
 
@@ -160,6 +165,7 @@ public class GUIController implements Initializable {
    * @param newColor  is the new color
    */
   public void changeTerritoryColor(Label territory, Color newColor) {
+    System.out.println(territory);
     BackgroundFill obf = territory.getBackground().getFills().get(0);
     territory.setBackground(new Background(new BackgroundFill(newColor, obf.getRadii(), obf.getInsets())));
   }
@@ -267,8 +273,15 @@ public class GUIController implements Initializable {
   @FXML
   public void chooseTerritory(MouseEvent event) throws IOException {
     Label terr = (Label) event.getSource();
+
+    System.out.println("Source of event: " + terr);
     String id = terr.getId();
+
     Label terr_back = getBackgroundID(id);
+
+    System.out.println("Background: " + terr_back);
+
+    System.out.println("Label id" + id);
 
     model.selectedTerritory.set(id);
     // terrText.set(id + "\nUnits: 7\nOwner: Red\nPotato: Tomato");

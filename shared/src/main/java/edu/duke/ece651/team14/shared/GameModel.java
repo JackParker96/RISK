@@ -28,7 +28,7 @@ public class GameModel {
     this.techResources = new SimpleIntegerProperty(techResources);
     this.maxTechLevel = new SimpleIntegerProperty(maxTechLevel);
     this.hasLost = new SimpleBooleanProperty(false);
-    this.selectedTerritory = new SimpleStringProperty("");
+    this.selectedTerritory = new SimpleStringProperty("midkemia_l");
     this.gameLogText = new SimpleStringProperty("");
   }
 
