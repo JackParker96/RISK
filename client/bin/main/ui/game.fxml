@@ -88,7 +88,7 @@
                            <content>
                               <Pane>
                                  <children>
-                                    <TextArea fx:id="territoryStatsText" layoutY="-2.0" prefHeight="226.0" prefWidth="602.0" text="The Label component, on the other hand, is used to display user-readable text that can be styled with basic formatting such as bold or italic, but is not suitable for complex layouts or rich text. A Label has an explicit size and layout on its own, so it can be used as a standalone component or within a layout container." wrapText="true" />
+                                    <TextArea fx:id="territoryStatsText" layoutY="-2.0" prefHeight="226.0" prefWidth="602.0" text="Click a territory on the map to see its current stats" wrapText="true" />
                                  </children>
                               </Pane>
                            </content>
@@ -97,7 +97,7 @@
                            <content>
                               <Pane prefHeight="200.0" prefWidth="200.0">
                                  <children>
-                                    <TextArea fx:id="userStatsText" prefHeight="222.0" prefWidth="602.0" text="The Label component, on the other hand, is used to display user-readable text that can be styled with basic formatting such as bold or italic, but is not suitable for complex layouts or rich text. A Label has an explicit size and layout on its own, so it can be used as a standalone component or within a layout container." wrapText="true" />
+                                    <TextArea fx:id="userStatsText" prefHeight="222.0" prefWidth="602.0" text="User stats will appear here" wrapText="true" />
                                  </children></Pane>
                            </content>
                       </Tab>

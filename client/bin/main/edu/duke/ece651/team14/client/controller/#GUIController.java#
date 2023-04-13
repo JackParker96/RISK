@@ -130,36 +130,6 @@ public class GUIController implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle r) {
-        terrNames.put("midkemia_b", "midkemia");
-    terrNames.put("gondor_b", "gondor");
-    terrNames.put("oz_b", "oz");
-    terrNames.put("neverland_b", "neverland");
-    terrNames.put("narnia_b", "narnia");
-    terrNames.put("mordor_b", "mordor");
-    terrNames.put("scadrial_b", "scadrial");
-    terrNames.put("elantris_b", "elantris");
-    terrNames.put("olympus_b", "mt olympus");
-    terrNames.put("roshar_b", "roshar");
-    terrNames.put("othrys_b", "mt othrys");
-    terrNames.put("camp_half_blood_b", "camp half-blood");
-    terrNames.put("gotham_city_b", "gotham city");
-    terrNames.put("diagon_alley_b", "diagon alley");
-    terrNames.put("hogwarts_b", "hogwarts");
-    terrNames.put("platform_b", "platform 9 and 3/4");
-    terrNames.put("jurassic_park_b", "jurassic park");
-    terrNames.put("wakanda_b", "wakanda");
-    terrNames.put("district12_b", "district twelve");
-    terrNames.put("duke_b", "duke");
-    terrNames.put("north_pole_b", "north pole");
-    terrNames.put("wonka_b", "wonka chocolate factory");
-    terrNames.put("atlantis_b", "atlantis");
-    terrNames.put("capitol_b", "the capitol");
-
-    playerColors.put("red", "#F4CCCC");
-    playerColors.put("green", "#D9EAD3");
-    playerColors.put("blue", "#CFE2F3");
-    playerColors.put("yellow", "#FFF2CC");
-
     labels.addAll(Arrays.asList(midkemia_b, gondor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b,
         roshar_b, othrys_b, camp_half_blood_b, gotham_city_b, diagon_alley_b, hogwarts_b, platform_b, jurassic_park_b,
         wakanda_b, district12_b, duke_b, north_pole_b, wonka_b, atlantis_b, capitol_b));
@@ -174,15 +144,22 @@ public class GUIController implements Initializable {
    * Updates the territory colors on map updates
    */
   public void addMapUpdateListener() {
+    // System.out.println(labels);
     model.mapCount.addListener((obs, oldValue, newValue) -> {
+      // for (Label territoryBackground : labels) {
       System.out.println("Map Count" + newValue);
-      for (Label b : labels) {
-        String id = b.getId();
-        String actualName = terrNames.get(id);
-        Territory terr = model.getMap().getTerritoryByName(actualName);
-        String color = playerColors.get(terr.getOwner().getName());
-        b.setStyle("-fx-background-color: " + color);
-      }
+      // for (int i = 0; i < labels2.length; i++) {
+      //   // System.out.println(territoryBackground);
+      //   Label bg = labels2[i];
+      //   // String terrName = terrNames.get(territoryBackground.getId());
+      //   String terrName = terrNames.get(bg.getId());
+      //   System.out.println(terrName);
+      //   Territory terr = model.getMap().getTerritoryByName(terrName);
+      //   String newColorHex = playerColors.get(terr.getOwner().getName());
+      //   Color newColor = Color.web(newColorHex);
+      //   // changeTerritoryColor(territoryBackground, newColor);
+      //   changeTerritoryColor(bg, newColor);
+      // }
     });
   }
 

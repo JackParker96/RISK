@@ -8,7 +8,6 @@ Instructions
 - Select one of the following options:
 	- Start game - create new game and select number of players
 	- Join game - join new game waiting for certain number of players to begin
-	- Continue game - rejoin game to continue playing 
+	- Rejoin game - rejoin active game to continue playing 
 - Follow prompts to enter game
 - Click "exit the game" to leave anytime during game play
-- Click "logout" to disconnect from server
