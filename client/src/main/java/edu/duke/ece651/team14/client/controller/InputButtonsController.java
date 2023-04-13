@@ -125,6 +125,7 @@ public class InputButtonsController implements Initializable {
 
   @FXML
   public void onMove(ActionEvent e) {
+    resetOwnedTerrs();
     String origin = getChoice("Choose origin territory", terrs);
     String destination = getChoice("Choose destination territory", terrs);
     int numUnits = getInteger("Enter number of units to move");
@@ -144,6 +145,7 @@ public class InputButtonsController implements Initializable {
 
   @FXML
   public void onAttack(ActionEvent e) {
+    resetOwnedTerrs();
     String origin = getChoice("Choose origin territory", terrs);
     setAllTerrs();
     String destination = getChoice("Choose territory you want to attack", terrs);
@@ -164,6 +166,7 @@ public class InputButtonsController implements Initializable {
 
   @FXML
   public void onResearch(ActionEvent e) {
+    resetOwnedTerrs();
     Order ro = new ResearchOrder(this.client.getPlayer());
     try {
       int tech = processor.processResearch(this.model.getMap(), ro, this.client.getPlayer());

@@ -160,10 +160,10 @@ public class GUIController implements Initializable {
     playerColors.put("blue", "#CFE2F3");
     playerColors.put("yellow", "#FFF2CC");
 
-    labels.addAll(Arrays.asList(midkemia_b, gondor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b,
+    labels.addAll(Arrays.asList(midkemia_b, gondor_b, mordor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b,
         roshar_b, othrys_b, camp_half_blood_b, gotham_city_b, diagon_alley_b, hogwarts_b, platform_b, jurassic_park_b,
         wakanda_b, district12_b, duke_b, north_pole_b, wonka_b, atlantis_b, capitol_b));
-    labels2 = new Label[]{ midkemia_b, gondor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b, roshar_b,
+    labels2 = new Label[]{ midkemia_b, gondor_b, mordor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b, roshar_b,
         othrys_b, camp_half_blood_b, gotham_city_b, diagon_alley_b, hogwarts_b, platform_b, jurassic_park_b, wakanda_b,
         district12_b, duke_b, north_pole_b, wonka_b, atlantis_b, capitol_b };
     addSelectedListener();
