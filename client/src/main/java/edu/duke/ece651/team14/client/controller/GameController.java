@@ -63,25 +63,6 @@ public class GameController implements Initializable {
   public GameController(GameModel model, GUIClientPlayer client) {
     this.model = model;
     this.client = client;
-  }
-
-  @Override
-  public void initialize(URL location, ResourceBundle resources) {
-    inputButtonsController.gameLogText = gameLogText;
-    guiController.gameLogText = gameLogText;
-    try {
-      model.setMap(client.recvMap());
-      MapTextView view = new MapTextView(model.getMap());
-      gameLogText.setText(view.displayMap());
-      this.client.getPlayer().updateResourcesInTurn(model.getMap());
-      inputButtonsController.gameLogshowPlayer();
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-    }
-  }
-
-  public GameController(GameModel model) {
-    this.model = model;
     terrNames.put("midkemia_l", "midkemia");
     terrNames.put("gondor_l", "gondor");
     terrNames.put("oz_l", "oz");
@@ -108,26 +89,63 @@ public class GameController implements Initializable {
     terrNames.put("capitol_l", "the capitol");
   }
 
-  public void initialize() {
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
     setPlayerText();
-    model.selectedTerritory.addListener((obs, oldValue, newValue) -> {        
+    model.selectedTerritory.addListener((obs, oldValue, newValue) -> {
+        System.out.println("In GameModel printing newValue: " + newValue);
         setTerrText(newValue);
     });
-    model.gameLogText.addListener((obs, oldValue, newValue) -> {
-      gameLogText.setText(newValue);
-      // Platform.runLater(() ->
-      // gameLogText.scrollTopProperty().set(Double.MAX_VALUE));
-      // gameLogList.getItems().add(newValue);
-      // gameLogList.scrollTo(gameLogList.getItems().size() - 1);
-      // gameLogList.getSelectionModel().select(gameLogList.getItems().size() - 1);
-      // gameLogList.getFocusModel().focus(gameLogList.getItems().size() - 1);
-      // System.out.println(gameLogText.getScrollTop());
-    });
+    //model.gameLogText.addListener((obs, oldValue, newValue) -> {
+    //  gameLogText.setText(newValue);
+    //});
+    model.foodResources.addListener((obs,oldValue, newValue)->{
+        setPlayerText();
+      });
+    model.techResources.addListener((obs, oldValue, newValue)->{
+        setPlayerText();
+      });
+    model.maxTechLevel.addListener((obs,oldValue ,newValue)->{
+        setPlayerText();
+      });
+    inputButtonsController.gameLogText = gameLogText;
+    guiController.gameLogText = gameLogText;
+    try {
+      model.setMap(client.recvMap());
+      MapTextView view = new MapTextView(model.getMap());
+      gameLogText.setText(view.displayMap());
+      this.client.getPlayer().updateResourcesInTurn(model.getMap());
+      inputButtonsController.gameLogshowPlayer();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
   }
+
+
+
+  /*
+   * public void initialize() {
+   * setPlayerText();
+   * model.selectedTerritory.addListener((obs, oldValue, newValue) -> {
+   * setTerrText(newValue);
+   * });
+   * model.gameLogText.addListener((obs, oldValue, newValue) -> {
+   * gameLogText.setText(newValue);
+   * // Platform.runLater(() ->
+   * // gameLogText.scrollTopProperty().set(Double.MAX_VALUE));
+   * // gameLogList.getItems().add(newValue);
+   * // gameLogList.scrollTo(gameLogList.getItems().size() - 1);
+   * // gameLogList.getSelectionModel().select(gameLogList.getItems().size() - 1);
+   * // gameLogList.getFocusModel().focus(gameLogList.getItems().size() - 1);
+   * // System.out.println(gameLogText.getScrollTop());
+   * });
+   * }
+   */
 
   public void setTerrText(String newValue) {
     StringBuilder sb = new StringBuilder();
-    Territory t = model.getMap().getTerritoryByName(terrNames.get(model.getSelectedTerritory()));
+    Territory t = model.getMap().getTerritoryByName(terrNames.get(newValue));
+    System.out.println(model.getSelectedTerritory());
     sb.append("Territory: " + t.getName() + "\n");
     sb.append("Owner: " + t.getOwner() + "\n");
     sb.append("Food Production Rate: " + t.getFoodProductionRate() + "\n");

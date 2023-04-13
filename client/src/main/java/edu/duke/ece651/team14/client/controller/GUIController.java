@@ -35,7 +35,7 @@ public class GUIController implements Initializable {
 
   @FXML
   TextArea gameLogText;
-  
+
   @FXML
   private Text actiontarget;
   @FXML
@@ -89,7 +89,10 @@ public class GUIController implements Initializable {
   @FXML
   private Label capitol_b;
 
+  Label[] labels2;
+
   GUIClientPlayer client;
+
   public GUIController(GameModel model, GUIClientPlayer client) {
     this.model = model;
     this.client = client;
@@ -123,13 +126,16 @@ public class GUIController implements Initializable {
     playerColors.put("blue", "#CFE2F3");
     playerColors.put("yellow", "#FFF2CC");
     labels = new ArrayList<>();
-    labels.addAll(Arrays.asList(midkemia_b, gondor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b,
-        roshar_b, othrys_b, camp_half_blood_b, gotham_city_b, diagon_alley_b, hogwarts_b, platform_b, jurassic_park_b,
-        wakanda_b, district12_b, duke_b, north_pole_b, wonka_b, atlantis_b, capitol_b));
   }
 
   @Override
   public void initialize(URL url, ResourceBundle r) {
+    labels.addAll(Arrays.asList(midkemia_b, gondor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b,
+        roshar_b, othrys_b, camp_half_blood_b, gotham_city_b, diagon_alley_b, hogwarts_b, platform_b, jurassic_park_b,
+        wakanda_b, district12_b, duke_b, north_pole_b, wonka_b, atlantis_b, capitol_b));
+    labels2 = new Label[]{ midkemia_b, gondor_b, oz_b, neverland_b, narnia_b, scadrial_b, elantris_b, olympus_b, roshar_b,
+        othrys_b, camp_half_blood_b, gotham_city_b, diagon_alley_b, hogwarts_b, platform_b, jurassic_park_b, wakanda_b,
+        district12_b, duke_b, north_pole_b, wonka_b, atlantis_b, capitol_b };
     addSelectedListener();
     addMapUpdateListener();
   }
@@ -138,14 +144,22 @@ public class GUIController implements Initializable {
    * Updates the territory colors on map updates
    */
   public void addMapUpdateListener() {
+    // System.out.println(labels);
     model.mapCount.addListener((obs, oldValue, newValue) -> {
-      for (Label territoryBackground : labels) {
-        String terrName = terrNames.get(territoryBackground.getId());
-        Territory terr = model.getMap().getTerritoryByName(terrName);
-        String newColorHex = playerColors.get(terr.getOwner().getName());
-        Color newColor = Color.web(newColorHex);
-        changeTerritoryColor(territoryBackground, newColor);
-      }
+      // for (Label territoryBackground : labels) {
+      System.out.println("Map Count" + newValue);
+      // for (int i = 0; i < labels2.length; i++) {
+      //   // System.out.println(territoryBackground);
+      //   Label bg = labels2[i];
+      //   // String terrName = terrNames.get(territoryBackground.getId());
+      //   String terrName = terrNames.get(bg.getId());
+      //   System.out.println(terrName);
+      //   Territory terr = model.getMap().getTerritoryByName(terrName);
+      //   String newColorHex = playerColors.get(terr.getOwner().getName());
+      //   Color newColor = Color.web(newColorHex);
+      //   // changeTerritoryColor(territoryBackground, newColor);
+      //   changeTerritoryColor(bg, newColor);
+      // }
     });
   }
 
@@ -156,6 +170,7 @@ public class GUIController implements Initializable {
    * @param newColor  is the new color
    */
   public void changeTerritoryColor(Label territory, Color newColor) {
+    System.out.println(territory);
     BackgroundFill obf = territory.getBackground().getFills().get(0);
     territory.setBackground(new Background(new BackgroundFill(newColor, obf.getRadii(), obf.getInsets())));
   }
@@ -263,8 +278,15 @@ public class GUIController implements Initializable {
   @FXML
   public void chooseTerritory(MouseEvent event) throws IOException {
     Label terr = (Label) event.getSource();
+
+    System.out.println("Source of event: " + terr);
     String id = terr.getId();
+
     Label terr_back = getBackgroundID(id);
+
+    System.out.println("Background: " + terr_back);
+
+    System.out.println("Label id" + id);
 
     model.selectedTerritory.set(id);
     // terrText.set(id + "\nUnits: 7\nOwner: Red\nPotato: Tomato");

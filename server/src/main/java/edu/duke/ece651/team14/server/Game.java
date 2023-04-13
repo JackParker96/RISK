@@ -101,8 +101,9 @@ public class Game {
 
   protected void initializeGamePhase() throws IOException, ClassNotFoundException {
     MapFactory f = new MapFactory();
-    // this.map = f.makeMap("Earth", getAllPlayers()); // actual map
-    this.map = f.makeMap("test", getAllPlayers()); // test map
+    this.map = f.makeMap("Earth", getAllPlayers()); // actual map
+    // this.map = f.makeMap("test", getAllPlayers());
+    // test map
     sendGameInitInfo();
     receivePlacementOrders();
   }

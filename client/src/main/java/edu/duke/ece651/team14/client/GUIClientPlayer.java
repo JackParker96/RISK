@@ -16,12 +16,13 @@ import edu.duke.ece651.team14.client.controller.InputButtonsController;
 import edu.duke.ece651.team14.client.controller.LoginController;
 import edu.duke.ece651.team14.shared.Account;
 import edu.duke.ece651.team14.shared.Communicator;
+import edu.duke.ece651.team14.shared.GUIPlayer;
+import edu.duke.ece651.team14.shared.GameModel;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.Player;
 import edu.duke.ece651.team14.shared.UnitPlacementOrder;
-import edu.duke.ece651.team14.shared.GameModel;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -97,7 +98,7 @@ public class GUIClientPlayer extends ClientPlayer {
     URL xmlResource = App.class.getResource("/ui/login.fxml");// note App.class instead of getClass()
     FXMLLoader loader = new FXMLLoader(xmlResource);
     loader.setControllerFactory((c) -> {
-      return this.controller_initializer.get(c);
+    return this.controller_initializer.get(c);
     });
     Parent root = loader.load();
     Scene scene = new Scene(root, 500, 500);
@@ -106,10 +107,10 @@ public class GUIClientPlayer extends ClientPlayer {
     // URL url = App.class.getResource("/ui/game.fxml");
     // FXMLLoader loader = new FXMLLoader(url);
     // loader.setControllerFactory((c) -> {
-    //     return getControllerInitializer().get(c);
+    //   return getControllerInitializer().get(c);
     // });
     // Parent root = loader.load();
-    // //Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    // // Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     // window.setScene(new Scene(root));
     // window.show();
   }
@@ -131,7 +132,6 @@ public class GUIClientPlayer extends ClientPlayer {
   public Communicator getCommunicator() {
     return communicator;
   }
-
 
   // **************************************below are the methods that text client
   // uses*********************//
@@ -185,10 +185,14 @@ public class GUIClientPlayer extends ClientPlayer {
    * @throws ClassNotFoundException
    */
   public void whoAmIPhase() throws IOException, ClassNotFoundException {
-    myPlayer = communicator.recvBasicPlayer();
-    model.playerName = myPlayer.getName();
-  }
+    //myPlayer = communicator.recvBasicPlayer();
+    //model.playerName = myPlayer.getName();
 
+    Player p = communicator.recvBasicPlayer();
+    GUIPlayer guiPlayer = new GUIPlayer(p.getColor(), p.getName(), model);
+    myPlayer = guiPlayer;
+    model.playerName = myPlayer.getName();  
+  }
 
   /**
    * Displays given map to client output
@@ -268,7 +272,7 @@ public class GUIClientPlayer extends ClientPlayer {
 
   @Override
   public void placeUnitsPhase() throws IOException, ClassNotFoundException {
-    //not necessary
+    // not necessary
   }
 
   @Override

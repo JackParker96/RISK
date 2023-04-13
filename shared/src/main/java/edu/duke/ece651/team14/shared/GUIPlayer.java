@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class GUIPlayer extends Player {
   public GameModel model;
-  
+
   public GUIPlayer(Color color, String name, GameModel model) {
     super(color, name);
     this.model = model;
@@ -52,7 +52,7 @@ public class GUIPlayer extends Player {
     foodAmt -= toUse;
     model.foodResources.set(model.getFoodResources() - toUse);
   }
-  
+
   @Override
   public void addTechResources(int toAdd) {
     if (toAdd < 0) {
@@ -109,5 +109,14 @@ public class GUIPlayer extends Player {
   @Override
   public int hashCode() {
     return name.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other != null) {
+      Player otherPlayer = (Player) other;
+      return name.equals(otherPlayer.getName());
+    }
+    return false;
   }
 }
