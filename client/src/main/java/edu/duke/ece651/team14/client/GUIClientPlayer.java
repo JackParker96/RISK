@@ -185,13 +185,13 @@ public class GUIClientPlayer extends ClientPlayer {
    * @throws ClassNotFoundException
    */
   public void whoAmIPhase() throws IOException, ClassNotFoundException {
-    myPlayer = communicator.recvBasicPlayer();
-    model.playerName = myPlayer.getName();
+    //myPlayer = communicator.recvBasicPlayer();
+    //model.playerName = myPlayer.getName();
 
-    //Player p = communicator.recvBasicPlayer();
-    //GUIPlayer guiPlayer = new GUIPlayer(p.getColor(), p.getName(), model);
-    //myPlayer = guiPlayer;
-    //model.playerName = myPlayer.getName();  
+    Player p = communicator.recvBasicPlayer();
+    GUIPlayer guiPlayer = new GUIPlayer(p.getColor(), p.getName(), model);
+    myPlayer = guiPlayer;
+    model.playerName = myPlayer.getName();  
   }
 
   /**

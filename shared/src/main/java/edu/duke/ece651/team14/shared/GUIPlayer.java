@@ -113,7 +113,7 @@ public class GUIPlayer extends Player {
 
   @Override
   public boolean equals(Object other) {
-    if (other != null && other.getClass().equals(getClass())) {
+    if (other != null) {
       Player otherPlayer = (Player) other;
       return name.equals(otherPlayer.getName());
     }

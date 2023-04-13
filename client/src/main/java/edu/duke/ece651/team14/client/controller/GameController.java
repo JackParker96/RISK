@@ -93,9 +93,18 @@ public class GameController implements Initializable {
         System.out.println("In GameModel printing newValue: " + newValue);
         setTerrText(newValue);
     });
-    model.gameLogText.addListener((obs, oldValue, newValue) -> {
-      gameLogText.setText(newValue);
-    });
+    //model.gameLogText.addListener((obs, oldValue, newValue) -> {
+    //  gameLogText.setText(newValue);
+    //});
+    model.foodResources.addListener((obs,oldValue, newValue)->{
+        setPlayerText();
+      });
+    model.techResources.addListener((obs, oldValue, newValue)->{
+        setPlayerText();
+      });
+    model.maxTechLevel.addListener((obs,oldValue ,newValue)->{
+        setPlayerText();
+      });
     inputButtonsController.gameLogText = gameLogText;
     guiController.gameLogText = gameLogText;
     try {

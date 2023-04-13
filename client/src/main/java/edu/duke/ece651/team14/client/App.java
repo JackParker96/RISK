@@ -63,7 +63,7 @@ public class App extends Application {
     Socket clientSocket = new Socket(hostName, port);
     Communicator comm = new Communicator(clientSocket.getOutputStream(), clientSocket.getInputStream());
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    model = new GameModel(null, 0, 1, 1, 1);
+    model = new GameModel(null, 0, 0, 0, 1);
     this.client = new GUIClientPlayer(model, clientSocket, comm, input, System.out);
   }
 
