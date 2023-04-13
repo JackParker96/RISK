@@ -7,8 +7,9 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import java.io.Serializable;
 
-public class GameModel {
+public class GameModel{
 
   Map map;
   // Code needs to change this in whoamiphase

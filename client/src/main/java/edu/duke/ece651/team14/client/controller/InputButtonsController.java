@@ -133,6 +133,7 @@ public class InputButtonsController implements Initializable {
     Order move = new MoveOrder(origin_terr, dest_terr, numUnits, this.client.getPlayer());
     try {
       int food = processor.processMove(this.model.getMap(), move, this.client.getPlayer());
+      processor.addOrder(new MoveOrder(origin_terr, dest_terr, numUnits, this.client.getBasicPlayer()));
       gameLogText.appendText("Valid move order with food cost: " + food + "\n");
       gameLogShowMap();
       gameLogshowPlayer();
@@ -152,6 +153,7 @@ public class InputButtonsController implements Initializable {
     Order attackOrder = new AttackOrder(origin_terr, dest_terr, numUnits, this.client.getPlayer());
     try {
       int food = processor.processAttack(this.model.getMap(), attackOrder, this.client.getPlayer());
+      processor.addOrder(new AttackOrder(origin_terr, dest_terr, numUnits, this.client.getBasicPlayer()));
       gameLogText.appendText("Valid attack order with food cost: " + food + "\n");
       gameLogShowMap();
       gameLogshowPlayer();
@@ -183,6 +185,7 @@ public class InputButtonsController implements Initializable {
     Order o = new UpgradeOrder(origin_terr, null, numUnits, client.getPlayer(), cur_level, new_level);
     try {
       int tech = processor.processUpgrade(model.getMap(), o, client.getPlayer());
+      processor.addOrder(new UpgradeOrder(origin_terr, null, numUnits, client.getBasicPlayer(),cur_level, new_level));
       // model.gameLogText.set("Valid upgrade order with cost:");
       gameLogText.appendText("Valid upgrade order with tech cost: " + tech + "\n");
       gameLogShowMap();

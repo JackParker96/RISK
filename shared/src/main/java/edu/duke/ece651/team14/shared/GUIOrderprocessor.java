@@ -59,7 +59,6 @@ public class GUIOrderprocessor {
       }
       int cost = upgradeOrder.calculateCost();
       p.useTechResources(cost);
-      verifiedOrders.add(upgradeOrder);
       return cost;
     } else {
       throw new IllegalArgumentException("Order type not supported");
@@ -76,7 +75,6 @@ public class GUIOrderprocessor {
       int cost = attackOrder.calculateCost();
       p.useFoodResources(cost);
       UnitMover.moveUnits(o.getOrigin(),new BasicTerritory("battlefield"), o.getNumUnits(), "basic");
-      verifiedOrders.add(attackOrder);
       return cost;
     } else {
       throw new IllegalArgumentException("Order type not supported");
@@ -93,7 +91,6 @@ public class GUIOrderprocessor {
       int cost = moveOrder.calculateCost();
       p.useFoodResources(cost);
       UnitMover.moveUnits(o.getOrigin(), o.getDestination(), o.getNumUnits(), "basic");
-      verifiedOrders.add(moveOrder);
       return cost;
     } else {
       throw new IllegalArgumentException("Order type not supported");
@@ -106,5 +103,9 @@ public class GUIOrderprocessor {
 
   public void clearVerified() {
     this.verifiedOrders.clear();
+  }
+
+  public void addOrder(Order o){
+    this.verifiedOrders.add(o);
   }
 }

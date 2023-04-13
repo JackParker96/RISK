@@ -32,7 +32,7 @@ public class GUIClientPlayer extends ClientPlayer {
   private Stage window;
   private HashMap<Class<?>, Object> controller_initializer;
   GameModel model;
-
+  Player p;
   /**
    * Constructor
    * 
@@ -188,10 +188,14 @@ public class GUIClientPlayer extends ClientPlayer {
     //myPlayer = communicator.recvBasicPlayer();
     //model.playerName = myPlayer.getName();
 
-    Player p = communicator.recvBasicPlayer();
+    this.p = communicator.recvBasicPlayer();
     GUIPlayer guiPlayer = new GUIPlayer(p.getColor(), p.getName(), model);
     myPlayer = guiPlayer;
     model.playerName = myPlayer.getName();  
+  }
+
+  public Player getBasicPlayer(){
+    return this.p;
   }
 
   /**
