@@ -7,10 +7,27 @@ import java.util.ArrayList;
  */
 public class GUIPlayer extends Player {
   public GameModel model;
+  // The number of aggression points the player currently has
+  private int aggPts;
 
   public GUIPlayer(Color color, String name, GameModel model) {
     super(color, name);
     this.model = model;
+    this.aggPts = 0;
+  }
+
+  // Increment the player's aggression points by 1
+  public void addAggPt() {
+    aggPts += 1;
+  }
+
+  // Reset aggression points to 0
+  public void resetAggPts() {
+    aggPts = 0;
+  }
+
+  public int getAggPts() {
+    return aggPts;
   }
 
   /**
