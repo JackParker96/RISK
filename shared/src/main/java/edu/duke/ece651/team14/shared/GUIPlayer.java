@@ -1,6 +1,8 @@
 package edu.duke.ece651.team14.shared;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * A class to represent a GUI player in the RISC game
@@ -28,6 +30,62 @@ public class GUIPlayer extends Player {
 
   public int getAggPts() {
     return aggPts;
+  }
+
+  /**
+   * Reward the player for collecting 3 aggression points
+   * Add 5 Level 1 units to a random territory controlled by the player
+   */
+  public void rewardLevel1() throws MaxTechLevelException {
+    // Create a list of 5 level 1 units
+    ArrayList<Unit> toAdd = new ArrayList<>();
+    for (int i = 0; i < 5; i++) {
+      BasicUnit u = new BasicUnit();
+      u.increaseTechLevel(1);
+      toAdd.add(u);
+    }
+    // Search through the map until a territory owned by this player is found
+    // When found, add the 5 units to that territory
+    HashMap<String, Territory> m = model.getMap().getMap();
+    Collection<Territory> terrs = m.values();
+    for (Territory terr : terrs) {
+      if (this.equals(terr.getOwner())) {
+        terr.addUnits(toAdd);
+        break;
+      }
+    }
+  }
+
+  /**
+   * Reward player for collecting 5 aggression points
+   * Upgrade the player to the next max tech level for free
+   */
+  public void rewardLevel2() throws MaxTechLevelException {
+    if (this.getMaxTechLevel() != 6) {
+      this.increaseMaxTechLevel();
+    }
+  }
+
+  /**
+   * Reward player for collecting 8, 10, 12, 14, etc. aggression points
+   * Increase the level of every single one of the player's units
+   */
+  public void rewardLevel3() throws MaxTechLevelException {
+    // Search through the map and find all the territories owned by this player
+    HashMap<String, Territory> m = model.getMap().getMap();
+    Collection<Territory> terrs = m.values();
+    for (Territory terr : terrs) {
+      if (this.equals(terr.getOwner())) {
+        // For each territory owned by this player, increase the level of all the units
+        // on that territory by 1
+        ArrayList<Unit> units = terr.getUnits();
+        for (Unit u : units) {
+          if (u.getTechLevel() != 6) {
+            u.increaseTechLevel(1);
+          }
+        }
+      }
+    }
   }
 
   /**
