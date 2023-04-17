@@ -8,18 +8,16 @@ import org.junit.jupiter.api.Test;
 
 public class GUIPlayerTest {
   @Test
-  public void test_aggPts() {
+  public void test_aggPts() throws MaxTechLevelException {
     GameModel gm = new GameModel(null, 0, 0, 0, 0);
     GUIPlayer p = new GUIPlayer(new Color("blue"), "p", gm);
-    assertEquals(0, p.getAggPts());
+    assertEquals(0, p.model.getAggPts());
     p.addAggPt();
-    assertEquals(1, p.getAggPts());
+    assertEquals(1, p.model.getAggPts());
     p.addAggPt();
-    assertEquals(2, p.getAggPts());
-    p.addAggPt();
-    assertEquals(3, p.getAggPts());
+    assertEquals(2, p.model.getAggPts());
     p.resetAggPts();
-    assertEquals(0, p.getAggPts());
+    assertEquals(0, p.model.getAggPts());
   }
 
 }

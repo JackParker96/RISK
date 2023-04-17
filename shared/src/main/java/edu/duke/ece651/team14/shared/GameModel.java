@@ -18,6 +18,7 @@ public class GameModel{
   public IntegerProperty foodResources;
   public IntegerProperty techResources;
   public IntegerProperty maxTechLevel;
+  public IntegerProperty aggPts;
   public BooleanProperty hasLost;
   public StringProperty selectedTerritory;
   public StringProperty gameLogText;
@@ -28,6 +29,7 @@ public class GameModel{
     this.foodResources = new SimpleIntegerProperty(foodResources);
     this.techResources = new SimpleIntegerProperty(techResources);
     this.maxTechLevel = new SimpleIntegerProperty(maxTechLevel);
+    this.aggPts = new SimpleIntegerProperty(0);
     this.hasLost = new SimpleBooleanProperty(false);
     this.selectedTerritory = new SimpleStringProperty("midkemia_l");
     this.gameLogText = new SimpleStringProperty("");
@@ -35,6 +37,10 @@ public class GameModel{
 
   public Map getMap() {
     return map;
+  }
+
+  public int getAggPts() {
+    return aggPts.get();
   }
 
   /**

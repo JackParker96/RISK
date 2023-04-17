@@ -9,27 +9,36 @@ import java.util.HashMap;
  */
 public class GUIPlayer extends Player {
   public GameModel model;
-  // The number of aggression points the player currently has
-  private int aggPts;
 
   public GUIPlayer(Color color, String name, GameModel model) {
     super(color, name);
     this.model = model;
-    this.aggPts = 0;
   }
 
   // Increment the player's aggression points by 1
-  public void addAggPt() {
-    aggPts += 1;
+  // Check if they get a reward. If so, distribute that reward
+  public void addAggPt() throws MaxTechLevelException {
+    // Add 1 aggression point to the model
+    model.aggPts.set(model.getAggPts() + 1);
+    // Figure out if player gets a reward
+    int pts = model.getAggPts();
+    // 3 aggression points -> Reward Level 1
+    if (pts == 3) {
+      rewardLevel1();
+    }
+    // 5 aggression points -> Reward Level 2
+    if (pts == 5) {
+      rewardLevel2();
+    }
+    // 8, 10, 12, 14, ... aggression points -> Reward Level 3
+    if ((pts >= 8) && (pts % 2 == 0)) {
+      rewardLevel3();
+    }
   }
 
   // Reset aggression points to 0
   public void resetAggPts() {
-    aggPts = 0;
-  }
-
-  public int getAggPts() {
-    return aggPts;
+    model.aggPts.set(0);
   }
 
   /**
