@@ -10,6 +10,18 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 public class BasicPlayerTest {
+
+  @Test
+  public void test_allies() {
+    Player p = new BasicPlayer(new Color("blue"), "p");
+    assertEquals(0, p.getAllies().size());
+    Player p2 = new BasicPlayer(new Color("green"), "p2");
+    p.addAlly(p2);
+    assertEquals(1, p.getAllies().size());
+    p.removeAlly(p2);
+    assertEquals(0, p.getAllies().size());
+  }
+  
   @Test
   public void test_resources() throws MaxTechLevelException {
     Player p = new BasicPlayer(new Color("blue"), "A");

@@ -21,6 +21,8 @@ public abstract class Player implements Serializable {
   public int techAmt;
   // Current max tech level of the player
   public int maxTechLevel;
+  // The player's current list of allies
+  public ArrayList<Player> allies;
 
   /**
    * Creates a Player object from given color
@@ -33,8 +35,23 @@ public abstract class Player implements Serializable {
     this.foodAmt = 0;
     this.techAmt = 0;
     this.maxTechLevel = 1;
+    this.allies = new ArrayList<>();
   }
 
+  // Add another player to this player's list of allies
+  public void addAlly(Player player) {
+    allies.add(player);
+  }
+
+  // Remove another player from this player's list of allies
+  public void removeAlly(Player player) {
+    allies.remove(player);
+  }
+
+  public ArrayList<Player> getAllies() {
+    return allies;
+  }
+  
   /**
    * Check if this Player has won the game
    *
