@@ -23,6 +23,9 @@ public abstract class Player implements Serializable {
   public int techAmt;
   // Current max tech level of the player
   public int maxTechLevel;
+  // The player's current list of allies
+  public ArrayList<Player> allies;
+  // Player's current number of aggresstion points
   public int aggPts;
 
   /**
@@ -37,8 +40,22 @@ public abstract class Player implements Serializable {
     this.techAmt = 0;
     this.maxTechLevel = 1;
     this.aggPts = 0;
+    this.allies = new ArrayList<>();
   }
 
+  // Add another player to this player's list of allies
+  public void addAlly(Player player) {
+    allies.add(player);
+  }
+
+  // Remove another player from this player's list of allies
+  public void removeAlly(Player player) {
+    allies.remove(player);
+  }
+
+  public ArrayList<Player> getAllies() {
+    return allies;
+  }
 
   public void setAggPts(int points){
     this.aggPts = points;
@@ -128,6 +145,7 @@ public abstract class Player implements Serializable {
       }
     }
   }
+  
   /**
    * Check if this Player has won the game
    *
