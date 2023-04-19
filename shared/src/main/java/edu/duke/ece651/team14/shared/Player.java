@@ -25,6 +25,7 @@ public abstract class Player implements Serializable {
   public int maxTechLevel;
   // The player's current list of allies
   public ArrayList<Player> allies;
+  // Player's current number of aggresstion points
   public int aggPts;
 
   /**
