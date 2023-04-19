@@ -1,13 +1,12 @@
 package edu.duke.ece651.team14.shared;
 
-import edu.duke.ece651.team14.shared.Map;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import java.io.Serializable;
+
 
 public class GameModel{
 
