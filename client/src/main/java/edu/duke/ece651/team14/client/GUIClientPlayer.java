@@ -15,6 +15,7 @@ import edu.duke.ece651.team14.client.controller.InitUnitsController;
 import edu.duke.ece651.team14.client.controller.InputButtonsController;
 import edu.duke.ece651.team14.client.controller.LoginController;
 import edu.duke.ece651.team14.shared.Account;
+import edu.duke.ece651.team14.shared.AgressionPointMsg;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.GUIPlayer;
 import edu.duke.ece651.team14.shared.GameModel;
@@ -133,6 +134,25 @@ public class GUIClientPlayer extends ClientPlayer {
     return communicator;
   }
 
+  /** 
+   * 
+   * @return the setted aggpts
+   */
+  public int handleAggPts(){
+    try{
+      AgressionPointMsg amsg = (AgressionPointMsg) this.communicator.recvObject();
+      int myAggPts = amsg.getPoint(this.myPlayer.getName());
+      this.myPlayer.setAggPts(myAggPts);
+      if(myAggPts==5){
+        this.myPlayer.rewardLevel2();//server doesn't send players, other rewards done by server
+      }
+      return myAggPts;
+    }catch(Exception e){
+      System.out.println(e.getMessage());
+    }
+    return -1;
+  }
+
   // **************************************below are the methods that text client
   // uses*********************//
   /**
@@ -187,7 +207,6 @@ public class GUIClientPlayer extends ClientPlayer {
   public void whoAmIPhase() throws IOException, ClassNotFoundException {
     //myPlayer = communicator.recvBasicPlayer();
     //model.playerName = myPlayer.getName();
-
     this.p = communicator.recvBasicPlayer();
     GUIPlayer guiPlayer = new GUIPlayer(p.getColor(), p.getName(), model);
     myPlayer = guiPlayer;

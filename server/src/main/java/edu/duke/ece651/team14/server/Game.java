@@ -8,13 +8,14 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import edu.duke.ece651.team14.shared.Account;
+import edu.duke.ece651.team14.shared.AgressionPointMsg;
 import edu.duke.ece651.team14.shared.BasicPlayer;
 import edu.duke.ece651.team14.shared.Color;
 import edu.duke.ece651.team14.shared.Communicator;
 import edu.duke.ece651.team14.shared.DiceResolver;
-import edu.duke.ece651.team14.shared.GUIOrderprocessor;
 import edu.duke.ece651.team14.shared.Map;
 import edu.duke.ece651.team14.shared.MapFactory;
+import edu.duke.ece651.team14.shared.MaxTechLevelException;
 import edu.duke.ece651.team14.shared.MoveOrder;
 import edu.duke.ece651.team14.shared.Order;
 import edu.duke.ece651.team14.shared.Player;
@@ -57,7 +58,7 @@ public class Game {
     this.waitList = new LinkedBlockingQueue<>();
   }
 
-  public void runGame() throws InterruptedException, IOException, ClassNotFoundException {
+  public void runGame() throws InterruptedException, IOException, ClassNotFoundException, MaxTechLevelException {
     acceptPlayersPhase();
     initializeGamePhase();
     playGamePhase();
@@ -137,18 +138,19 @@ public class Game {
   /**
    * Add reconnected player to this game.
    */
-  protected void addReconnectedPlayer() throws IOException,InterruptedException{
-    while(!waitList.isEmpty()){
+  protected void addReconnectedPlayer() throws IOException, InterruptedException {
+    while (!waitList.isEmpty()) {
       PlayerInfo joined_pinfo = addPlayer();
       joined_pinfo.getCommunicator().sendObject(joined_pinfo.getPlayer());
     }
   }
-  
+
   // * Runs through all stages of the game
   // *
   // * @throws IOException, ClassNotFoundException
   //
-  protected void playGamePhase() throws IOException, ClassNotFoundException,InterruptedException{
+  protected void playGamePhase()
+      throws IOException, ClassNotFoundException, InterruptedException, MaxTechLevelException {
     while (true) {
       addReconnectedPlayer();
       executeOneTurn();
@@ -164,51 +166,53 @@ public class Game {
   }
 
   protected void executeOneTurn()
-      throws IOException, ClassNotFoundException {
+      throws IOException, ClassNotFoundException, MaxTechLevelException {
     sendInfo(this.map);
+    AgressionPointResolver apr = new AgressionPointResolver(this.map);
     HashMap<String, ArrayList<Order>> orders = receiveAllOrders();
-    //resolve upgrade
+    // resolve upgrade
     ServerOrderProcessor processor = new ServerOrderProcessor(this.map);
     serverResolveUpgrade(processor, orders.get("upgrade"));
     serverResolveMove(processor, orders.get("move"));
     // resolve attack
     ServerAttackOrderResolver sar = new ServerAttackOrderResolver(map, new DiceResolver());
     String results = sar.resolveAllAttackOrders(orders.get("attack"));// the attcking information
+    AgressionPointMsg amsg = apr.resolveAgressionPoint();// Resolve agression points
     sendInfo(results);
+    sendInfo(amsg);
     this.map.allAddOneUnit();
   }
 
-
-  /** 
-   * Make use of the GUIprocessor, it makes new order and resolve locally. To get rid of pointer problems.
+  /**
+   * Make use of the GUIprocessor, it makes new order and resolve locally. To get
+   * rid of pointer problems.
+   * 
    * @param processor
    * @param orders
    */
-  private void serverResolveUpgrade(ServerOrderProcessor processor,ArrayList<Order> orders){
-    try{
-      for(Order o:orders){
-        UpgradeOrder uo = (UpgradeOrder)o;
-        Order serverOrder = new UpgradeOrder(map.getTerritoryByName(uo.getOrigin().getName()), null, uo.getNumUnits(), uo.getPlayer(),uo.getCurrTechLevel(), uo.getNewTechLevel());
+  private void serverResolveUpgrade(ServerOrderProcessor processor, ArrayList<Order> orders) {
+    try {
+      for (Order o : orders) {
+        UpgradeOrder uo = (UpgradeOrder) o;
+        Order serverOrder = new UpgradeOrder(map.getTerritoryByName(uo.getOrigin().getName()), null, uo.getNumUnits(),
+            uo.getPlayer(), uo.getCurrTechLevel(), uo.getNewTechLevel());
         processor.processUpgrade(map, serverOrder, uo.getPlayer());
       }
-    }
-    catch(Exception e){
+    } catch (Exception e) {
       System.out.println(e.getMessage());
     }
   }
 
-
-  private void serverResolveMove(ServerOrderProcessor processor, ArrayList<Order> moveOrders){
-    try{
-      for(Order o:moveOrders){
-        MoveOrder mo = (MoveOrder)o;
+  private void serverResolveMove(ServerOrderProcessor processor, ArrayList<Order> moveOrders) {
+    try {
+      for (Order o : moveOrders) {
+        MoveOrder mo = (MoveOrder) o;
         Territory origin = map.getTerritoryByName(mo.getOrigin().getName());
         Territory dest = map.getTerritoryByName(mo.getDestination().getName());
         Order serverOrder = new MoveOrder(origin, dest, mo.getNumUnits(), mo.getPlayer());
         processor.processMove(map, serverOrder, mo.getPlayer());
       }
-    }
-    catch(Exception e){
+    } catch (Exception e) {
       System.out.println();
     }
   }

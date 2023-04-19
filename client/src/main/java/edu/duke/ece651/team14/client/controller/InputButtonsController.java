@@ -136,7 +136,7 @@ public class InputButtonsController implements Initializable {
       int food = processor.processMove(this.model.getMap(), move, this.client.getPlayer());
       processor.addOrder(new MoveOrder(origin_terr, dest_terr, numUnits, this.client.getBasicPlayer()));
       gameLogText.appendText("Valid move order with food cost: " + food + "\n");
-      gameLogShowMap();
+      //gameLogShowMap();
       gameLogshowPlayer();
     } catch (Exception ee) {
       gameLogText.appendText(ee.getMessage());
@@ -157,7 +157,7 @@ public class InputButtonsController implements Initializable {
       int food = processor.processAttack(this.model.getMap(), attackOrder, this.client.getPlayer());
       processor.addOrder(new AttackOrder(origin_terr, dest_terr, numUnits, this.client.getBasicPlayer()));
       gameLogText.appendText("Valid attack order with food cost: " + food + "\n");
-      gameLogShowMap();
+      //gameLogShowMap();
       gameLogshowPlayer();
     } catch (Exception ee) {
       gameLogText.appendText(ee.getMessage());
@@ -191,7 +191,7 @@ public class InputButtonsController implements Initializable {
       processor.addOrder(new UpgradeOrder(origin_terr, null, numUnits, client.getBasicPlayer(),cur_level, new_level));
       // model.gameLogText.set("Valid upgrade order with cost:");
       gameLogText.appendText("Valid upgrade order with tech cost: " + tech + "\n");
-      gameLogShowMap();
+      //gameLogShowMap();
       gameLogshowPlayer();
     } catch (Exception exp) {
       // model.gameLogText.set(exp.getMessage());
@@ -226,6 +226,9 @@ public class InputButtonsController implements Initializable {
       processor.clearVerified();
       String result = this.client.getCommunicator().recvString();
       gameLogText.appendText(result);
+      int aggPts = this.client.handleAggPts();
+      gameLogText.appendText("Player's current Aggression Points: "+aggPts+"\n");
+      //TODO: replace it with more meaningful information
       String gameresult = this.client.getCommunicator().recvString();
       if (gameresult.equals("Gameover")) {// one global winner occurs, exit game.
         this.model.setMap(client.recvMap());
@@ -256,7 +259,7 @@ public class InputButtonsController implements Initializable {
       } else {// not lost yet
         this.client.getPlayer().updateResourcesInTurn(this.model.getMap());
         resetOwnedTerrs();
-        gameLogShowMap();
+        //gameLogShowMap();
         gameLogshowPlayer();
         switchState(1);
       }
@@ -290,6 +293,7 @@ public class InputButtonsController implements Initializable {
     sb.append("Maximum Technology Level: " + p.getMaxTechLevel() + "\n");
     sb.append("Total Food Resources: " + p.getFoodAmt() + "\n");
     sb.append("Total Technology Resources: " + p.getTechAmt() + "\n");
+    sb.append("Current Aggression Points: "+ p.getAggPt()+ "\n");
     gameLogText.appendText(sb.toString());
   }
 

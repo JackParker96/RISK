@@ -4,5 +4,4 @@ public class BasicPlayer extends Player {
   public BasicPlayer(Color color, String name) {
     super(color, name);
   }
-
 }

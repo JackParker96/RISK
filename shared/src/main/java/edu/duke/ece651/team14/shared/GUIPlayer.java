@@ -203,4 +203,10 @@ public class GUIPlayer extends Player {
     }
     return false;
   }
+
+  @Override
+  public void setAggPts(int points) {
+    this.aggPts = points;
+    this.model.aggPts.set(points);
+  }
 }
