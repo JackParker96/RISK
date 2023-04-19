@@ -10,21 +10,14 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import edu.duke.ece651.team14.client.GUIClientPlayer;
-import edu.duke.ece651.team14.shared.BasicUnit;
-import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.GameModel;
-import edu.duke.ece651.team14.shared.BasicUnit;
+import edu.duke.ece651.team14.shared.MapTextView;
 import edu.duke.ece651.team14.shared.Territory;
 import edu.duke.ece651.team14.shared.Unit;
-
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
@@ -112,8 +105,8 @@ public class GameController implements Initializable {
     guiController.gameLogText = gameLogText;
     try {
       model.setMap(client.recvMap());
-      MapTextView view = new MapTextView(model.getMap());
-      gameLogText.setText(view.displayMap());
+      //MapTextView view = new MapTextView(model.getMap());
+      //gameLogText.setText(view.displayMap());
       this.client.getPlayer().updateResourcesInTurn(model.getMap());
       inputButtonsController.gameLogshowPlayer();
     } catch (Exception e) {

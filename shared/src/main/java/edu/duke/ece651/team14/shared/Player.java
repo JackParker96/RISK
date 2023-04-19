@@ -2,7 +2,9 @@ package edu.duke.ece651.team14.shared;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 
 // Player
@@ -23,6 +25,7 @@ public abstract class Player implements Serializable {
   public int maxTechLevel;
   // The player's current list of allies
   public ArrayList<Player> allies;
+  public int aggPts;
 
   /**
    * Creates a Player object from given color
@@ -35,6 +38,7 @@ public abstract class Player implements Serializable {
     this.foodAmt = 0;
     this.techAmt = 0;
     this.maxTechLevel = 1;
+    this.aggPts = 0;
     this.allies = new ArrayList<>();
   }
 
@@ -51,7 +55,96 @@ public abstract class Player implements Serializable {
   public ArrayList<Player> getAllies() {
     return allies;
   }
+
+  public void setAggPts(int points){
+    this.aggPts = points;
+  }
   
+  public int getAggPt(){
+    return this.aggPts;
+  }
+  
+  // Increment the player's aggression points by 1
+  // Check if they get a reward. If so, distribute that reward
+  public void addAggPt(Map map) throws MaxTechLevelException {
+    // Add 1 aggression point to the model
+    this.aggPts+=1;
+    // Figure out if player gets a reward
+    // 3 aggression points -> Reward Level 1
+    if (this.aggPts == 3) {
+      rewardLevel1(map);
+    }
+    // 5 aggression points -> Reward Level 2
+    if (this.aggPts == 5) {
+      rewardLevel2();
+    }
+    // 8, 10, 12, 14, ... aggression points -> Reward Level 3
+    if ((this.aggPts >= 8) && (this.aggPts % 2 == 0)) {
+      rewardLevel3(map);
+    }
+  }
+
+  // Reset aggression points to 0
+  public void resetAggPts() {
+    this.aggPts = 0;
+  }
+
+  /**
+   * Reward the player for collecting 3 aggression points
+   * Add 5 Level 1 units to a random territory controlled by the player
+   */
+  public void rewardLevel1(Map map) throws MaxTechLevelException {
+    // Create a list of 5 level 1 units
+    ArrayList<Unit> toAdd = new ArrayList<>();
+    for (int i = 0; i < 5; i++) {
+      BasicUnit u = new BasicUnit();
+      u.increaseTechLevel(1);
+      toAdd.add(u);
+    }
+    // Search through the map until a territory owned by this player is found
+    // When found, add the 5 units to that territory
+    HashMap<String, Territory> m = map.getMap();
+    Collection<Territory> terrs = m.values();
+    for (Territory terr : terrs) {
+      if (this.equals(terr.getOwner())) {
+        terr.addUnits(toAdd);
+        break;
+      }
+    }
+  }
+
+  /**
+   * Reward player for collecting 5 aggression points
+   * Upgrade the player to the next max tech level for free
+   */
+  public void rewardLevel2() throws MaxTechLevelException {
+    if (this.getMaxTechLevel() != 6) {
+      this.increaseMaxTechLevel();
+    }
+  }
+
+  /**
+   * Reward player for collecting 8, 10, 12, 14, etc. aggression points
+   * Increase the level of every single one of the player's units
+   */
+  public void rewardLevel3(Map map) throws MaxTechLevelException {
+    // Search through the map and find all the territories owned by this player
+    HashMap<String, Territory> m = map.getMap();
+    Collection<Territory> terrs = m.values();
+    for (Territory terr : terrs) {
+      if (this.equals(terr.getOwner())) {
+        // For each territory owned by this player, increase the level of all the units
+        // on that territory by 1
+        ArrayList<Unit> units = terr.getUnits();
+        for (Unit u : units) {
+          if (u.getTechLevel() != 6) {
+            u.increaseTechLevel(1);
+          }
+        }
+      }
+    }
+  }
+>>>>>>> shared/src/main/java/edu/duke/ece651/team14/shared/Player.java
   /**
    * Check if this Player has won the game
    *
