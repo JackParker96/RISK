@@ -145,7 +145,7 @@ public abstract class Player implements Serializable {
       }
     }
   }
->>>>>>> shared/src/main/java/edu/duke/ece651/team14/shared/Player.java
+  
   /**
    * Check if this Player has won the game
    *
