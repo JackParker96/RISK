@@ -37,7 +37,7 @@ public class InputButtonsController implements Initializable {
 
   @FXML
   TextArea gameLogText;
-  
+
   @FXML
   Button upgrade;
 
@@ -136,7 +136,7 @@ public class InputButtonsController implements Initializable {
       int food = processor.processMove(this.model.getMap(), move, this.client.getPlayer());
       processor.addOrder(new MoveOrder(origin_terr, dest_terr, numUnits, this.client.getBasicPlayer()));
       gameLogText.appendText("Valid move order with food cost: " + food + "\n");
-      //gameLogShowMap();
+      // gameLogShowMap();
       gameLogshowPlayer();
     } catch (Exception ee) {
       gameLogText.appendText(ee.getMessage());
@@ -157,7 +157,7 @@ public class InputButtonsController implements Initializable {
       int food = processor.processAttack(this.model.getMap(), attackOrder, this.client.getPlayer());
       processor.addOrder(new AttackOrder(origin_terr, dest_terr, numUnits, this.client.getBasicPlayer()));
       gameLogText.appendText("Valid attack order with food cost: " + food + "\n");
-      //gameLogShowMap();
+      // gameLogShowMap();
       gameLogshowPlayer();
     } catch (Exception ee) {
       gameLogText.appendText(ee.getMessage());
@@ -188,10 +188,10 @@ public class InputButtonsController implements Initializable {
     Order o = new UpgradeOrder(origin_terr, null, numUnits, client.getPlayer(), cur_level, new_level);
     try {
       int tech = processor.processUpgrade(model.getMap(), o, client.getPlayer());
-      processor.addOrder(new UpgradeOrder(origin_terr, null, numUnits, client.getBasicPlayer(),cur_level, new_level));
+      processor.addOrder(new UpgradeOrder(origin_terr, null, numUnits, client.getBasicPlayer(), cur_level, new_level));
       // model.gameLogText.set("Valid upgrade order with cost:");
       gameLogText.appendText("Valid upgrade order with tech cost: " + tech + "\n");
-      //gameLogShowMap();
+      // gameLogShowMap();
       gameLogshowPlayer();
     } catch (Exception exp) {
       // model.gameLogText.set(exp.getMessage());
@@ -226,9 +226,20 @@ public class InputButtonsController implements Initializable {
       processor.clearVerified();
       String result = this.client.getCommunicator().recvString();
       gameLogText.appendText(result);
+
       int aggPts = this.client.handleAggPts();
-      gameLogText.appendText("Player's current Aggression Points: "+aggPts+"\n");
-      //TODO: replace it with more meaningful information
+      gameLogText.appendText("Current Aggression Points: " + aggPts + "\n");
+      if (aggPts == 3) {
+        gameLogText.appendText(
+            "\nYou have captured territories 3 turns in a row! You have received 5 new units for free. You will receive another reward if you make it to 5 turns in a row.\n");
+      } else if (aggPts == 5) {
+        gameLogText.appendText(
+            "\nYou have captured territories 5 turns in a row! Your max tech level has been increased. You will receive another reward if you make it to 8 turns in a row.\n");
+      } else if (aggPts > 7 && (aggPts % 2 == 0)) {
+        gameLogText.appendText(
+            "\nYou have captured territories " + aggPts + " turns in a row! All of your troops have been upgraded to the next level. Keep going! You will receive this same reward every 2 turns that you keep the current streak alive.\n");
+      }
+
       String gameresult = this.client.getCommunicator().recvString();
       if (gameresult.equals("Gameover")) {// one global winner occurs, exit game.
         this.model.setMap(client.recvMap());
@@ -259,7 +270,7 @@ public class InputButtonsController implements Initializable {
       } else {// not lost yet
         this.client.getPlayer().updateResourcesInTurn(this.model.getMap());
         resetOwnedTerrs();
-        //gameLogShowMap();
+        // gameLogShowMap();
         gameLogshowPlayer();
         switchState(1);
       }
@@ -293,7 +304,7 @@ public class InputButtonsController implements Initializable {
     sb.append("Maximum Technology Level: " + p.getMaxTechLevel() + "\n");
     sb.append("Total Food Resources: " + p.getFoodAmt() + "\n");
     sb.append("Total Technology Resources: " + p.getTechAmt() + "\n");
-    sb.append("Current Aggression Points: "+ p.getAggPt()+ "\n");
+    sb.append("Current Aggression Points: " + p.getAggPt() + "\n");
     gameLogText.appendText(sb.toString());
   }
 
