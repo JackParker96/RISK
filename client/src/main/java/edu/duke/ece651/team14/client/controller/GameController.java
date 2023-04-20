@@ -170,6 +170,7 @@ public class GameController implements Initializable {
     sb.append("Maximum Technology Level: " + model.getMaxTechLevel() + "\n");
     sb.append("Total Food Resources: " + model.getFoodResources() + "\n");
     sb.append("Total Technology Resources: " + model.getTechResources() + "\n");
+    sb.append("Aggression Points: " + model.getAggPts() + "\n");
     userStatsText.setText(sb.toString());
   }
 
